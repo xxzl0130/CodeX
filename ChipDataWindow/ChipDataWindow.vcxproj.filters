@@ -20,32 +20,45 @@
       <ParseFiles>false</ParseFiles>
     </Filter>
     <Filter Include="Form Files">
-      <UniqueIdentifier>{942110d3-2828-46d2-aafd-3660b2ab5a86}</UniqueIdentifier>
+      <UniqueIdentifier>{99349809-55BA-4b9d-BF79-8FDBB0286EB3}</UniqueIdentifier>
+      <Extensions>ui</Extensions>
+      <ParseFiles>true</ParseFiles>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ChipView.cpp">
+    <ClCompile Include="ChipDataWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ChipBlock.cpp">
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GetChipWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="chipview_global.h">
+    <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="ChipView.ui">
+    <ClInclude Include="chipdatawindow_global.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="GetChipWindow.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="ChipDataWindow.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="ChipView.h">
+    <QtMoc Include="ChipDataWindow.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="ChipBlock.h">
+    <QtMoc Include="GetChipWindow.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

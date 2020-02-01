@@ -3,9 +3,20 @@
 
 CodeX::CodeX(QWidget *parent)
 	: QMainWindow(parent),
-	ui(new Ui::CodeX)
+	ui(new Ui::CodeX),
+	chipDataWindow(new ChipDataWindow(this))
 {
 	ui->setupUi(this);
-	this->ui->chipView->setChipSize(QSize(10,10));
-	this->ui->chipView->setChipSize(QSize(6,6));
+	this->ui->chipView->setChipSize(QSize(8,8));
+	connect();
+}
+
+void CodeX::connect()
+{
+	QObject::connect(
+		this->ui->chipDataButton,
+		&QPushButton::clicked,
+		this->chipDataWindow,
+		&ChipDataWindow::show
+	);
 }
