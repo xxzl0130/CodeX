@@ -4,6 +4,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.29728.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CodeX", "CodeX\CodeX.vcxproj", "{3741CE50-E243-41E2-B612-3A787E0F790C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{140A233F-BB61-43EB-96E5-EF3EAF84ECC5} = {140A233F-BB61-43EB-96E5-EF3EAF84ECC5}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ChipView", "ChipView\ChipView.vcxproj", "{140A233F-BB61-43EB-96E5-EF3EAF84ECC5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +20,10 @@ Global
 		{3741CE50-E243-41E2-B612-3A787E0F790C}.Debug|x64.Build.0 = Debug|x64
 		{3741CE50-E243-41E2-B612-3A787E0F790C}.Release|x64.ActiveCfg = Release|x64
 		{3741CE50-E243-41E2-B612-3A787E0F790C}.Release|x64.Build.0 = Release|x64
+		{140A233F-BB61-43EB-96E5-EF3EAF84ECC5}.Debug|x64.ActiveCfg = Debug|x64
+		{140A233F-BB61-43EB-96E5-EF3EAF84ECC5}.Debug|x64.Build.0 = Debug|x64
+		{140A233F-BB61-43EB-96E5-EF3EAF84ECC5}.Release|x64.ActiveCfg = Release|x64
+		{140A233F-BB61-43EB-96E5-EF3EAF84ECC5}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,5 +1,5 @@
 #pragma once
-
+#pragma warning(disable:26812)
 #include <QtWidgets/QMainWindow>
 #include "ui_CodeX.h"
 
@@ -11,5 +11,5 @@ public:
 	CodeX(QWidget *parent = Q_NULLPTR);
 
 private:
-	Ui::CodeXClass ui;
+	Ui::CodeX *ui;
 };
