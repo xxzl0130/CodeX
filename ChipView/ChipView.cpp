@@ -71,7 +71,7 @@ void ChipView::resizeEvent(QResizeEvent* event)
 	auto vLeft = this->height() - sHeight; // ´¹Ö±Ê£Óà
 	auto hLeft = this->width() - sWidth; // Ë®Æ½Ê£Óà
 	this->ui->gridLayout->setContentsMargins(hLeft / 2, vLeft / 2, hLeft - hLeft / 2, vLeft - vLeft / 2);
-	__super::resizeEvent(event);
+	QWidget::resizeEvent(event);
 }
 
 ChipBlock* ChipView::createChip(QWidget* parent)

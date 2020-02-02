@@ -37,5 +37,5 @@ void ChipBlock::setColor(int c)
 void ChipBlock::resizeEvent(QResizeEvent* event)
 {
 	this->setFixedHeight(this->width());
-	__super::resizeEvent(event);
+	QLabel::resizeEvent(event);
 }

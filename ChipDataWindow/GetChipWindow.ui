@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>368</width>
-    <height>387</height>
+    <height>391</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -39,6 +39,20 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>UID</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="uidLineEdit">
+        <property name="text">
+         <string>1563276</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QLabel" name="label_2">
         <property name="text">
          <string>昵称</string>
@@ -51,25 +65,21 @@
          <string/>
         </property>
         <property name="text">
-         <string/>
+         <string>轩轩醉了</string>
         </property>
        </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="label_3">
-        <property name="text">
-         <string>UID</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLineEdit" name="uidLineEdit"/>
       </item>
      </layout>
     </widget>
    </item>
    <item row="0" column="0">
     <widget class="QGroupBox" name="groupBox">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="title">
       <string>代理信息</string>
      </property>
@@ -77,9 +87,22 @@
       <item row="0" column="0" colspan="2">
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
+         <widget class="QPushButton" name="startLocalPushButton">
+          <property name="text">
+           <string>启动</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QRadioButton" name="localProxyRadioButton">
           <property name="enabled">
-           <bool>false</bool>
+           <bool>true</bool>
+          </property>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
           </property>
           <property name="text">
            <string>本地代理</string>
@@ -88,6 +111,12 @@
         </item>
         <item>
          <widget class="QRadioButton" name="netProxyRadioButton">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="text">
            <string>网络代理</string>
           </property>
