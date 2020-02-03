@@ -1,5 +1,5 @@
 #pragma once
-#include <ChipView.h>
+#include "ChipView/ChipView.h"
 #include "gzip/decompress.hpp"
 #include "gzip/utils.hpp"
 

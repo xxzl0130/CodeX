@@ -44,7 +44,7 @@
   <customwidget>
    <class>ChipView</class>
    <extends>QWidget</extends>
-   <header>ChipView.h</header>
+   <header>ChipView/ChipView.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

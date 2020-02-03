@@ -1,5 +1,5 @@
 #pragma once
 #include <QtWidgets>
 
-#include "ChipDataWindow.h"
-#include "ChipView.h"
+#include "ChipDataWindow/ChipDataWindow.h"
+#include "ChipView/ChipView.h"
