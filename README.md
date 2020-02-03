@@ -1,6 +1,18 @@
 # CodeX
 少女前线芯片计算器CodeX
 
+## 施工中
+目前进度：  
+- [x] 与代理服务器通讯  
+- [x] 芯片基础类  
+- [ ] 用户数据解析  
+- [ ] 重装方案解析与用户配置
+- [ ] 分析用户现有芯片配置
+- [ ] 算法求解线程（已有算法在[GFChipToolX](https://github.com/xxzl0130/GFChipToolX)中，需要移植） 30%  
+- [ ] 芯片列表展示（ChipDataWindow） 50%  
+- [ ] 芯片方案展示（在主界面） 20%  
+- [ ] 使用SQLite保存数据、用户配置、芯片方案  
+
 ## 依赖
 [zlib](https://github.com/madler/zlib)  
 [gzip-hpp](https://github.com/mapbox/gzip-hpp)  
