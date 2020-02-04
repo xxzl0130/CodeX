@@ -16,6 +16,8 @@ public:
 	explicit ChipDataWindow(QWidget* parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
 	~ChipDataWindow();
 
+	void init();
+
 public slots:
 	void recvChipJsonObject(const QJsonObject& object);
 
@@ -26,5 +28,4 @@ private:
 	GetChipWindow* getChipWindow;
 	ChipTableModel* tableModel_;
 	ChipTableDelegate* tableDelegate_;
-	QList<GFChip> chips_;
 };

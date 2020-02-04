@@ -4,7 +4,8 @@
 
 ChipTableModel::ChipTableModel(QObject* parent):
 	QAbstractItemModel(parent),
-	showBlocks_(false)
+	showBlocks_(false),
+	showStatus_(true)
 {
 }
 

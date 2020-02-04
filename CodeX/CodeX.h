@@ -1,7 +1,9 @@
 #pragma once
 #pragma warning(disable:26812)
 #include <QtWidgets/QMainWindow>
-#include "ui_CodeX.h"
+#include "Chip/Chip.h"
+
+namespace Ui { class CodeX; }
 
 class CodeX : public QMainWindow
 {
@@ -9,6 +11,8 @@ class CodeX : public QMainWindow
 
 public:
 	static CodeX* instance();
+
+	QList<GFChip> chips;
 
 private:
 	CodeX(QWidget* parent = Q_NULLPTR);

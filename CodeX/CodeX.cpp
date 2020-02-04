@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "CodeX.h"
+#include "ui_CodeX.h"
 
 CodeX* CodeX::instance()
 {
@@ -19,6 +20,8 @@ CodeX::CodeX(QWidget *parent)
 	ui->setupUi(this);
 	this->ui->chipView->setChipSize(QSize(8,8));
 	connect();
+
+	this->chipDataWindow->init();
 }
 
 void CodeX::connect()
