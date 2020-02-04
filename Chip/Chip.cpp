@@ -44,7 +44,7 @@ GFChip GFChip::fromJsonObject(const QJsonObject& object)
 	return GFChip(object);
 }
 
-QIcon GFChip::icon() const
+QPixmap GFChip::icon() const
 {
 	if(!ChipResourceInit)
 	{
@@ -52,7 +52,7 @@ QIcon GFChip::icon() const
 		Q_INIT_RESOURCE(Chip);
 	}
 	static const QString url(":/Chip/Resources/img/%1%2.png");
-	return QIcon(url.arg(color == Blue ? "b" : "o").arg(gridID));
+	return QPixmap(url.arg(color == Blue ? "b" : "o").arg(gridID));
 }
 
 QString GFChip::name() const
@@ -123,17 +123,17 @@ QString squadString(int i)
 	switch (i)
 	{
 	case 1:
-		return QString("BGM-71");
+		return QString("BGM");
 	case 2:
-		return QString("AGS-30");
+		return QString("AGS");
 	case 3:
-		return QString("2B14");
+		return QString("2B");
 	case 4:
 		return QString("M2");
 	case 5:
 		return QString("AT4");
 	case 6:
-		return QString("QLZ-04");
+		return QString("QLZ");
 	default:
 		return QString("");
 	}

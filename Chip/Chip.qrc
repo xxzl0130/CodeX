@@ -57,5 +57,9 @@
         <file>Resources/img/o38.png</file>
         <file>Resources/img/o39.png</file>
         <file>Resources/chips.json</file>
+        <file>Resources/img/icon-acu.png</file>
+        <file>Resources/img/icon-dbk.png</file>
+        <file>Resources/img/icon-dmg.png</file>
+        <file>Resources/img/icon-fil.png</file>
     </qresource>
 </RCC>

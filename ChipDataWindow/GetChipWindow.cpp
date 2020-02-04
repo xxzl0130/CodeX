@@ -140,6 +140,7 @@ void GetChipWindow::recvData(QNetworkReply* reply)
 		else if(parseChipData(bytes))
 		{
 			QMessageBox::information(this, trUtf8(u8"成功"), trUtf8(u8"获取芯片数据成功！"));
+			this->close();
 		}
 		else
 		{

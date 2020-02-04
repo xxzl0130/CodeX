@@ -25,5 +25,6 @@ private:
 	Ui::ChipDataWindow* ui;
 	GetChipWindow* getChipWindow;
 	ChipTableModel* tableModel_;
+	ChipTableDelegate* tableDelegate_;
 	QList<GFChip> chips_;
 };

@@ -1,5 +1,6 @@
 #include "ChipTableView.h"
 #include <QBrush>
+#include <QPainter>
 
 ChipTableModel::ChipTableModel(QObject* parent):
 	QAbstractItemModel(parent),
@@ -47,6 +48,7 @@ QVariant ChipTableModel::data(const QModelIndex& index, int role) const
 			return QString::number(chip.no);
 		case 1:
 			return chip.icon();
+			//return QAbstractItemModel::data(index, role);
 		case 2:
 			return chip.name();
 		case 3:
@@ -93,6 +95,11 @@ void ChipTableModel::setChips(const QList<GFChip>& chips)
 	refresh();
 }
 
+const QList<GFChip>& ChipTableModel::chips() const
+{
+	return chips_;
+}
+
 void ChipTableModel::setShowBlocks(bool b)
 {
 	showBlocks_ = b;
@@ -103,4 +110,66 @@ void ChipTableModel::setShowStatus(bool b)
 {
 	showStatus_ = b;
 	refresh();
+}
+
+ChipTableDelegate::ChipTableDelegate(QObject* parent):
+	QItemDelegate(parent)
+{
+	
+}
+
+void ChipTableDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
+{
+	if(index.column() != 1)
+	{
+		QItemDelegate::paint(painter, option, index);
+		return;
+	}
+	auto model = dynamic_cast<const ChipTableModel*>(index.model());
+	const auto& icon = model->chips()[index.row()].icon();
+	auto width = icon.width();
+	auto height = icon.height();
+	const auto& rect = option.rect;
+	auto x = rect.x() + rect.width() / 2 - width / 2;
+	auto y = rect.y() + rect.height() / 2 - height / 2;
+
+	painter->drawPixmap(x, y, icon);
+}
+
+Qt::ItemFlags ChipTableModel::flags(const QModelIndex& index) const
+{
+	if (!index.isValid())
+		return Qt::NoItemFlags;
+	return QAbstractItemModel::flags(index) & ~Qt::ItemIsEditable;
+}
+
+QVariant ChipTableModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
+	if (orientation == Qt::Vertical || role != Qt::DisplayRole)
+		return QAbstractItemModel::headerData(section, orientation, role);
+	switch (section)
+	{
+	case 0:
+		return trUtf8(u8"编号");
+	case 1:
+		return trUtf8(u8"图形");
+	case 2:
+		return trUtf8(u8"名称");
+	case 3:
+		return trUtf8(u8"强化");
+	case 4:
+		return trUtf8(u8"命中");
+	case 5:
+		return trUtf8(u8"装填");
+	case 6:
+		return trUtf8(u8"伤害");
+	case 7:
+		return trUtf8(u8"破防");
+	case 8:
+		return trUtf8(u8"锁定");
+	case 9:
+		return trUtf8(u8"装备");
+	default:
+		return QAbstractItemModel::headerData(section, orientation, role);
+	}
 }

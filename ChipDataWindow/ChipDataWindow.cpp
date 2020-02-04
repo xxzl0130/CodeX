@@ -7,12 +7,16 @@ ChipDataWindow::ChipDataWindow(QWidget* parent, Qt::WindowFlags f):
 	QDialog(parent,f),
 	ui(new Ui::ChipDataWindow),
 	getChipWindow(new GetChipWindow(this)),
-	tableModel_(new ChipTableModel(this))
+	tableModel_(new ChipTableModel(this)),
+	tableDelegate_(new ChipTableDelegate(this))
 {
 	ui->setupUi(this);
 	connect();
 	getChipWindow->init();
 	this->ui->tableView->setModel(this->tableModel_);
+	this->ui->tableView->setItemDelegate(this->tableDelegate_);
+	this->ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+	this->ui->tableView->verticalHeader()->hide();
 }
 
 ChipDataWindow::~ChipDataWindow()
@@ -26,7 +30,7 @@ void ChipDataWindow::recvChipJsonObject(const QJsonObject& object)
 	for(const auto& it : squads)
 	{
 		auto obj = it.toObject();
-		squadID[obj["id"].toInt(0)] = obj["squad_id"].toInt(0);
+		squadID[obj["id"].toString().toInt(0)] = obj["squad_id"].toString().toInt(0);
 	}
 
 	chips_ = getChips(object["chip_with_user_info"].toObject());
@@ -34,7 +38,10 @@ void ChipDataWindow::recvChipJsonObject(const QJsonObject& object)
 	{
 		auto& chip = chips_[i];
 		chip.no = i + 1;
-		chip.squad = squadID[chip.squad];
+		if(chip.squad > 0)
+		{
+			chip.squad = squadID[chip.squad];
+		}
 	}
 	this->tableModel_->setChips(chips_);
 }

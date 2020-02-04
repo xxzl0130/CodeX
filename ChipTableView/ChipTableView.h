@@ -2,6 +2,7 @@
 
 #include "chiptableview_global.h"
 #include <QAbstractItemModel>
+#include <QItemDelegate>
 #include "Chip/Chip.h"
 
 class CHIPTABLEVIEW_EXPORT ChipTableModel : public QAbstractItemModel
@@ -22,8 +23,12 @@ public:
     bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
 
     Qt::ItemFlags flags(const QModelIndex& index) const;
+
+    QVariant headerData(int section, Qt::Orientation orientation,
+        int role = Qt::DisplayRole) const override;
 	
     void setChips(const QList<GFChip>& chips);
+    const QList<GFChip>& chips() const;
 	// true显示格数 false显示数值（默认)
     void setShowBlocks(bool b = false);
 	// true显示锁定与装备状态（默认），false不显示
@@ -35,15 +40,19 @@ public:
     }
 
 private:
-	
     QList<GFChip> chips_;
     bool showBlocks_;
     bool showStatus_;
 };
 
-inline Qt::ItemFlags ChipTableModel::flags(const QModelIndex& index) const
+class CHIPTABLEVIEW_EXPORT ChipTableDelegate : public QItemDelegate
 {
-	if(!index.isValid())
-        return Qt::NoItemFlags;
-	return QAbstractItemModel::flags(index) & ~Qt::ItemIsEditable;
-}
+    Q_OBJECT;
+public:
+    explicit ChipTableDelegate(QObject* parent = nullptr);
+    ~ChipTableDelegate() = default;
+
+    void paint(QPainter* painter,
+        const QStyleOptionViewItem& option,
+        const QModelIndex& index) const override;
+};

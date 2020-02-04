@@ -2,7 +2,7 @@
 
 #include "chip_global.h"
 #include <QJsonObject>
-#include <QIcon>
+#include <QPixmap>
 #include <QList>
 #include <string>
 #include <vector>
@@ -14,7 +14,7 @@ class CHIP_EXPORT GFChip
 public:
 	explicit GFChip(const QJsonObject& object);
 	static GFChip fromJsonObject(const QJsonObject& object);
-	QIcon icon() const;
+	QPixmap icon() const;
 	QString name() const;
 	QString squadName() const;
 

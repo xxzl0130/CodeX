@@ -23,7 +23,7 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string>GetChipWindow</string>
+   <string>获取芯片数据</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="1" column="0">
