@@ -15,6 +15,8 @@ public:
 	explicit GFChip(const QJsonObject& object);
 	static GFChip fromJsonObject(const QJsonObject& object);
 	QIcon icon() const;
+	QString name() const;
+	QString squadName() const;
 
 	enum ChipClass
 	{
@@ -31,7 +33,11 @@ public:
 	{
 		int x, y;
 	};
-	
+
+	// 游戏内id
+	int id;
+	// 顺序编号
+	int no;
 	// 芯片类别，5061/5051/5052...
 	int chipClass;
 	// 芯片等级
@@ -70,7 +76,10 @@ private:
 	void calcValue();
 };
 
-QList<GFChip> getChips(const QJsonObject& obj);
+QList<GFChip> CHIP_EXPORT getChips(const QJsonObject& obj);
+
+// 小队序号转为对应名称，需要先从squad_with_user_info中读取id并转换为1-6
+QString CHIP_EXPORT squadString(int i);
 
 // 每类芯片的基本参数
 class CHIP_EXPORT ChipConfig
@@ -108,7 +117,7 @@ private:
 };
 
 // 芯片在拼图解法中的参数
-struct ChipPuzzleOption
+struct CHIP_EXPORT ChipPuzzleOption
 {
 	int gridID;
 	int x, y;

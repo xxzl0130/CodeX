@@ -3,6 +3,7 @@
 #include "chipdatawindow_global.h"
 #include <QDialog>
 #include <QJsonObject>
+#include "ChipTableView/ChipTableView.h"
 
 namespace Ui {	class ChipDataWindow; }
 class GetChipWindow;
@@ -23,4 +24,6 @@ private:
 
 	Ui::ChipDataWindow* ui;
 	GetChipWindow* getChipWindow;
+	ChipTableModel* tableModel_;
+	QList<GFChip> chips_;
 };

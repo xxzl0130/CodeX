@@ -4,6 +4,9 @@
 #include <cmath>
 #include <QJsonArray>
 #include <QJsonDocument>
+#include <algorithm>
+#include <QDebug>
+#include <QResource>
 
 // 各属性系数
 static constexpr double ArgDmg = 4.4, ArgDbk = 12.7, ArgAcu = 7.1, ArgFil = 5.7;
@@ -12,24 +15,27 @@ static constexpr double Den56 = 1.0, Den551 = 1.0, Den552 = 0.92;
 // 等级系数
 static constexpr double ArgLv[21] = { 1.0,1.08,1.16,1.24,1.32,1.4,1.48,1.56,1.64,1.72,1.8,1.87,1.94,2.01,2.08,2.15,2.22,2.29,2.36,2.43,2.5 };
 
+static bool ChipResourceInit = false;
 
 GFChip::GFChip(const QJsonObject& object)
 {
-	chipClass = object.value("chip_id").toInt();
-	level = object.value("chip_level").toInt();
-	color = object.value("color_id").toInt();
-	gridID = object.value("grid_id").toInt();
-	squad = object.value("squad_with_user_id").toInt();
-	auto t = object.value("position").toString().split(",");
+	id = object.value("id").toString("0").toInt();
+	chipClass = object.value("chip_id").toString().toInt();
+	level = object.value("chip_level").toString().toInt();
+	color = object.value("color_id").toString().toInt();
+	gridID = object.value("grid_id").toString().toInt();
+	squad = object.value("squad_with_user_id").toString().toInt();
+	auto t = object.value("position").toString("0,0").split(",");
 	position.x = t[0].toInt();
 	position.y = t[1].toInt();
-	rotate = object.value("shape_info").toString()
+	rotate = object.value("shape_info").toString("0,0")
 		.split(",")[0].toInt();
-	damageBlock = object.value("assist_damage").toInt();
-	reloadBlock = object.value("assist_reload").toInt();
-	hitBlock = object.value("assist_hit").toInt();
-	defbreakBlock = object.value("assist_def_break").toInt();
-	locked = object.value("is_locked").toBool();
+	damageBlock = object.value("assist_damage").toString("0").toInt();
+	reloadBlock = object.value("assist_reload").toString("0").toInt();
+	hitBlock = object.value("assist_hit").toString("0").toInt();
+	defbreakBlock = object.value("assist_def_break").toString("0").toInt();
+	locked = object.value("is_locked").toString("0").toInt();
+	no = 0;
 	calcValue();
 }
 
@@ -40,13 +46,28 @@ GFChip GFChip::fromJsonObject(const QJsonObject& object)
 
 QIcon GFChip::icon() const
 {
+	if(!ChipResourceInit)
+	{
+		ChipResourceInit = true;
+		Q_INIT_RESOURCE(Chip);
+	}
 	static const QString url(":/Chip/Resources/img/%1%2.png");
 	return QIcon(url.arg(color == Blue ? "b" : "o").arg(gridID));
 }
 
+QString GFChip::name() const
+{
+	return QString::fromStdString(ChipConfig::getConfig(this->gridID).name);
+}
+
+QString GFChip::squadName() const
+{
+	return squadString(squad);
+}
+
 GFChip::GFChip(): chipClass(0), level(0), color(Orange), gridID(0), squad(0), position({0,0}), rotate(0), damageBlock(0),
-              reloadBlock(0), hitBlock(0), defbreakBlock(0), damageValue(0), reloadValue(0), hitValue(0),
-              defbreakValue(0), locked(false)
+                  reloadBlock(0), hitBlock(0), defbreakBlock(0), damageValue(0), reloadValue(0), hitValue(0),
+                  defbreakValue(0), locked(false)
 {
 }
 
@@ -78,24 +99,63 @@ QList<GFChip> getChips(const QJsonObject& obj)
 	for(const auto& k : obj.keys())
 	{
 		auto chip = GFChip::fromJsonObject(obj[k].toObject());
-		if ((chip.gridID == GFChip::Class56 || chip.gridID == GFChip::Class551 || chip.gridID == GFChip::Class552) && chip.
+		if ((chip.chipClass == GFChip::Class56 || chip.chipClass == GFChip::Class551 || chip.chipClass == GFChip::Class552) && chip.
 			gridID > 11)
 		{
 			chips.push_back(chip);
 		}
 	}
+	// 按ID排序
+	std::sort(chips.begin(), chips.end(),
+		[](const GFChip& a, const GFChip& b) -> bool
+		{
+			return a.id < b.id;
+		});
+	for(auto i = 0;i < chips.size();++i)
+	{
+		chips[i].no = i + 1;
+	}
 	return chips;
 }
+
+QString squadString(int i)
+{
+	switch (i)
+	{
+	case 1:
+		return QString("BGM-71");
+	case 2:
+		return QString("AGS-30");
+	case 3:
+		return QString("2B14");
+	case 4:
+		return QString("M2");
+	case 5:
+		return QString("AT4");
+	case 6:
+		return QString("QLZ-04");
+	default:
+		return QString("");
+	}
+}
+
+std::map<int, ChipConfig> ChipConfig::configs_ = std::map<int, ChipConfig>();
 
 const ChipConfig& ChipConfig::getConfig(int id)
 {
 	if(configs_.empty())
 	{
+		if (!ChipResourceInit)
+		{
+			ChipResourceInit = true;
+			Q_INIT_RESOURCE(Chip);
+		}
 		// 初始化
 		QFile json(":/Chip/Resources/chips.json");
 		json.open(QIODevice::ReadOnly);
-		auto doc = QJsonDocument::fromJson(json.readAll());
-		for(const auto& it : doc.object())
+		auto data = json.readAll();
+		auto doc = QJsonDocument::fromJson(data);
+		for(const auto& it : doc.array())
 		{
 			auto config = ChipConfig(it.toObject());
 			configs_[config.gridID] = config;

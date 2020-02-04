@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "GetChipWindow.h"
 #include "ui_GetChipWindow.h"
+#include <QFile>
 
 constexpr auto pacUrl = "http://static.xuanxuan.tech/GF/GF.pac";
 constexpr auto serverHost = "https://ar.xuanxuan.tech:8080/";
@@ -74,6 +75,10 @@ bool GetChipWindow::parseChipData(const QByteArray& bytes)
 		QByteArray(bytes.data() + 1, bytes.size() - 1), QByteArray::Base64Encoding);
 	try {
 		auto res = gzip::decompress(data.data(), data.size());
+		/*QFile file("chip.json");
+		file.open(QIODevice::WriteOnly);
+		file.write(res.c_str());
+		file.close();*/
 		QJsonParseError jsonError;
 		QJsonDocument doucment = QJsonDocument::fromJson(res.c_str(), &jsonError);  // 转化为 JSON 文档
 		if (!doucment.isNull() && jsonError.error == QJsonParseError::NoError && doucment.isObject())

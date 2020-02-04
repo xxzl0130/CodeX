@@ -14,6 +14,10 @@
 - [ ] 芯片方案展示（在主界面） 20%  
 - [x] ~~使用SQLite~~保存数据、用户配置、芯片方案  
 
+TODO: 
+* 芯片读取的分类似乎有问题？不知道是这边还是服务器上的bug
+* 表格中显示图片
+
 ## 依赖
 [zlib](https://github.com/madler/zlib)  
 [gzip-hpp](https://github.com/mapbox/gzip-hpp)  
