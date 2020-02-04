@@ -1,0 +1,24 @@
+{
+    "2B14": {
+        "2B14": "2B14-result.json"
+    },
+    "AGS-30":{
+        "AGS-30":"AGS-30-result.json"
+    },
+    "AT4":{
+        "只用6格":"AT4-6-result.json",
+        "使用5格":"AT4-5-result.json"
+    },
+    "BGM-71":{
+        "BGM-71":"BGM-71-result.json"
+    },
+    "M2":{
+        "只用6格-空2格":"M2-6-2-result.json",
+        "使用5格-填满":"M2-5-0-result.json",
+        "使用5格-空2格":"M2-5-2-result.json",
+        "使用5格-空3格":"M2-5-3-result.json"
+    },
+    "QLZ-04":{
+        "QLZ-04":"QLZ-04.json"
+    }
+}

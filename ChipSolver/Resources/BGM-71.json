@@ -1,0 +1,29 @@
+{
+    "name": "BGM-71",
+    "optional": {
+        "BGM-71": 0
+    },
+    "width": 6,
+    "height": 6,
+    "blocks": 36,
+    "map": [
+        "000000",
+        "000000",
+        "000000",
+        "000000",
+        "000000",
+        "000000"
+    ],
+    "MaxBlocks": {
+        "damage": 16,
+        "def_break": 10,
+        "hit": 7,
+        "reload": 3
+    },
+    "MaxValues": {
+        "damage": 190,
+        "def_break": 329,
+        "hit": 191,
+        "reload": 46
+    }
+}

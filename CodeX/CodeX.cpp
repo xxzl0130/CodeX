@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "CodeX.h"
 #include "ui_CodeX.h"
+#include "ChipSolver/ChipSolver.h"
 
 CodeX* CodeX::instance()
 {
@@ -14,7 +15,8 @@ CodeX* CodeX::instance()
 CodeX::CodeX(QWidget *parent)
 	: QMainWindow(parent),
 	ui(new Ui::CodeX),
-	chipDataWindow(new ChipDataWindow(this))
+	chipDataWindow(new ChipDataWindow(this)),
+	solver(new ChipSolver(this))
 {
 	CodeX::singleton = this;
 	ui->setupUi(this);

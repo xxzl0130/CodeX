@@ -3,3 +3,4 @@
 
 #include "ChipDataWindow/ChipDataWindow.h"
 #include "ChipView/ChipView.h"
+#include "Chip/Chip.h"

@@ -1,0 +1,31 @@
+{
+    "name": "AT4",
+    "optional": {
+        "AT4": 0
+    },
+    "width": 8,
+    "height": 8,
+    "blocks": 36,
+    "map": [
+        "11100111",
+        "11000011",
+        "10000001",
+        "00011000",
+        "00011000",
+        "10000001",
+        "11000011",
+        "11100111"
+    ],
+    "MaxBlocks": {
+        "damage": 14,
+        "def_break": 8,
+        "hit": 9,
+        "reload": 5
+    },
+    "MaxValues": {
+        "damage": 169,
+        "def_break": 261,
+        "hit": 190,
+        "reload": 90
+    }
+}

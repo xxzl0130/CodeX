@@ -49,7 +49,6 @@ void GetChipWindow::init()
 	// 启动后尝试加载数据
 	QSettings settings;
 	parseChipData(settings.value("/User/Chip").toByteArray());
-	qDebug() << settings.fileName();
 }
 
 void GetChipWindow::startLocalProxy()

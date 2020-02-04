@@ -13,6 +13,7 @@ class CHIP_EXPORT GFChip
 {
 public:
 	explicit GFChip(const QJsonObject& object);
+	GFChip();
 	static GFChip fromJsonObject(const QJsonObject& object);
 	QPixmap icon() const;
 	QString name() const;
@@ -71,8 +72,6 @@ public:
 	// 锁定
 	bool locked;
 	
-private:
-	GFChip();
 	void calcValue();
 };
 
@@ -119,10 +118,18 @@ private:
 // 芯片在拼图解法中的参数
 struct CHIP_EXPORT ChipPuzzleOption
 {
-	int gridID;
+	int id;
 	int x, y;
 	// 顺时针旋转90度的次数
 	int rotate;
-	explicit ChipPuzzleOption(int _x = 0, int _y = 0, int _r = 0, int _no = 0) :gridID(_no), x(_x), y(_y), rotate(_r) {}
+	explicit ChipPuzzleOption(int _x = 0, int _y = 0, int _r = 0, int _no = 0) :id(_no), x(_x), y(_y), rotate(_r) {}
 	explicit ChipPuzzleOption(const QJsonObject& object);
+};
+
+// 芯片摆放信息，0为空，>0为芯片编号（下标+1),<0为无法使用
+struct CHIP_EXPORT ChipViewInfo
+{
+	int width;
+	int height;
+	QList<QList<int>> map;
 };

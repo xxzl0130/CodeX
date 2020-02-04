@@ -206,7 +206,7 @@ ChipConfig::ChipConfig(const QJsonObject& object)
 
 ChipPuzzleOption::ChipPuzzleOption(const QJsonObject& object)
 {
-	gridID = object.value("ID").toInt();
+	id = object.value("ID").toInt();
 	x = object.value("x").toInt();
 	y = object.value("y").toInt();
 	rotate = object.value("rotate").toInt();

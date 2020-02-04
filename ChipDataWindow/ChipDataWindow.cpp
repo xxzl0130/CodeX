@@ -39,6 +39,8 @@ void ChipDataWindow::recvChipJsonObject(const QJsonObject& object)
 	}
 
 	auto& chips = CodeX::instance()->chips;
+	auto& gridChips = CodeX::instance()->gridChips;
+	gridChips.clear();
 	chips = getChips(object["chip_with_user_info"].toObject());
 	for(auto i = 0;i < chips.size();++i)
 	{
@@ -48,6 +50,12 @@ void ChipDataWindow::recvChipJsonObject(const QJsonObject& object)
 		{
 			chip.squad = squadID[chip.squad];
 		}
+		// ¿½±´Ò»·Ý+20
+		auto t = chip;
+		t.no = i;
+		t.level = 20;
+		t.calcValue();
+		gridChips[t.gridID].push_back(t);
 	}
 	this->tableModel_->setChips(chips);
 }

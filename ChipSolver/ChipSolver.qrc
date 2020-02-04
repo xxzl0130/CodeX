@@ -1,0 +1,21 @@
+<RCC>
+    <qresource prefix="/ChipSolver">
+        <file>Resources/2B14.json</file>
+        <file>Resources/2B14-result.json</file>
+        <file>Resources/AGS-30.json</file>
+        <file>Resources/AGS-30-result.json</file>
+        <file>Resources/AT4.json</file>
+        <file>Resources/AT4-5-result.json</file>
+        <file>Resources/AT4-6-result.json</file>
+        <file>Resources/BGM-71.json</file>
+        <file>Resources/BGM-71-result.json</file>
+        <file>Resources/M2.json</file>
+        <file>Resources/M2-5-0-result.json</file>
+        <file>Resources/M2-5-2-result.json</file>
+        <file>Resources/M2-5-3-result.json</file>
+        <file>Resources/M2-6-2-result.json</file>
+        <file>Resources/QLZ-04.json</file>
+        <file>Resources/QLZ-04-result.json</file>
+        <file>Resources/squads.json</file>
+    </qresource>
+</RCC>

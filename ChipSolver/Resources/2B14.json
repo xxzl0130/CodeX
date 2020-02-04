@@ -1,0 +1,29 @@
+{
+    "name": "2B14",
+    "optional": {
+        "2B14": 0
+    },
+    "width": 8,
+    "height": 6,
+    "blocks": 32,
+    "map": [
+        "11011011",
+        "10000001",
+        "00000000",
+        "00000000",
+        "10000001",
+        "11011011"
+    ],
+    "MaxBlocks": {
+        "damage": 20,
+        "def_break": 2,
+        "hit": 4,
+        "reload": 6
+    },
+    "MaxValues": {
+        "damage": 227,
+        "def_break": 58,
+        "hit": 90,
+        "reload": 107
+    }
+}
