@@ -10,10 +10,16 @@ ChipDataWindow::ChipDataWindow(QWidget* parent, Qt::WindowFlags f):
 {
 	ui->setupUi(this);
 	connect();
+	getChipWindow->init();
 }
 
 ChipDataWindow::~ChipDataWindow()
 {
+}
+
+void ChipDataWindow::recvChipJsonObject(const QJsonObject& object)
+{
+	//TODO
 }
 
 void ChipDataWindow::connect()
@@ -23,5 +29,11 @@ void ChipDataWindow::connect()
 		&QPushButton::clicked,
 		this->getChipWindow,
 		&GetChipWindow::show
+	);
+	QObject::connect(
+		this->getChipWindow,
+		&GetChipWindow::sendChipJsonObject,
+		this,
+		&ChipDataWindow::recvChipJsonObject
 	);
 }

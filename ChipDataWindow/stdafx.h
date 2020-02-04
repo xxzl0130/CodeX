@@ -10,3 +10,4 @@
 #include <QJsonDocument>
 #include <QJsonValue>
 #include <QJsonParseError>
+#include <QSettings>

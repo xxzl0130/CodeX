@@ -22,10 +22,20 @@ GetChipWindow::GetChipWindow(QWidget *parent)
 {
 	ui->setupUi(this);
 	connect();
-	
+}
+
+GetChipWindow::~GetChipWindow()
+{
+	delete ui;
+	delete request_;
+	killProcess();
+}
+
+void GetChipWindow::init()
+{
 	this->ui->netProxyRadioButton->setChecked(true);
 	request_->setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded; charset=UTF-8");
-	
+
 	QSslConfiguration config = request_->sslConfiguration();
 	config.setPeerVerifyMode(QSslSocket::VerifyNone);
 	config.setProtocol(QSsl::SecureProtocols);
@@ -34,13 +44,11 @@ GetChipWindow::GetChipWindow(QWidget *parent)
 	process_->setProgram(QString("./") + exeName);
 
 	killProcess();
-}
 
-GetChipWindow::~GetChipWindow()
-{
-	delete ui;
-	delete request_;
-	killProcess();
+	// 启动后尝试加载数据
+	QSettings settings;
+	parseChipData(settings.value("/User/Chip").toByteArray());
+	qDebug() << settings.fileName();
 }
 
 void GetChipWindow::startLocalProxy()
@@ -54,6 +62,38 @@ void GetChipWindow::closeEvent(QCloseEvent* e)
 {
 	killProcess();
 	QDialog::closeEvent(e);
+}
+
+bool GetChipWindow::parseChipData(const QByteArray& bytes)
+{
+	if (bytes.isEmpty() || bytes[0] != '#')
+	{
+		return false;
+	}
+	auto data = QByteArray::fromBase64(
+		QByteArray(bytes.data() + 1, bytes.size() - 1), QByteArray::Base64Encoding);
+	try {
+		auto res = gzip::decompress(data.data(), data.size());
+		QJsonParseError jsonError;
+		QJsonDocument doucment = QJsonDocument::fromJson(res.c_str(), &jsonError);  // 转化为 JSON 文档
+		if (!doucment.isNull() && jsonError.error == QJsonParseError::NoError && doucment.isObject())
+		{  // 解析未发生错误 JSON 文档为对象
+			auto obj = doucment.object();
+			emit sendChipJsonObject(obj);
+			QSettings settings; // 解析成功则保存数据
+			settings.setValue("/User/Chip", bytes);
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	catch (const std::runtime_error & e)
+	{
+		qDebug() << trUtf8(u8"数据解析失败！\n") + e.what();
+		return false;
+	}
 }
 
 void GetChipWindow::setLocalProxy()
@@ -88,34 +128,17 @@ void GetChipWindow::recvData(QNetworkReply* reply)
 	if (reply->error() == QNetworkReply::NoError)
 	{
 		QByteArray bytes = reply->readAll();
-		if(bytes[0] != '#')
+		if (bytes[0] != '#')
 		{
 			QMessageBox::warning(this, trUtf8(u8"失败"), trUtf8(u8"获取数据失败！请检查代理操作和用户信息！"));
 		}
+		else if(parseChipData(bytes))
+		{
+			QMessageBox::information(this, trUtf8(u8"成功"), trUtf8(u8"获取芯片数据成功！"));
+		}
 		else
 		{
-			auto data = QByteArray::fromBase64(
-				QByteArray(bytes.data() + 1, bytes.size() - 1), QByteArray::Base64Encoding);
-			try {
-				auto res = gzip::decompress(data.data(), data.size());
-				QJsonParseError jsonError;
-				QJsonDocument doucment = QJsonDocument::fromJson(res.c_str(), &jsonError);  // 转化为 JSON 文档
-				if (!doucment.isNull() && jsonError.error == QJsonParseError::NoError && doucment.isObject())
-				{  // 解析未发生错误 JSON 文档为对象
-					auto obj = doucment.object();
-					emit sendChipJsonObject(obj);
-					QMessageBox::warning(this, trUtf8(u8"成功"), trUtf8(u8"获取芯片数据成功！"));
-					this->close();
-				}
-				else
-				{
-					throw std::runtime_error(u8"Parse Json failed.");
-				}
-			}
-			catch (const std::runtime_error & e)
-			{
-				QMessageBox::warning(this, trUtf8(u8"失败"), trUtf8(u8"数据解析失败！\n") + e.what());
-			}
+			QMessageBox::warning(this, trUtf8(u8"失败"), trUtf8(u8"解析数据失败！"));
 		}
 	}
 	else

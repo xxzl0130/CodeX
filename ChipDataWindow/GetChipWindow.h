@@ -2,7 +2,7 @@
 
 #include "chipdatawindow_global.h"
 #include <QDialog>
-#include <QNetworkRequest>
+#include <QJsonObject>
 #include <QNetworkReply>
 #include <QNetworkAccessManager>
 #include <QProcess>
@@ -17,6 +17,8 @@ class CHIPDATAWINDOW_EXPORT GetChipWindow : public QDialog
 public:
 	GetChipWindow(QWidget *parent = Q_NULLPTR);
 	~GetChipWindow();
+
+	void init();
 
 signals:
 	void sendChipJsonObject(const QJsonObject& object);
@@ -43,6 +45,8 @@ protected slots:
 
 private:
 	void connect();
+	// 解析从服务器或者保存的配置中读取的芯片信息
+	bool parseChipData(const QByteArray& data);
 
 	// 杀死已经存在的进程
 	void killProcess();

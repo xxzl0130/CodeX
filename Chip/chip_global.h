@@ -11,3 +11,5 @@
 #else
 # define CHIP_EXPORT
 #endif
+
+#pragma comment(lib,"Chip.lib")

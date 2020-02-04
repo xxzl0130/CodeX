@@ -12,7 +12,7 @@
 - [ ] 算法求解线程（已有算法在[GFChipToolX](https://github.com/xxzl0130/GFChipToolX)中，需要移植） 30%  
 - [ ] 芯片列表展示（ChipDataWindow） 50%  
 - [ ] 芯片方案展示（在主界面） 20%  
-- [ ] 使用SQLite保存数据、用户配置、芯片方案  
+- [x] ~~使用SQLite~~保存数据、用户配置、芯片方案  
 
 ## 依赖
 [zlib](https://github.com/madler/zlib)  
