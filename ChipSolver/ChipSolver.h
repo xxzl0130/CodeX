@@ -30,7 +30,7 @@ struct CHIPSOLVER_EXPORT TargetBlock
 };
 
 // 一个重装的所有解
-typedef QList<Solution> SquadSolution;
+typedef std::vector<Solution> SquadSolution;
 
 class CHIPSOLVER_EXPORT ChipSolver : public QThread
 {

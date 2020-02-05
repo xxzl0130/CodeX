@@ -62,7 +62,7 @@ QVariant SolutionTableModel::data(const QModelIndex& index, int role) const
 		switch (index.column())
 		{
 		case 0:
-			return index.column();
+			return index.row();
 		case 1:
 			return QString("%1 (%2)").arg(solution.totalValue.damageValue)
 			.arg(min(0, solution.totalValue.damageValue - maxValue_.damageValue));

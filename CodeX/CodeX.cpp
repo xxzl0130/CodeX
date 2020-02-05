@@ -28,6 +28,17 @@ void CodeX::solveFinished()
 	this->solutionTableModel_->setMaxValue(this->solver->squadMaxValue(this->ui->squadsComboBox->currentText()));
 }
 
+void CodeX::selectSolution(int index)
+{
+	Chips solutionChips;
+	const auto& solution = this->solver->solutions[index];
+	for(const auto& it : solution.chips)
+	{
+		solutionChips.push_back(this->chips[it.id]);
+	}
+	this->chipTableModel_->setChips(solutionChips);
+}
+
 CodeX::CodeX(QWidget *parent)
 	: QMainWindow(parent),
 	ui(new Ui::CodeX),
@@ -135,4 +146,11 @@ void CodeX::connect()
 		this->solver,
 		&ChipSolver::setUseEquipped
 	);
+	QObject::connect(
+		this->ui->solutionTable,
+		&QTableView::clicked,
+		[&](const QModelIndex& index)
+	{
+			this->selectSolution(index.row());
+	});
 }

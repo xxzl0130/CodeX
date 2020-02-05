@@ -95,13 +95,13 @@ bool ChipTableModel::setData(const QModelIndex& index, const QVariant& value, in
 	return false;
 }
 
-void ChipTableModel::setChips(const QList<GFChip>& chips)
+void ChipTableModel::setChips(const Chips& chips)
 {
 	chips_ = chips;
 	refresh();
 }
 
-const QList<GFChip>& ChipTableModel::chips() const
+const Chips& ChipTableModel::chips() const
 {
 	return chips_;
 }

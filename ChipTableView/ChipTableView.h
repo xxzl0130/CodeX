@@ -28,8 +28,8 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation,
         int role = Qt::DisplayRole) const override;
 	
-    void setChips(const QList<GFChip>& chips);
-    const QList<GFChip>& chips() const;
+    void setChips(const Chips& chips);
+    const Chips& chips() const;
 	// true显示格数 false显示数值（默认)
     void setShowBlocks(bool b = false);
 	// true显示锁定与装备状态（默认），false不显示
@@ -41,7 +41,7 @@ public:
     }
 
 private:
-    QList<GFChip> chips_;
+    Chips chips_;
     bool showBlocks_;
     bool showStatus_;
     QFont font_;

@@ -132,9 +132,9 @@ GFChip GFChip::operator-=(const GFChip& t)
 	return *this = *this - t;
 }
 
-QList<GFChip> getChips(const QJsonObject& obj)
+Chips getChips(const QJsonObject& obj)
 {
-	QList<GFChip> chips;
+	Chips chips;
 	for(const auto& k : obj.keys())
 	{
 		auto chip = GFChip::fromJsonObject(obj[k].toObject());

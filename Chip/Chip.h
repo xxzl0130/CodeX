@@ -80,7 +80,9 @@ public:
 	GFChip operator -= (const GFChip& t);
 };
 
-QList<GFChip> CHIP_EXPORT getChips(const QJsonObject& obj);
+typedef std::vector<GFChip> Chips;
+
+Chips CHIP_EXPORT getChips(const QJsonObject& obj);
 
 // 小队序号转为对应名称，需要先从squad_with_user_info中读取id并转换为1-6
 QString CHIP_EXPORT squadString(int i);

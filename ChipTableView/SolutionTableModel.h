@@ -29,7 +29,7 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation,
         int role = Qt::DisplayRole) const override;
 
-    void setSolution(QList<Solution> const* ptr);
+    void setSolution(std::vector<Solution> const* ptr);
     void setMaxValue(const GFChip& value);
 	
     void refresh()
@@ -39,7 +39,7 @@ public:
     }
 
 private:
-    QList<Solution> const* solution_;
+    std::vector<Solution> const* solution_;
     GFChip maxValue_;
     QFont font_;
 };

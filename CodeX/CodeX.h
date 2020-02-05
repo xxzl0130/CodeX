@@ -22,13 +22,14 @@ public:
 	static CodeX* instance();
 
 	// 芯片列表
-	QList<GFChip> chips;
+	Chips chips;
 	// 按grid编号分类的芯片，保存强制+20的属性
 	QMap<int, QList<GFChip>> gridChips;
 
 protected slots:
 	void solve();
 	void solveFinished();
+	void selectSolution(int index);
 	
 private:
 	CodeX(QWidget* parent = Q_NULLPTR);
