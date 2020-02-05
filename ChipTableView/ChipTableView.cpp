@@ -2,11 +2,14 @@
 #include <QBrush>
 #include <QPainter>
 #include <QFont>
+#include <QColor>
+#include "ChipView/ChipView.h"
 
 ChipTableModel::ChipTableModel(QObject* parent):
 	QAbstractItemModel(parent),
 	showBlocks_(false),
-	showStatus_(true)
+	showStatus_(true),
+	showColor_(false)
 {
 	font_.setFamily(QString::fromUtf8("\347\255\211\347\272\277"));
 	font_.setPointSize(12);
@@ -77,7 +80,7 @@ QVariant ChipTableModel::data(const QModelIndex& index, int role) const
 	case Qt::BackgroundRole:
 		if (index.row() % 2)
 		{
-			return QBrush(QColor(Qt::lightGray));
+			return QColor::fromRgb(ChipView::index2color(0));
 		}
 		else
 		{
@@ -85,6 +88,12 @@ QVariant ChipTableModel::data(const QModelIndex& index, int role) const
 		}
 	case Qt::FontRole:
 		return font_;
+	case Qt::ForegroundRole:
+		if(index.column() == 0 && showColor_)
+		{
+			return QColor::fromRgb(ChipView::index2color(index.row() + 1));
+		}
+		return QVariant();
 	default:
 		return QVariant();
 	}
@@ -115,6 +124,12 @@ void ChipTableModel::setShowBlocks(bool b)
 void ChipTableModel::setShowStatus(bool b)
 {
 	showStatus_ = b;
+	refresh();
+}
+
+void ChipTableModel::setShowColor(bool b)
+{
+	showColor_ = b;
 	refresh();
 }
 

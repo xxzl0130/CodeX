@@ -13,17 +13,5 @@
         "10000001",
         "11000011",
         "11100111"
-    ],
-    "MaxBlocks": {
-        "damage": 10,
-        "def_break": 5,
-        "hit": 7,
-        "reload": 16
-    },
-    "MaxValues": {
-        "damage": 122,
-        "def_break": 143,
-        "hit": 132,
-        "reload": 233
-    }
+    ]
 }

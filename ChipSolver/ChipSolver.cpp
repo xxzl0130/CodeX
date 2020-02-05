@@ -63,6 +63,7 @@ ChipSolver::ChipSolver(QObject* parent):
 			squadConfig.maxValue.defbreakValue = maxValues["def_break"].toInt();
 			squadConfig.maxValue.hitValue = maxValues["hit"].toInt();
 			squadConfig.maxValue.reloadValue = maxValues["reload"].toInt();
+			squadConfig.color = obj["color"].toInt();
 			
 			file.setFileName(QrcBase + configFile[name].toString());
 			file.open(QIODevice::ReadOnly);
@@ -121,7 +122,23 @@ void ChipSolver::setUseLocked(bool b)
 
 ChipViewInfo ChipSolver::solution2ChipView(const Solution& solution)
 {
-	return ChipViewInfo();
+	auto view = squadView_[targetSquadName_];
+	for(auto i = 0;i < solution.chips.size();++i)
+	{
+		const auto& chip = solution.chips[i];
+		const auto& chipConfig = ChipConfig::getConfig(CodeX::instance()->chips[chip.id].gridID).rotate90(chip.rotate);
+		for(auto x = 0;x < chipConfig.width;++x)
+		{
+			for(auto y = 0;y < chipConfig.height;++y)
+			{
+				if(chipConfig.map[y][x] == '1')
+				{
+					view.map[y + chip.y][x + chip.x] = i + 1;
+				}
+			}
+		}
+	}
+	return view;
 }
 
 void ChipSolver::run()
@@ -153,6 +170,8 @@ void ChipSolver::run()
 		// 当前配置方案
 		tmpConfig_ = plans.configs[i];
 		tmpMaxValue_ = configs_[targetSquadName_].maxValue;
+		tmpColor_ = configs_[targetSquadName_].color;
+		solutionSet_.clear();
 		findSolution(0);
 		emit solveNumberChanged(solutions.size());
 		auto t1 = clock();
@@ -191,6 +210,9 @@ void ChipSolver::findSolution(int k)
 {
 	if (k >= tmpConfig_.size())
 	{
+		if (solutionSet_.count(chipUsed_) > 0)
+			return;
+		solutionSet_.insert(chipUsed_);
 		tmpSolution_.totalValue.no = 0;
 		tmpSolution_.totalValue.id = 0;
 		tmpSolution_.totalValue.level = 0;
@@ -204,7 +226,10 @@ void ChipSolver::findSolution(int k)
 		tmpSolution_.totalValue.id += std::min(0, tmpSolution_.totalValue.damageValue - tmpMaxValue_.damageValue);
 		tmpSolution_.totalValue.id += std::min(0, tmpSolution_.totalValue.reloadValue - tmpMaxValue_.reloadValue);
 		tmpSolution_.totalValue.id += std::min(0, tmpSolution_.totalValue.hitValue - tmpMaxValue_.hitValue);
+		auto t = tmpSolution_.chips.size();
+		tmpSolution_.chips.resize(k);
 		solutions.push_back(tmpSolution_);
+		tmpSolution_.chips.resize(t);
 		return;
 	}
 	//获取当前所需型号的芯片列表
@@ -213,12 +238,10 @@ void ChipSolver::findSolution(int k)
 	tmpSolution_.chips[k] = tmpConfig_[k];
 	for (const auto& chip : chips)
 	{
-		if(chip.locked && !useLocked_)
-		{// 已锁定且不使用已锁定
-			continue;
-		}
-		if(chip.squad && !useEquipped_)
-		{// 已装备且不使用已装备
+		if((chip.color != tmpColor_) // 颜色不同
+			|| (chip.locked && !useLocked_)// 已锁定且不使用已锁定
+			|| (chip.squad && !useEquipped_))// 已装备且不使用已装备
+		{
 			continue;
 		}
 		if (!chipUsed_[chip.no])

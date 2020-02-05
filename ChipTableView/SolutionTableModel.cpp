@@ -3,6 +3,7 @@
 #include "Chip/Chip.h"
 #include <QList>
 #include "CodeX/CodeX.h"
+#include "ChipView/ChipView.h"
 
 SolutionTableModel::SolutionTableModel(QObject *parent)
 	: QAbstractItemModel(parent),
@@ -89,7 +90,7 @@ QVariant SolutionTableModel::data(const QModelIndex& index, int role) const
 	case Qt::BackgroundRole:
 		if (index.row() % 2)
 		{
-			return QBrush(QColor(Qt::lightGray));
+			return QColor::fromRgb(ChipView::index2color(0));
 		}
 		else
 		{
@@ -135,7 +136,7 @@ QVariant SolutionTableModel::headerData(int section, Qt::Orientation orientation
 	case 4:
 		return trUtf8(u8"命中");
 	case 5:
-		return trUtf8(u8"总属性");
+		return trUtf8(u8"总偏差");
 	case 6:
 		return trUtf8(u8"总等级");
 	case 7:

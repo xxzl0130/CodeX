@@ -34,6 +34,8 @@ public:
     void setShowBlocks(bool b = false);
 	// true显示锁定与装备状态（默认），false不显示
     void setShowStatus(bool b = true);
+	// true则在编号处显示颜色
+    void setShowColor(bool b = false);
     void refresh()
     {
         beginResetModel();
@@ -44,6 +46,7 @@ private:
     Chips chips_;
     bool showBlocks_;
     bool showStatus_;
+    bool showColor_;
     QFont font_;
 };
 

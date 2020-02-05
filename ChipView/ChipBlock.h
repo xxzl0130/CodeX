@@ -16,7 +16,7 @@ public:
 	bool hasHeightForWidth() const override;
 
 	int color() { return colorHex; }
-	void setColor(int c);
+	void setColor(uint32_t c);
 
 protected:
 	void resizeEvent(QResizeEvent* event) override;

@@ -37,6 +37,7 @@ void CodeX::selectSolution(int index)
 		solutionChips.push_back(this->chips[it.id]);
 	}
 	this->chipTableModel_->setChips(solutionChips);
+	this->ui->chipView->setView(this->solver->solution2ChipView(solution));
 }
 
 CodeX::CodeX(QWidget *parent)
@@ -64,10 +65,11 @@ CodeX::CodeX(QWidget *parent)
 	this->ui->chipsTable->setItemDelegate(chipTableDelegate_);
 	this->ui->chipsTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 	this->ui->chipsTable->verticalHeader()->hide();
-	this->ui->chipsTable->setColumnHidden(0,true);
+	//this->ui->chipsTable->setColumnHidden(0,true);
 	this->ui->chipsTable->setColumnHidden(2,true);
 	this->chipTableModel_->setShowBlocks(false);
 	this->chipTableModel_->setShowStatus(false);
+	this->chipTableModel_->setShowColor(true);
 	this->ui->solutionTable->setModel(solutionTableModel_);
 	this->ui->solutionTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 	this->ui->solutionTable->verticalHeader()->hide();

@@ -1,5 +1,6 @@
 #include "ChipBlock.h"
 #include "ChipView.h"
+#include <QDebug>
 
 ChipBlock::ChipBlock(QWidget *parent)
 	: QLabel(parent)
@@ -11,7 +12,7 @@ ChipBlock::ChipBlock(QWidget *parent)
 	this->setSizePolicy(sizePolicy);
 	this->setMinimumSize(QSize(0, 0));
 	this->setEnabled(false);
-	this->setColor(ChipView::Red);
+	this->setColor(ChipView::Gray);
 	this->setText("");
 }
 
@@ -29,9 +30,9 @@ bool ChipBlock::hasHeightForWidth() const
 	return true;
 }
 
-void ChipBlock::setColor(int c)
+void ChipBlock::setColor(uint32_t c)
 {
-	this->setStyleSheet(QString("background-color: #%1;\nborder:none;").arg(c, 6, 16));
+	this->setStyleSheet(QString("background-color: #%1;\nborder:none;").arg(c, 6, 16, QLatin1Char('0')));
 }
 
 void ChipBlock::resizeEvent(QResizeEvent* event)

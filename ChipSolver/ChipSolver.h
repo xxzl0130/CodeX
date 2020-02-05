@@ -2,10 +2,9 @@
 
 #include "chipsolver_global.h"
 #include <QThread>
-#include <QList>
-#include <QMap>
 #include <QString>
-#include <QJsonObject>
+#include <map>
+#include <set>
 #include <vector>
 #include "Chip/Chip.h"
 
@@ -81,15 +80,17 @@ private:
 		int blocks = 38;
 		// 可空格数
 		int optional = 0;
+		// 颜色
+		int color;
 		// 最大属性
 		GFChip maxValue;
 	};
 	// 所有配置方案，以名称为key
-	QMap<QString, SquadConfig> configs_;
+	std::map<QString, SquadConfig> configs_;
 	// 重装和配置方案记录信息
 	QJsonObject configInfo_;
 	// 重装的基本格子
-	QMap<QString, ChipViewInfo> squadView_;
+	std::map<QString, ChipViewInfo> squadView_;
 	// 目标重装
 	QString targetSquadName_;
 	// 目标方案
@@ -106,6 +107,10 @@ private:
 	GFChip tmpMaxValue_;
 	// 记录芯片使用
 	std::vector<bool> chipUsed_;
+	// 去重用set
+	std::set<std::vector<bool>> solutionSet_;
+	// 颜色
+	int tmpColor_;
 	// 使用已装备
 	bool useEquipped_;
 	// 使用已锁定

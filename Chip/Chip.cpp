@@ -141,6 +141,7 @@ Chips getChips(const QJsonObject& obj)
 		if ((chip.chipClass == GFChip::Class56 || chip.chipClass == GFChip::Class551 || chip.chipClass == GFChip::Class552) && chip.
 			gridID > 11)
 		{
+			chip.rotate %= ChipConfig::getConfig(chip.gridID).direction;
 			chips.push_back(chip);
 		}
 	}
@@ -224,6 +225,7 @@ ChipConfig ChipConfig::rotate90(int n) const
 	for (auto i = 0; i < n; ++i)
 	{
 		t.map = rotate(t.map);
+		std::swap(t.height, t.width);
 	}
 	return t;
 }
@@ -235,6 +237,7 @@ ChipConfig::ChipConfig(const QJsonObject& object)
 	width = object.value("width").toInt();
 	height = object.value("height").toInt();
 	blocks = object.value("blocks").toInt();
+	direction = object.value("direction").toInt();
 	name = object.value("name").toString().toStdString();
 	auto oMap = object["map"].toArray();
 	for(const auto& it : oMap)

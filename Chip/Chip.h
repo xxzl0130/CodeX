@@ -105,6 +105,8 @@ public:
 	int height;
 	// 芯片格数
 	int blocks;
+	// 旋转方向数
+	int direction;
 
 	// 芯片名字
 	std::string name;
