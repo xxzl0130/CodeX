@@ -34,7 +34,7 @@ GetChipWindow::~GetChipWindow()
 
 void GetChipWindow::init()
 {
-	this->ui->netProxyRadioButton->setChecked(true);
+	this->ui->localProxyRadioButton->setChecked(true);
 	request_->setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded; charset=UTF-8");
 
 	QSslConfiguration config = request_->sslConfiguration();
@@ -54,8 +54,8 @@ void GetChipWindow::init()
 void GetChipWindow::startLocalProxy()
 {
 	killProcess();
-	process_->start(QIODevice::ReadOnly);
 	this->ui->startLocalPushButton->setEnabled(false);
+	process_->start(QIODevice::ReadOnly);
 }
 
 void GetChipWindow::closeEvent(QCloseEvent* e)
@@ -160,6 +160,7 @@ void GetChipWindow::processError(QProcess::ProcessError error)
 	localProxyPort_ = "";
 	if (this->ui->netProxyRadioButton->isChecked())
 		return;
+	this->ui->startLocalPushButton->setEnabled(true);
 	switch (error)
 	{
 	case QProcess::FailedToStart:
@@ -181,7 +182,6 @@ void GetChipWindow::processError(QProcess::ProcessError error)
 		QMessageBox::warning(this, trUtf8(u8"´íÎó"), trUtf8(u8"³ÌÐòÎ´Öª´íÎó£¡"));
 		break;
 	}
-	this->ui->startLocalPushButton->setEnabled(true);
 }
 
 void GetChipWindow::processDataReady()
