@@ -694,13 +694,6 @@
        </property>
       </widget>
      </item>
-     <item>
-      <widget class="QPushButton" name="noButton">
-       <property name="text">
-        <string>取消</string>
-       </property>
-      </widget>
-     </item>
     </layout>
    </item>
   </layout>

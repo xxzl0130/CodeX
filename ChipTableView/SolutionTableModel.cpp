@@ -4,6 +4,7 @@
 #include <QList>
 #include "CodeX/CodeX.h"
 #include "ChipView/ChipView.h"
+#include <algorithm>
 
 SolutionTableModel::SolutionTableModel(QObject *parent)
 	: QAbstractItemModel(parent),
@@ -63,7 +64,7 @@ QVariant SolutionTableModel::data(const QModelIndex& index, int role) const
 		switch (index.column())
 		{
 		case 0:
-			return index.row();
+			return index.row() + 1;
 		case 1:
 			return QString("%1 (%2)").arg(solution.totalValue.damageValue)
 			.arg(min(0, solution.totalValue.damageValue - maxValue_.damageValue));
@@ -146,7 +147,62 @@ QVariant SolutionTableModel::headerData(int section, Qt::Orientation orientation
 	}
 }
 
-void SolutionTableModel::setSolution(SquadSolution const* ptr)
+void SolutionTableModel::sort(int column, Qt::SortOrder order)
+{
+	if (!solution_)
+		return;
+	auto cmp = [&](int a, int b) -> bool
+	{
+		if (order == Qt::AscendingOrder)
+			return a < b;
+		return a > b;
+	};
+	switch (column)
+	{
+	case 0:
+		break;
+	case 1:
+		std::sort(solution_->begin(), solution_->end(),
+			[&](const Solution& a, const Solution& b)
+			{return cmp(a.totalValue.damageValue, b.totalValue.damageValue); });
+		break;
+	case 2:
+		std::sort(solution_->begin(), solution_->end(),
+			[&](const Solution& a, const Solution& b)
+			{return cmp(a.totalValue.defbreakValue, b.totalValue.defbreakValue); });
+		break;
+	case 3:
+		std::sort(solution_->begin(), solution_->end(),
+			[&](const Solution& a, const Solution& b)
+			{return cmp(a.totalValue.reloadValue, b.totalValue.reloadValue); });
+		break;
+	case 4:
+		std::sort(solution_->begin(), solution_->end(),
+			[&](const Solution& a, const Solution& b)
+			{return cmp(a.totalValue.hitValue, b.totalValue.hitValue); });
+		break;
+	case 5:
+		std::sort(solution_->begin(), solution_->end(),
+			[&](const Solution& a, const Solution& b)
+			{return cmp(a.totalValue.id, b.totalValue.id); });
+		break;
+	case 6:
+		std::sort(solution_->begin(), solution_->end(),
+			[&](const Solution& a, const Solution& b)
+			{return cmp(a.totalValue.level, b.totalValue.level); });
+		break;
+	case 7:
+		std::sort(solution_->begin(), solution_->end(),
+			[&](const Solution& a, const Solution& b)
+			{return cmp(a.totalValue.no, b.totalValue.no); });
+		break;
+	default:
+		return;
+	}
+	refresh();
+}
+
+void SolutionTableModel::setSolution(SquadSolution* ptr)
 {
 	solution_ = ptr;
 	refresh();

@@ -65,10 +65,4 @@ void SettingWindow::connect()
 		this,
 		&SettingWindow::accept
 	);
-	QObject::connect(
-		this->ui->noButton,
-		&QPushButton::clicked,
-		this,
-		&SettingWindow::reject
-	);
 }

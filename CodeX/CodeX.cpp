@@ -57,16 +57,16 @@ void CodeX::selectSolution(int index)
 
 CodeX::CodeX(QWidget *parent)
 	: QMainWindow(parent),
+	solver_(new ChipSolver(this)),
 	ui(new Ui::CodeX),
 	chipDataWindow_(new ChipDataWindow(this)),
-	solver_(new ChipSolver(this)),
+	settingWindow_(new SettingWindow(this)),
 	progressBar_(new QProgressBar(this)),
 	solveNumberLabel_(new QLabel(u8"方案数：0",this)),
 	timeLabel_(new QLabel(u8"耗时：0s", this)),
 	chipTableModel_(new ChipTableModel(this)),
 	chipTableDelegate_(new ChipTableDelegate(this)),
-	solutionTableModel_(new SolutionTableModel(this)),
-	settingWindow_(new SettingWindow(this))
+	solutionTableModel_(new SolutionTableModel(this))
 {
 	CodeX::singleton = this;
 	ui->setupUi(this);
@@ -90,6 +90,8 @@ CodeX::CodeX(QWidget *parent)
 	this->ui->solutionTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 	this->ui->solutionTable->verticalHeader()->hide();
 	this->ui->solutionTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+	this->ui->solutionTable->setSelectionMode(QAbstractItemView::SingleSelection);
+	this->ui->solutionTable->setSortingEnabled(true);
 
 	connect();
 
@@ -168,7 +170,7 @@ void CodeX::connect()
 	QObject::connect(
 		this->ui->solutionTable,
 		&QTableView::clicked,
-		[&](const QModelIndex& index)
+		[&](QModelIndex index)
 	{
 			this->selectSolution(index.row());
 	});
