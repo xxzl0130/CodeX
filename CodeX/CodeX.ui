@@ -15,23 +15,70 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
-     <widget class="ChipView" name="chipView" native="true"/>
-    </item>
-    <item row="1" column="0">
-     <widget class="QPlainTextEdit" name="plainTextEdit">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
+    <item row="4" column="1">
+     <widget class="QLabel" name="solveNumberLabel">
+      <property name="text">
+       <string>方案数：0</string>
       </property>
      </widget>
     </item>
     <item row="1" column="1">
+     <widget class="QProgressBar" name="progressBar">
+      <property name="value">
+       <number>0</number>
+      </property>
+      <property name="textVisible">
+       <bool>true</bool>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="textDirection">
+       <enum>QProgressBar::TopToBottom</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="1">
+     <widget class="QCheckBox" name="useLockedCheckBox">
+      <property name="text">
+       <string>使用已锁定</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="1">
+     <widget class="QCheckBox" name="useEquippedCheckBox">
+      <property name="text">
+       <string>使用已装备</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="ChipView" name="chipView" native="true"/>
+    </item>
+    <item row="2" column="1">
+     <widget class="QComboBox" name="squadsComboBox"/>
+    </item>
+    <item row="3" column="1">
+     <widget class="QComboBox" name="configsComboBox"/>
+    </item>
+    <item row="8" column="1">
      <widget class="QPushButton" name="chipDataButton">
       <property name="text">
        <string>芯片数据</string>
+      </property>
+     </widget>
+    </item>
+    <item row="9" column="1">
+     <widget class="QPushButton" name="solveButton">
+      <property name="text">
+       <string>求解方案</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="1">
+     <widget class="QLabel" name="timeLabel">
+      <property name="text">
+       <string>耗时：0s</string>
       </property>
      </widget>
     </item>

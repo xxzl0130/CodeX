@@ -65,7 +65,8 @@ QString GFChip::squadName() const
 	return squadString(squad);
 }
 
-GFChip::GFChip(): chipClass(0), level(0), color(Orange), gridID(0), squad(0), position({0,0}), rotate(0), damageBlock(0),
+GFChip::GFChip(): id(0), no(0), chipClass(0), level(0), color(Orange), gridID(0), squad(0), position({0, 0}), rotate(0),
+                  damageBlock(0),
                   reloadBlock(0), hitBlock(0), defbreakBlock(0), damageValue(0), reloadValue(0), hitValue(0),
                   defbreakValue(0), locked(false)
 {
@@ -87,10 +88,48 @@ void GFChip::calcValue()
 		den = Den552;
 		break;
 	}
-	this->damageValue = ceil(ceil(this->defbreakBlock * ArgDmg * den) * ArgLv[this->level]);
+	this->damageValue = ceil(ceil(this->damageBlock * ArgDmg * den) * ArgLv[this->level]);
 	this->defbreakValue = ceil(ceil(this->defbreakBlock * ArgDbk * den) * ArgLv[this->level]);
 	this->hitValue = ceil(ceil(this->hitBlock * ArgAcu * den) * ArgLv[this->level]);
 	this->reloadValue = ceil(ceil(this->reloadBlock * ArgFil * den) * ArgLv[this->level]);
+}
+
+GFChip GFChip::operator+(const GFChip& t) const
+{
+	auto r = *this;
+	r.defbreakBlock += t.defbreakBlock;
+	r.reloadBlock += t.reloadBlock;
+	r.damageBlock += t.damageBlock;
+	r.hitBlock += t.hitBlock;
+	r.defbreakValue += t.defbreakValue;
+	r.reloadValue += t.reloadValue;
+	r.damageValue += t.damageValue;
+	r.hitValue += t.hitValue;
+	return r;
+}
+
+GFChip GFChip::operator+=(const GFChip& t)
+{
+	return *this = *this + t;
+}
+
+GFChip GFChip::operator-(const GFChip& t) const
+{
+	auto r = *this;
+	r.defbreakBlock -= t.defbreakBlock;
+	r.reloadBlock -= t.reloadBlock;
+	r.damageBlock -= t.damageBlock;
+	r.hitBlock -= t.hitBlock;
+	r.defbreakValue -= t.defbreakValue;
+	r.reloadValue -= t.reloadValue;
+	r.damageValue -= t.damageValue;
+	r.hitValue -= t.hitValue;
+	return r;
+}
+
+GFChip GFChip::operator-=(const GFChip& t)
+{
+	return *this = *this - t;
 }
 
 QList<GFChip> getChips(const QJsonObject& obj)

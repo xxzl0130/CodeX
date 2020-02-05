@@ -7,6 +7,7 @@
 namespace Ui { class CodeX; }
 class GFChip;
 class ChipSolver;
+class ChipDataWindow;
 
 class CodeX : public QMainWindow
 {
@@ -19,6 +20,11 @@ public:
 	QList<GFChip> chips;
 	// 按grid编号分类的芯片，保存强制+20的属性
 	QMap<int, QList<GFChip>> gridChips;
+
+protected slots:
+	void solve();
+	void solveFinished();
+	
 private:
 	CodeX(QWidget* parent = Q_NULLPTR);
 	static CodeX* singleton;

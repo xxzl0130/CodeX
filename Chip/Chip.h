@@ -73,6 +73,11 @@ public:
 	bool locked;
 	
 	void calcValue();
+
+	GFChip operator + (const GFChip& t) const;
+	GFChip operator += (const GFChip& t);
+	GFChip operator - (const GFChip& t) const;
+	GFChip operator -= (const GFChip& t);
 };
 
 QList<GFChip> CHIP_EXPORT getChips(const QJsonObject& obj);
@@ -119,9 +124,9 @@ private:
 struct CHIP_EXPORT ChipPuzzleOption
 {
 	int id;
-	int x, y;
+	uint8_t x, y;
 	// 顺时针旋转90度的次数
-	int rotate;
+	uint8_t rotate;
 	explicit ChipPuzzleOption(int _x = 0, int _y = 0, int _r = 0, int _no = 0) :id(_no), x(_x), y(_y), rotate(_r) {}
 	explicit ChipPuzzleOption(const QJsonObject& object);
 };
@@ -131,5 +136,5 @@ struct CHIP_EXPORT ChipViewInfo
 {
 	int width;
 	int height;
-	QList<QList<int>> map;
+	std::vector<std::vector<int>> map;
 };

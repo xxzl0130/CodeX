@@ -91,7 +91,7 @@
     <ClCompile Include="ChipSolver.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ChipSolver.h" />
+    <QtMoc Include="ChipSolver.h" />
     <ClInclude Include="chipsolver_global.h" />
   </ItemGroup>
   <ItemGroup>
