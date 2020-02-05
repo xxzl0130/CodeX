@@ -5,6 +5,7 @@
 #include <vector>
 #include <ctime>
 #include "CodeX/CodeX.h"
+#include <cstdlib>
 
 constexpr auto QrcBase = ":/ChipSolver/Resources/";
 
@@ -82,15 +83,20 @@ ChipSolver::ChipSolver(QObject* parent):
 	}
 }
 
-QStringList ChipSolver::squads() const
+QStringList ChipSolver::squadList() const
 {
 	return configInfo_.keys();
 }
 
-QStringList ChipSolver::configs(const QString& squad)
+QStringList ChipSolver::configList(const QString& squad)
 {
 	targetSquadName_ = squad;
 	return configInfo_[squad].toObject().keys();
+}
+
+GFChip ChipSolver::squadMaxValue(const QString& squad)
+{
+	return configs_[squad].maxValue;
 }
 
 void ChipSolver::setTargetBlock(const TargetBlock& block)
@@ -146,6 +152,7 @@ void ChipSolver::run()
 
 		// 当前配置方案
 		tmpConfig_ = plans.configs[i];
+		tmpMaxValue_ = configs_[targetSquadName_].maxValue;
 		findSolution(0);
 		emit solveNumberChanged(solutions.size());
 		auto t1 = clock();
@@ -184,6 +191,19 @@ void ChipSolver::findSolution(int k)
 {
 	if (k >= tmpConfig_.size())
 	{
+		tmpSolution_.totalValue.no = 0;
+		tmpSolution_.totalValue.id = 0;
+		tmpSolution_.totalValue.level = 0;
+		for(const auto& it : tmpSolution_.chips)
+		{
+			const auto& chip = CodeX::instance()->chips[it.id];
+			tmpSolution_.totalValue.no += abs(it.rotate - chip.rotate);
+			tmpSolution_.totalValue.level += chip.level;
+		}
+		tmpSolution_.totalValue.id += std::min(0, tmpSolution_.totalValue.defbreakValue - tmpMaxValue_.defbreakValue);
+		tmpSolution_.totalValue.id += std::min(0, tmpSolution_.totalValue.damageValue - tmpMaxValue_.damageValue);
+		tmpSolution_.totalValue.id += std::min(0, tmpSolution_.totalValue.reloadValue - tmpMaxValue_.reloadValue);
+		tmpSolution_.totalValue.id += std::min(0, tmpSolution_.totalValue.hitValue - tmpMaxValue_.hitValue);
 		solutions.push_back(tmpSolution_);
 		return;
 	}

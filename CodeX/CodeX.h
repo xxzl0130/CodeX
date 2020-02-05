@@ -8,6 +8,11 @@ namespace Ui { class CodeX; }
 class GFChip;
 class ChipSolver;
 class ChipDataWindow;
+class QProgressBar;
+class QLabel;
+class ChipTableModel;
+class ChipTableDelegate;
+class SolutionTableModel;
 
 class CodeX : public QMainWindow
 {
@@ -34,4 +39,12 @@ private:
 	Ui::CodeX *ui;
 	ChipDataWindow* chipDataWindow;
 	ChipSolver* solver;
+
+	QProgressBar* progressBar_;
+	QLabel* solveNumberLabel_;
+	QLabel* timeLabel_;
+
+	ChipTableModel* chipTableModel_;
+	ChipTableDelegate* chipTableDelegate_;
+	SolutionTableModel* solutionTableModel_;
 };

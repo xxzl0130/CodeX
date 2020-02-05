@@ -1,8 +1,6 @@
 #include "stdafx.h"
 #include "CodeX.h"
 #include "ui_CodeX.h"
-#include "ChipSolver/ChipSolver.h"
-#include "ChipDataWindow/ChipDataWindow.h"
 
 CodeX* CodeX::instance()
 {
@@ -26,21 +24,48 @@ void CodeX::solveFinished()
 	this->ui->solveButton->setEnabled(true);
 	this->ui->useEquippedCheckBox->setEnabled(true);
 	this->ui->useLockedCheckBox->setEnabled(true);
+	this->solutionTableModel_->setSolution(&this->solver->solutions);
+	this->solutionTableModel_->setMaxValue(this->solver->squadMaxValue(this->ui->squadsComboBox->currentText()));
 }
 
 CodeX::CodeX(QWidget *parent)
 	: QMainWindow(parent),
 	ui(new Ui::CodeX),
 	chipDataWindow(new ChipDataWindow(this)),
-	solver(new ChipSolver(this))
+	solver(new ChipSolver(this)),
+	progressBar_(new QProgressBar(this)),
+	solveNumberLabel_(new QLabel(u8"方案数：0",this)),
+	timeLabel_(new QLabel(u8"耗时：0s", this)),
+	chipTableModel_(new ChipTableModel(this)),
+	chipTableDelegate_(new ChipTableDelegate(this)),
+	solutionTableModel_(new SolutionTableModel(this))
 {
 	CodeX::singleton = this;
 	ui->setupUi(this);
+	this->ui->statusBar->addWidget(progressBar_);
+	this->ui->statusBar->addWidget(solveNumberLabel_);
+	this->ui->statusBar->addWidget(timeLabel_);
+	
 	this->ui->chipView->setChipSize(QSize(8,8));
+
+	this->ui->chipsTable->setModel(chipTableModel_);
+	this->ui->chipsTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+	this->ui->chipsTable->setItemDelegate(chipTableDelegate_);
+	this->ui->chipsTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+	this->ui->chipsTable->verticalHeader()->hide();
+	this->ui->chipsTable->setColumnHidden(0,true);
+	this->ui->chipsTable->setColumnHidden(2,true);
+	this->chipTableModel_->setShowBlocks(false);
+	this->chipTableModel_->setShowStatus(false);
+	this->ui->solutionTable->setModel(solutionTableModel_);
+	this->ui->solutionTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+	this->ui->solutionTable->verticalHeader()->hide();
+	this->ui->solutionTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+
 	connect();
 
 	this->chipDataWindow->init();
-	this->ui->squadsComboBox->addItems(this->solver->squads());
+	this->ui->squadsComboBox->addItems(this->solver->squadList());
 	this->solver->setTargetBlock(TargetBlock(20,2,4,6,0));
 }
 
@@ -55,7 +80,7 @@ void CodeX::connect()
 	QObject::connect(
 		this->solver,
 		&ChipSolver::solvePercentChanged,
-		this->ui->progressBar,
+		this->progressBar_,
 		&QProgressBar::setValue
 	);
 	QObject::connect(
@@ -63,14 +88,14 @@ void CodeX::connect()
 		&ChipSolver::solveNumberChanged,
 		[&](int n)
 	{
-			this->ui->solveNumberLabel->setText(trUtf8(u8"方案数：") + QString::number(n));
+			this->solveNumberLabel_->setText(trUtf8(u8"方案数：") + QString::number(n));
 	});
 	QObject::connect(
 		this->solver,
 		&ChipSolver::solveTimeChanged,
 		[&](double t)
 	{
-			this->ui->timeLabel->setText(trUtf8(u8"耗时：") + QString::number(t,'f',2) + "s");
+			this->timeLabel_->setText(trUtf8(u8"耗时：") + QString::number(t,'f',2) + "s");
 	});
 	QObject::connect(
 		this->solver,
@@ -90,7 +115,7 @@ void CodeX::connect()
 		[&](const QString& squad)
 	{
 			this->ui->configsComboBox->clear();
-			this->ui->configsComboBox->addItems(this->solver->configs(squad));
+			this->ui->configsComboBox->addItems(this->solver->configList(squad));
 	});
 	QObject::connect(
 		this->ui->configsComboBox,

@@ -9,15 +9,6 @@
 #include <vector>
 #include "Chip/Chip.h"
 
-// 一组可行解
-struct CHIPSOLVER_EXPORT Solution
-{
-	// 使用的芯片参数
-	std::vector<ChipPuzzleOption> chips;
-	// 得到的重装总属性
-	GFChip totalValue;
-};
-
 struct CHIPSOLVER_EXPORT TargetBlock
 {
 	// 伤害格数
@@ -38,6 +29,9 @@ struct CHIPSOLVER_EXPORT TargetBlock
 	{}
 };
 
+// 一个重装的所有解
+typedef QList<Solution> SquadSolution;
+
 class CHIPSOLVER_EXPORT ChipSolver : public QThread
 {
 	Q_OBJECT
@@ -45,15 +39,14 @@ public:
 	explicit ChipSolver(QObject* parent = nullptr);
 	~ChipSolver() = default;
 
-	// 一个重装的所有解
-	typedef QList<Solution> SquadSolution;
-
 	SquadSolution solutions;
 	
 	// 重装列表
-	QStringList squads() const;
+	QStringList squadList() const;
 	// 该重装的方案列表，同时会设置成当前重装
-	QStringList configs(const QString& squad);
+	QStringList configList(const QString& squad);
+	// 返回该重装的最大属性
+	GFChip squadMaxValue(const QString& squad);
 
 	// 将一个方案转为可显示的图形信息
 	ChipViewInfo solution2ChipView(const Solution& solution);
@@ -109,6 +102,8 @@ private:
 	Solution tmpSolution_;
 	// 临时选择的方案
 	Config tmpConfig_;
+	// 当前重装的最大值
+	GFChip tmpMaxValue_;
 	// 记录芯片使用
 	std::vector<bool> chipUsed_;
 	// 使用已装备

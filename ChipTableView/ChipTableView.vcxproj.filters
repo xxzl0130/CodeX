@@ -24,6 +24,9 @@
     <ClCompile Include="ChipTableView.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SolutionTableModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="chiptableview_global.h">
@@ -32,6 +35,9 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="ChipTableView.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="SolutionTableModel.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

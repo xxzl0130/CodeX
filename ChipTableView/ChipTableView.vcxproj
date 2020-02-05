@@ -89,8 +89,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ChipTableView.cpp" />
+    <ClCompile Include="SolutionTableModel.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <QtMoc Include="SolutionTableModel.h" />
     <QtMoc Include="ChipTableView.h" />
     <ClInclude Include="chiptableview_global.h" />
   </ItemGroup>

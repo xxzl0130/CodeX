@@ -1,16 +1,17 @@
 #pragma once
 
-#include "chiptableview_global.h"
 #include <QAbstractItemModel>
-#include <QItemDelegate>
+#include "chiptableview_global.h"
 #include "Chip/Chip.h"
 #include <QFont>
 
-class CHIPTABLEVIEW_EXPORT ChipTableModel : public QAbstractItemModel
+class CHIPTABLEVIEW_EXPORT SolutionTableModel : public QAbstractItemModel
 {
 	Q_OBJECT
+
 public:
-	explicit ChipTableModel(QObject* parent = nullptr);
+	SolutionTableModel(QObject *parent);
+	~SolutionTableModel();
 
     QModelIndex index(int row, int column,
         const QModelIndex& parent = QModelIndex()) const override;
@@ -27,13 +28,10 @@ public:
 
     QVariant headerData(int section, Qt::Orientation orientation,
         int role = Qt::DisplayRole) const override;
+
+    void setSolution(QList<Solution> const* ptr);
+    void setMaxValue(const GFChip& value);
 	
-    void setChips(const QList<GFChip>& chips);
-    const QList<GFChip>& chips() const;
-	// true显示格数 false显示数值（默认)
-    void setShowBlocks(bool b = false);
-	// true显示锁定与装备状态（默认），false不显示
-    void setShowStatus(bool b = true);
     void refresh()
     {
         beginResetModel();
@@ -41,20 +39,7 @@ public:
     }
 
 private:
-    QList<GFChip> chips_;
-    bool showBlocks_;
-    bool showStatus_;
+    QList<Solution> const* solution_;
+    GFChip maxValue_;
     QFont font_;
-};
-
-class CHIPTABLEVIEW_EXPORT ChipTableDelegate : public QItemDelegate
-{
-    Q_OBJECT;
-public:
-    explicit ChipTableDelegate(QObject* parent = nullptr);
-    ~ChipTableDelegate() = default;
-
-    void paint(QPainter* painter,
-        const QStyleOptionViewItem& option,
-        const QModelIndex& index) const override;
 };

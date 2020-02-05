@@ -26,6 +26,7 @@ void ChipDataWindow::init()
 	this->ui->tableView->setItemDelegate(this->tableDelegate_);
 	this->ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 	this->ui->tableView->verticalHeader()->hide();
+	this->ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
 }
 
 void ChipDataWindow::recvChipJsonObject(const QJsonObject& object)

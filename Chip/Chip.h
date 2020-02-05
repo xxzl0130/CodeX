@@ -138,3 +138,12 @@ struct CHIP_EXPORT ChipViewInfo
 	int height;
 	std::vector<std::vector<int>> map;
 };
+
+// 一组可行解
+struct CHIP_EXPORT Solution
+{
+	// 使用的芯片参数
+	std::vector<ChipPuzzleOption> chips;
+	// 得到的重装总属性，以level为总等级，id为属性偏差，no为旋转次数
+	GFChip totalValue;
+};

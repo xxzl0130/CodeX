@@ -1,12 +1,15 @@
 #include "ChipTableView.h"
 #include <QBrush>
 #include <QPainter>
+#include <QFont>
 
 ChipTableModel::ChipTableModel(QObject* parent):
 	QAbstractItemModel(parent),
 	showBlocks_(false),
 	showStatus_(true)
 {
+	font_.setFamily(QString::fromUtf8("\347\255\211\347\272\277"));
+	font_.setPointSize(12);
 }
 
 QModelIndex ChipTableModel::index(int row, int column, const QModelIndex& parent) const
@@ -80,6 +83,8 @@ QVariant ChipTableModel::data(const QModelIndex& index, int role) const
 		{
 			return QColor(Qt::white);
 		}
+	case Qt::FontRole:
+		return font_;
 	default:
 		return QVariant();
 	}
@@ -146,30 +151,34 @@ Qt::ItemFlags ChipTableModel::flags(const QModelIndex& index) const
 
 QVariant ChipTableModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
+	if(role == Qt::FontRole)
+	{
+		return font_;
+	}
 	if (orientation == Qt::Vertical || role != Qt::DisplayRole)
 		return QAbstractItemModel::headerData(section, orientation, role);
 	switch (section)
 	{
 	case 0:
-		return trUtf8(u8"编号");
+		return trUtf8(u8"编\n号");
 	case 1:
-		return trUtf8(u8"图形");
+		return trUtf8(u8"形\n状");
 	case 2:
-		return trUtf8(u8"名称");
+		return trUtf8(u8"名\n称");
 	case 3:
-		return trUtf8(u8"强化");
+		return trUtf8(u8"强\n化");
 	case 4:
-		return trUtf8(u8"命中");
+		return trUtf8(u8"精\n度");
 	case 5:
-		return trUtf8(u8"装填");
+		return trUtf8(u8"装\n填");
 	case 6:
-		return trUtf8(u8"伤害");
+		return trUtf8(u8"伤\n害");
 	case 7:
-		return trUtf8(u8"破防");
+		return trUtf8(u8"破\n防");
 	case 8:
-		return trUtf8(u8"锁定");
+		return trUtf8(u8"锁\n定");
 	case 9:
-		return trUtf8(u8"装备");
+		return trUtf8(u8"装\n备");
 	default:
 		return QAbstractItemModel::headerData(section, orientation, role);
 	}
