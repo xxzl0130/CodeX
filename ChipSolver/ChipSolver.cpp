@@ -11,8 +11,8 @@ constexpr auto QrcBase = ":/ChipSolver/Resources/";
 
 ChipSolver::ChipSolver(QObject* parent):
 	QThread(parent),
-	useLocked_(false),
-	useEquipped_(false)
+	useEquipped_(false),
+	useLocked_(false)
 {
 	Q_INIT_RESOURCE(ChipSolver);
 
@@ -97,7 +97,7 @@ QStringList ChipSolver::configList(const QString& squad)
 
 GFChip ChipSolver::squadMaxValue(const QString& squad)
 {
-	return configs_[squad].maxValue;
+	return configs_[configList(squad)[0]].maxValue;
 }
 
 void ChipSolver::setTargetBlock(const TargetBlock& block)
@@ -169,8 +169,8 @@ void ChipSolver::run()
 
 		// 当前配置方案
 		tmpConfig_ = plans.configs[i];
-		tmpMaxValue_ = configs_[targetSquadName_].maxValue;
-		tmpColor_ = configs_[targetSquadName_].color;
+		tmpMaxValue_ = configs_[targetConfigName_].maxValue;
+		tmpColor_ = configs_[targetConfigName_].color;
 		solutionSet_.clear();
 		findSolution(0);
 		emit solveNumberChanged(solutions.size());
@@ -179,6 +179,7 @@ void ChipSolver::run()
 		if (solutions.size() >= targetBlock_.upper)
 			break;
 	}
+	emit solvePercentChanged(100);
 }
 
 bool ChipSolver::satisfyConfig(const Config& config)

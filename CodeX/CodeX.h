@@ -13,6 +13,7 @@ class QLabel;
 class ChipTableModel;
 class ChipTableDelegate;
 class SolutionTableModel;
+class SettingWindow;
 
 class CodeX : public QMainWindow
 {
@@ -25,6 +26,7 @@ public:
 	Chips chips;
 	// 按grid编号分类的芯片，保存强制+20的属性
 	QMap<int, QList<GFChip>> gridChips;
+	ChipSolver* solver_;
 
 protected slots:
 	void solve();
@@ -38,8 +40,8 @@ private:
 	void connect();
 	
 	Ui::CodeX *ui;
-	ChipDataWindow* chipDataWindow;
-	ChipSolver* solver;
+	ChipDataWindow* chipDataWindow_;
+	SettingWindow* settingWindow_;
 
 	QProgressBar* progressBar_;
 	QLabel* solveNumberLabel_;

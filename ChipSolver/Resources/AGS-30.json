@@ -21,7 +21,7 @@
         "damage": 10,
         "def_break": 5,
         "hit": 7,
-        "reload": 6
+        "reload": 16
     },
     "MaxValues": {
         "damage": 106,

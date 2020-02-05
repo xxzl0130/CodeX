@@ -81,7 +81,7 @@
         <item row="3" column="0" colspan="2">
          <widget class="QPushButton" name="solveButton">
           <property name="text">
-           <string>开始求解</string>
+           <string>开始计算</string>
           </property>
          </widget>
         </item>
@@ -125,6 +125,12 @@
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
        <widget class="QLabel" name="label">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="text">
          <string>CodeX重装芯片计算器</string>
         </property>
@@ -133,7 +139,14 @@
       <item>
        <widget class="QPushButton" name="chipDataButton">
         <property name="text">
-         <string>芯片数据</string>
+         <string>芯片</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="settingPushButton">
+        <property name="text">
+         <string>设置</string>
         </property>
        </widget>
       </item>
