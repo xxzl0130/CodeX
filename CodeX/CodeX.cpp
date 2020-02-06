@@ -2,6 +2,7 @@
 #include "CodeX.h"
 #include "ui_CodeX.h"
 #include "SettingWindow.h"
+#include "AboutDialog.h"
 
 CodeX* CodeX::instance()
 {
@@ -66,7 +67,8 @@ CodeX::CodeX(QWidget *parent)
 	timeLabel_(new QLabel(u8"ºÄÊ±£º0s", this)),
 	chipTableModel_(new ChipTableModel(this)),
 	chipTableDelegate_(new ChipTableDelegate(this)),
-	solutionTableModel_(new SolutionTableModel(this))
+	solutionTableModel_(new SolutionTableModel(this)),
+	aboutDialog_(new AboutDialog(this))
 {
 	CodeX::singleton = this;
 	ui->setupUi(this);
@@ -99,6 +101,8 @@ CodeX::CodeX(QWidget *parent)
 	this->ui->squadsComboBox->addItems(this->solver_->squadList());
 	this->solver_->setTargetBlock(TargetBlock(20,2,4,6,0));
 	this->settingWindow_->reset();
+	this->show();
+	this->aboutDialog_->checkUpdate();
 }
 
 void CodeX::connect()
@@ -178,6 +182,12 @@ void CodeX::connect()
 		this->ui->settingPushButton,
 		&QPushButton::clicked,
 		this->settingWindow_,
+		&SettingWindow::show
+	);
+	QObject::connect(
+		this->ui->aboutPushButton,
+		&QPushButton::clicked,
+		this->aboutDialog_,
 		&SettingWindow::show
 	);
 }

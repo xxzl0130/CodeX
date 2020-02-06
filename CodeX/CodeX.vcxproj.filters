@@ -37,6 +37,9 @@
     <ClCompile Include="SettingWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="AboutDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -50,12 +53,18 @@
     <QtMoc Include="SettingWindow.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="AboutDialog.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="CodeX.ui">
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="SettingWindow.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="AboutDialog.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>

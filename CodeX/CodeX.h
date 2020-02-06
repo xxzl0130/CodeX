@@ -14,6 +14,7 @@ class ChipTableModel;
 class ChipTableDelegate;
 class SolutionTableModel;
 class SettingWindow;
+class AboutDialog;
 
 class CodeX : public QMainWindow
 {
@@ -50,4 +51,5 @@ private:
 	ChipTableModel* chipTableModel_;
 	ChipTableDelegate* chipTableDelegate_;
 	SolutionTableModel* solutionTableModel_;
+	AboutDialog* aboutDialog_;
 };

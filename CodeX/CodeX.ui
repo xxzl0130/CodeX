@@ -154,6 +154,13 @@
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="QPushButton" name="aboutPushButton">
+        <property name="text">
+         <string>关于</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </item>
     <item row="1" column="0">
