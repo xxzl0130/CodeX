@@ -9,7 +9,7 @@
 #include <QNetworkProxy>
 
 CodeX* CodeX::singleton = nullptr;
-QVersionNumber version(1, 1);
+QVersionNumber version(1, 2);
 
 void checkUpdate();
 
