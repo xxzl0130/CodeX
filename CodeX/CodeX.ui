@@ -78,10 +78,17 @@
           </property>
          </widget>
         </item>
-        <item row="3" column="0" colspan="2">
+        <item row="3" column="0">
          <widget class="QPushButton" name="solveButton">
           <property name="text">
            <string>开始计算</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QPushButton" name="stopPushButton">
+          <property name="text">
+           <string>停止计算</string>
           </property>
          </widget>
         </item>

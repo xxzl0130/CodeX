@@ -190,4 +190,11 @@ void CodeX::connect()
 		this->aboutDialog_,
 		&SettingWindow::show
 	);
+	QObject::connect(
+		this->ui->stopPushButton,
+		&QPushButton::clicked,
+		this->solver_,
+		&ChipSolver::stop,
+		Qt::DirectConnection
+	);
 }

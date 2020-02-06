@@ -12,7 +12,8 @@ constexpr auto QrcBase = ":/ChipSolver/Resources/";
 ChipSolver::ChipSolver(QObject* parent):
 	QThread(parent),
 	useEquipped_(false),
-	useLocked_(false)
+	useLocked_(false),
+	running_(false)
 {
 	Q_INIT_RESOURCE(ChipSolver);
 
@@ -120,6 +121,12 @@ void ChipSolver::setUseLocked(bool b)
 	useLocked_ = b;
 }
 
+void ChipSolver::stop()
+{
+	if(this->isRunning())
+		running_ = false;
+}
+
 ChipViewInfo ChipSolver::solution2ChipView(const Solution& solution)
 {
 	auto view = squadView_[targetSquadName_];
@@ -144,12 +151,14 @@ ChipViewInfo ChipSolver::solution2ChipView(const Solution& solution)
 void ChipSolver::run()
 {
 	const auto& plans = configs_[targetConfigName_];
+	running_ = true;
+	lastSolveNumber_ = 0;
 	tmpTarget_ = targetBlock_;
 	tmpTarget_.error += plans.optional; // 附加额外的可空格
 	int percent = 0;
 	chipUsed_.resize(CodeX::instance()->chips.size(), false);
 	solutions.clear();
-	auto t0 = clock();
+	t0_ = clock();
 	for(auto i = 0;i < plans.configs.size();++i)
 	{
 		// 计算当前进度百分比
@@ -173,9 +182,9 @@ void ChipSolver::run()
 		tmpColor_ = configs_[targetConfigName_].color;
 		solutionSet_.clear();
 		findSolution(0);
-		emit solveNumberChanged(solutions.size());
+		emit solveNumberChanged(lastSolveNumber_ = solutions.size());
 		auto t1 = clock();
-		emit solveTimeChanged(double(t1 - t0) / CLOCKS_PER_SEC);
+		emit solveTimeChanged(double(t1 - t0_) / CLOCKS_PER_SEC);
 		if (solutions.size() >= targetBlock_.upper)
 			break;
 	}
@@ -209,6 +218,8 @@ bool ChipSolver::checkOverflow(const TargetBlock& target, const GFChip& chips) c
 
 void ChipSolver::findSolution(int k)
 {
+	if (!running_)
+		return;
 	if (k >= tmpConfig_.size())
 	{
 		if (solutionSet_.count(chipUsed_) > 0)
@@ -231,6 +242,18 @@ void ChipSolver::findSolution(int k)
 		tmpSolution_.totalValue.id += std::min(0, tmpSolution_.totalValue.hitValue - tmpMaxValue_.hitValue);
 		solutions.push_back(tmpSolution_);
 		tmpSolution_.chips.resize(t);
+
+		if(solutions.size() - lastSolveNumber_ > 100)
+		{
+			emit solveNumberChanged(lastSolveNumber_ = solutions.size());
+			auto t1 = clock();
+			emit solveTimeChanged(double(t1 - t0_) / CLOCKS_PER_SEC);
+			if(solutions.size() > targetBlock_.upper)
+			{
+				running_ = false;
+			}
+		}
+		
 		return;
 	}
 	//获取当前所需型号的芯片列表

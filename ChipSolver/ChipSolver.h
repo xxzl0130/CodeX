@@ -57,6 +57,7 @@ public slots:
 	void setTargetConfig(const QString& name);
 	void setUseEquipped(bool b);
 	void setUseLocked(bool b);
+	void stop();
 
 signals:
 	// 解决方案百分比
@@ -111,10 +112,16 @@ private:
 	std::set<std::vector<bool>> solutionSet_;
 	// 颜色
 	int tmpColor_;
+	// 上一次上报的求解数量
+	int lastSolveNumber_;
+	// 开始运行的时间
+	time_t t0_;
 	// 使用已装备
 	bool useEquipped_;
 	// 使用已锁定
 	bool useLocked_;
+	// 运行标志，用于停止解算
+	bool running_;
 
 	//检查当前芯片数量是否满足该拼法最低需要
 	static bool satisfyConfig(const Config& config);
