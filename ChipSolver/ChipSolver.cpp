@@ -220,7 +220,7 @@ void ChipSolver::findSolution(int k)
 		for(const auto& it : tmpSolution_.chips)
 		{
 			const auto& chip = CodeX::instance()->chips[it.id];
-			tmpSolution_.totalValue.no += abs(it.rotate - chip.rotate);
+			tmpSolution_.totalValue.no += int(it.rotate != chip.rotate);
 			tmpSolution_.totalValue.level += chip.level;
 		}
 		tmpSolution_.totalValue.id += std::min(0, tmpSolution_.totalValue.defbreakValue - tmpMaxValue_.defbreakValue);

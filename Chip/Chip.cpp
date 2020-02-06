@@ -20,10 +20,10 @@ static bool ChipResourceInit = false;
 GFChip::GFChip(const QJsonObject& object)
 {
 	id = object.value("id").toString("0").toInt();
-	chipClass = object.value("chip_id").toString().toInt();
 	level = object.value("chip_level").toString().toInt();
 	color = object.value("color_id").toString().toInt();
 	gridID = object.value("grid_id").toString().toInt();
+	chipClass = ChipConfig::getConfig(gridID).chipClass; // 游戏内有的class不对。。。
 	squad = object.value("squad_with_user_id").toString().toInt();
 	auto t = object.value("position").toString("0,0").split(",");
 	position.x = t[0].toInt();
