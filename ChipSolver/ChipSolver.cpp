@@ -156,7 +156,6 @@ void ChipSolver::run()
 	tmpTarget_ = targetBlock_;
 	tmpTarget_.error += plans.optional; // 附加额外的可空格
 	int percent = 0;
-	chipUsed_.resize(CodeX::instance()->chips.size(), false);
 	solutions.clear();
 	t0_ = clock();
 	tmpChips_.resize(8, 0);

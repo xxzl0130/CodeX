@@ -133,9 +133,9 @@ QVariant SolutionTableModel::headerData(int section, Qt::Orientation orientation
 	case 2:
 		return trUtf8(u8"ÆÆ·À");
 	case 3:
-		return trUtf8(u8"×°Ìî");
+		return trUtf8(u8"¾«¶È");
 	case 4:
-		return trUtf8(u8"ÃüÖĞ");
+		return trUtf8(u8"×°Ìî");
 	case 5:
 		return trUtf8(u8"×ÜÆ«²î");
 	case 6:
@@ -174,12 +174,12 @@ void SolutionTableModel::sort(int column, Qt::SortOrder order)
 	case 3:
 		std::sort(solution_->begin(), solution_->end(),
 			[&](const Solution& a, const Solution& b)
-			{return cmp(a.totalValue.reloadValue, b.totalValue.reloadValue); });
+			{return cmp(a.totalValue.hitValue, b.totalValue.hitValue); });
 		break;
 	case 4:
 		std::sort(solution_->begin(), solution_->end(),
 			[&](const Solution& a, const Solution& b)
-			{return cmp(a.totalValue.hitValue, b.totalValue.hitValue); });
+			{return cmp(a.totalValue.reloadValue, b.totalValue.reloadValue); });
 		break;
 	case 5:
 		std::sort(solution_->begin(), solution_->end(),
