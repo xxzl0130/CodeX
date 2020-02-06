@@ -71,7 +71,7 @@ protected:
 
 private:	
 	// 一组配置
-	typedef QList<ChipPuzzleOption> Config;
+	typedef std::vector<ChipPuzzleOption> Config;
 	// 一个重装的所有配置
 	struct SquadConfig
 	{
