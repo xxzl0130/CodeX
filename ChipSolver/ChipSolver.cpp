@@ -159,6 +159,7 @@ void ChipSolver::run()
 	chipUsed_.resize(CodeX::instance()->chips.size(), false);
 	solutions.clear();
 	t0_ = clock();
+	tmpChips_.resize(8, 0);
 	for(auto i = 0;i < plans.configs.size();++i)
 	{
 		// 计算当前进度百分比
@@ -169,6 +170,11 @@ void ChipSolver::run()
 			emit solvePercentChanged(percent);
 		}
 
+		// 当前配置方案
+		tmpConfig_ = plans.configs[i];
+		tmpMaxValue_ = configs_[targetConfigName_].maxValue;
+		tmpColor_ = configs_[targetConfigName_].color;
+		
 		if(!satisfyConfig(plans.configs[i]))
 		{
 			continue;
@@ -176,10 +182,6 @@ void ChipSolver::run()
 		// 临时记录方案
 		tmpSolution_.chips.resize(8, ChipPuzzleOption());
 
-		// 当前配置方案
-		tmpConfig_ = plans.configs[i];
-		tmpMaxValue_ = configs_[targetConfigName_].maxValue;
-		tmpColor_ = configs_[targetConfigName_].color;
 		solutionSet_.clear();
 		findSolution(0);
 		emit solveNumberChanged(lastSolveNumber_ = solutions.size());
@@ -201,7 +203,7 @@ bool ChipSolver::satisfyConfig(const Config& config)
 	}
 	for(const auto& it : require.keys())
 	{
-		ans = ans && (CodeX::instance()->gridChips[it].size() >= require[it]);
+		ans = ans && (CodeX::instance()->gridChips[tmpColor_][it].size() >= require[it]);
 	}
 	return ans;
 }
@@ -222,9 +224,9 @@ void ChipSolver::findSolution(int k)
 		return;
 	if (k >= tmpConfig_.size())
 	{
-		if (solutionSet_.count(chipUsed_) > 0)
+		if (solutionSet_.count(tmpChips_) > 0)
 			return;
-		solutionSet_.insert(chipUsed_);
+		solutionSet_.insert(tmpChips_);
 		auto t = tmpSolution_.chips.size();
 		tmpSolution_.chips.resize(k);
 		tmpSolution_.totalValue.no = 0;
@@ -257,30 +259,29 @@ void ChipSolver::findSolution(int k)
 		return;
 	}
 	//获取当前所需型号的芯片列表
-	const auto& chips = CodeX::instance()->gridChips[tmpConfig_[k].id];
+	auto& chips = CodeX::instance()->gridChips[tmpColor_][tmpConfig_[k].id];
 	// 先保存这一步的芯片配置，后续更新id
 	tmpSolution_.chips[k] = tmpConfig_[k];
-	for (const auto& chip : chips)
+	for (auto& chip : chips)
 	{
-		if((chip.color != tmpColor_) // 颜色不同
-			|| (chip.locked && !useLocked_)// 已锁定且不使用已锁定
+		if (chip.squad & 0x8000) //已使用
+			continue;
+		if ((chip.locked && !useLocked_)// 已锁定且不使用已锁定
 			|| (chip.squad && !useEquipped_))// 已装备且不使用已装备
 		{
 			continue;
 		}
-		if (!chipUsed_[chip.no])
+		// 溢出了不满足要求
+		if (checkOverflow(tmpTarget_, tmpSolution_.totalValue + chip))
 		{
-			// 溢出了不满足要求
-			if (checkOverflow(tmpTarget_, tmpSolution_.totalValue + chip))
-			{
-				continue;
-			}
-			chipUsed_[chip.no] = true;
-			tmpSolution_.totalValue += chip;
-			tmpSolution_.chips[k].id = chip.no; // 更新id
-			findSolution(k + 1);
-			chipUsed_[chip.no] = false;
-			tmpSolution_.totalValue -= chip;
+			continue;
 		}
+		chip.squad |= 0x8000; //符号位置1，反正小队号都是正数
+		tmpSolution_.totalValue += chip;
+		tmpSolution_.chips[k].id = chip.no; // 更新id
+		tmpChips_[k] = chip.no;
+		findSolution(k + 1);
+		chip.squad &= ~0x8000; // 符号位置0
+		tmpSolution_.totalValue -= chip;
 	}
 }

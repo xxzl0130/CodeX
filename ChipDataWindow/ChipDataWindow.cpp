@@ -56,7 +56,7 @@ void ChipDataWindow::recvChipJsonObject(const QJsonObject& object)
 		t.no = i;
 		t.level = 20;
 		t.calcValue();
-		gridChips[t.gridID].push_back(t);
+		gridChips[t.color][t.gridID].push_back(t);
 	}
 	this->tableModel_->setChips(chips);
 }

@@ -106,10 +106,8 @@ private:
 	Config tmpConfig_;
 	// 当前重装的最大值
 	GFChip tmpMaxValue_;
-	// 记录芯片使用
-	std::vector<bool> chipUsed_;
 	// 去重用set
-	std::set<std::vector<bool>> solutionSet_;
+	std::set<std::vector<int>> solutionSet_;
 	// 颜色
 	int tmpColor_;
 	// 上一次上报的求解数量
@@ -122,9 +120,11 @@ private:
 	bool useLocked_;
 	// 运行标志，用于停止解算
 	bool running_;
+	// 当前芯片
+	std::vector<int> tmpChips_;
 
 	//检查当前芯片数量是否满足该拼法最低需要
-	static bool satisfyConfig(const Config& config);
+	bool satisfyConfig(const Config& config);
 	// 检查芯片方案是否满足目标的格数溢出要求，只计算上溢，溢出返回true
 	bool checkOverflow(const TargetBlock& target, const GFChip& chips) const;
 	// 递归求解方案
