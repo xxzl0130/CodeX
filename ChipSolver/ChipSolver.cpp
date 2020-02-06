@@ -214,6 +214,8 @@ void ChipSolver::findSolution(int k)
 		if (solutionSet_.count(chipUsed_) > 0)
 			return;
 		solutionSet_.insert(chipUsed_);
+		auto t = tmpSolution_.chips.size();
+		tmpSolution_.chips.resize(k);
 		tmpSolution_.totalValue.no = 0;
 		tmpSolution_.totalValue.id = 0;
 		tmpSolution_.totalValue.level = 0;
@@ -227,8 +229,6 @@ void ChipSolver::findSolution(int k)
 		tmpSolution_.totalValue.id += std::min(0, tmpSolution_.totalValue.damageValue - tmpMaxValue_.damageValue);
 		tmpSolution_.totalValue.id += std::min(0, tmpSolution_.totalValue.reloadValue - tmpMaxValue_.reloadValue);
 		tmpSolution_.totalValue.id += std::min(0, tmpSolution_.totalValue.hitValue - tmpMaxValue_.hitValue);
-		auto t = tmpSolution_.chips.size();
-		tmpSolution_.chips.resize(k);
 		solutions.push_back(tmpSolution_);
 		tmpSolution_.chips.resize(t);
 		return;
