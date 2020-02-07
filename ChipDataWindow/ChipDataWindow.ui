@@ -6,18 +6,113 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>616</width>
+    <height>322</height>
    </rect>
+  </property>
+  <property name="font">
+   <font>
+    <family>等线</family>
+    <pointsize>14</pointsize>
+   </font>
   </property>
   <property name="windowTitle">
    <string>芯片数据</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
+  <layout class="QGridLayout" name="gridLayout" columnstretch="2,1">
    <item row="0" column="0">
     <widget class="QTableView" name="tableView"/>
    </item>
-   <item row="1" column="0">
+   <item row="0" column="1">
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>已装备小队信息</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="5" column="0">
+       <widget class="QLabel" name="reloadLabel">
+        <property name="text">
+         <string>装填：</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="dbkLabel">
+        <property name="text">
+         <string>破防：</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="hitLabel">
+        <property name="text">
+         <string>精度：</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QComboBox" name="squadComboBox">
+        <item>
+         <property name="text">
+          <string>BGM-71</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>AGS-30</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>2B14</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>M2</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>AT4</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>QLZ-04</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="6" column="0">
+       <widget class="QTableView" name="squadTableView"/>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="damageLabel">
+        <property name="text">
+         <string>杀伤：</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label">
+        <property name="font">
+         <font>
+          <pointsize>10</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>当前/满强/偏差/格数</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="1" column="0" colspan="2">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <spacer name="horizontalSpacer">

@@ -27,6 +27,10 @@ public:
 	Chips chips;
 	// 外层按颜色分类，内层按grid编号分类的芯片，保存强制+20的属性
 	std::map<int,std::map<int, std::vector<GFChip>>> gridChips;
+	// 按小队分类的已装备的芯片
+	std::map<int, std::vector<GFChip>> squadChips;
+	
+	// 求解器
 	ChipSolver* solver_;
 
 protected slots:

@@ -93,6 +93,8 @@ private:
 	};
 	// 所有配置方案，以名称为key
 	std::map<QString, SquadConfig> configs_;
+	// 所有重装的最大值
+	std::map<QString, GFChip> maxValues_;
 	// 重装和配置方案记录信息
 	QJsonObject configInfo_;
 	// 重装的基本格子

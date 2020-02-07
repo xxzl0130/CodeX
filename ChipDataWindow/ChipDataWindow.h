@@ -21,11 +21,16 @@ public:
 public slots:
 	void recvChipJsonObject(const QJsonObject& object);
 
+private slots:
+	void squadChanged(int index);
+
 private:
 	void connect();
 
 	Ui::ChipDataWindow* ui;
 	GetChipWindow* getChipWindow;
 	ChipTableModel* tableModel_;
+	ChipTableModel* squadModel_;
 	ChipTableDelegate* tableDelegate_;
+	ChipTableDelegate* squadDelegate_;
 };

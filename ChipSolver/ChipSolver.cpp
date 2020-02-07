@@ -82,6 +82,7 @@ ChipSolver::ChipSolver(QObject* parent):
 			}
 			// name是方案名
 			configs_[name] = squadConfig;
+			maxValues_[squad] = squadConfig.maxValue;
 		}
 	}
 }
@@ -99,7 +100,7 @@ QStringList ChipSolver::configList(const QString& squad)
 
 GFChip ChipSolver::squadMaxValue(const QString& squad)
 {
-	return configs_[configList(squad)[0]].maxValue;
+	return maxValues_[squad];
 }
 
 void ChipSolver::setTargetBlock(const TargetBlock& block)
@@ -273,7 +274,7 @@ void ChipSolver::findSolution(int k)
 		tmpSolution_.chips.resize(t);
 		++tmpSolutionNumber_;
 
-		if(tmpSolutionNumber_ - lastSolveNumber_ > 100)
+		if(tmpSolutionNumber_ - lastSolveNumber_ > 1000)
 		{
 			emit solveNumberChanged(lastSolveNumber_ = tmpSolutionNumber_);
 			auto t1 = clock();
