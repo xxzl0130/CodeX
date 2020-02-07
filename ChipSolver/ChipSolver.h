@@ -83,6 +83,8 @@ private:
 		int optional = 0;
 		// 颜色
 		int color;
+		// 旋转对称，0为不对称，>0为需要旋转几次
+		int palindrome;
 		// 最大属性
 		GFChip maxValue;
 	};
@@ -104,12 +106,10 @@ private:
 	Solution tmpSolution_;
 	// 临时选择的方案
 	Config tmpConfig_;
-	// 当前重装的最大值
-	GFChip tmpMaxValue_;
+	// 临时选择的重装方案
+	SquadConfig tmpSquadConfig_;
 	// 去重用set
 	std::set<std::vector<int>> solutionSet_;
-	// 颜色
-	int tmpColor_;
 	// 上一次上报的求解数量
 	int lastSolveNumber_;
 	// 开始运行的时间

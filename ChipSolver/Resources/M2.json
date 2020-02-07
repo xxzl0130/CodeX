@@ -9,6 +9,7 @@
     "height": 8,
     "blocks": 38,
     "color": 2,
+    "palindrome" : 1,
     "map": [
         "00011110",
         "10001100",

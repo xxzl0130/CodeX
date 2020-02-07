@@ -65,6 +65,7 @@ ChipSolver::ChipSolver(QObject* parent):
 			squadConfig.maxValue.hitValue = maxValues["hit"].toInt();
 			squadConfig.maxValue.reloadValue = maxValues["reload"].toInt();
 			squadConfig.color = obj["color"].toInt();
+			squadConfig.palindrome = obj["palindrome"].toInt();
 			
 			file.setFileName(QrcBase + configFile[name].toString());
 			file.open(QIODevice::ReadOnly);
@@ -159,6 +160,7 @@ void ChipSolver::run()
 	solutions.clear();
 	t0_ = clock();
 	tmpChips_.resize(8, 0);
+	tmpSquadConfig_ = configs_[targetConfigName_];
 	for(auto i = 0;i < plans.configs.size();++i)
 	{
 		// 计算当前进度百分比
@@ -171,8 +173,6 @@ void ChipSolver::run()
 
 		// 当前配置方案
 		tmpConfig_ = plans.configs[i];
-		tmpMaxValue_ = configs_[targetConfigName_].maxValue;
-		tmpColor_ = configs_[targetConfigName_].color;
 		
 		if(!satisfyConfig(plans.configs[i]))
 		{
@@ -202,7 +202,7 @@ bool ChipSolver::satisfyConfig(const Config& config)
 	}
 	for(const auto& it : require.keys())
 	{
-		ans = ans && (CodeX::instance()->gridChips[tmpColor_][it].size() >= require[it]);
+		ans = ans && (CodeX::instance()->gridChips[tmpSquadConfig_.color][it].size() >= require[it]);
 	}
 	return ans;
 }
@@ -237,10 +237,27 @@ void ChipSolver::findSolution(int k)
 			tmpSolution_.totalValue.no += int(it.rotate != chip.rotate);
 			tmpSolution_.totalValue.level += chip.level;
 		}
-		tmpSolution_.totalValue.id += std::min(0, tmpSolution_.totalValue.defbreakValue - tmpMaxValue_.defbreakValue);
-		tmpSolution_.totalValue.id += std::min(0, tmpSolution_.totalValue.damageValue - tmpMaxValue_.damageValue);
-		tmpSolution_.totalValue.id += std::min(0, tmpSolution_.totalValue.reloadValue - tmpMaxValue_.reloadValue);
-		tmpSolution_.totalValue.id += std::min(0, tmpSolution_.totalValue.hitValue - tmpMaxValue_.hitValue);
+		if(tmpSquadConfig_.palindrome > 0)
+		{
+			// 枚举整体旋转方向
+			for(auto i = tmpSquadConfig_.palindrome;i < 4;i += tmpSquadConfig_.palindrome)
+			{
+				int sum = 0;
+				// 对每个芯片附加一次旋转
+				for (const auto& it : tmpSolution_.chips)
+				{
+					const auto& chip = CodeX::instance()->chips[it.id];
+					auto r = chip.rotate + tmpSquadConfig_.palindrome;
+					r %= ChipConfig::getConfig(chip.gridID).direction; // 考虑芯片自身对称问题
+					sum += int(r != it.rotate);
+				}
+				tmpSolution_.totalValue.no = std::min(tmpSolution_.totalValue.no, sum);
+			}
+		}
+		tmpSolution_.totalValue.id += std::min(0, tmpSolution_.totalValue.defbreakValue - tmpSquadConfig_.maxValue.defbreakValue);
+		tmpSolution_.totalValue.id += std::min(0, tmpSolution_.totalValue.damageValue - tmpSquadConfig_.maxValue.damageValue);
+		tmpSolution_.totalValue.id += std::min(0, tmpSolution_.totalValue.reloadValue - tmpSquadConfig_.maxValue.reloadValue);
+		tmpSolution_.totalValue.id += std::min(0, tmpSolution_.totalValue.hitValue - tmpSquadConfig_.maxValue.hitValue);
 		solutions.push_back(tmpSolution_);
 		tmpSolution_.chips.resize(t);
 
@@ -258,7 +275,7 @@ void ChipSolver::findSolution(int k)
 		return;
 	}
 	//获取当前所需型号的芯片列表
-	auto& chips = CodeX::instance()->gridChips[tmpColor_][tmpConfig_[k].id];
+	auto& chips = CodeX::instance()->gridChips[tmpSquadConfig_.color][tmpConfig_[k].id];
 	// 先保存这一步的芯片配置，后续更新id
 	tmpSolution_.chips[k] = tmpConfig_[k];
 	for (auto& chip : chips)
