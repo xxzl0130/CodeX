@@ -11,7 +11,7 @@
 // 各属性系数
 static constexpr double ArgDmg = 4.4, ArgDbk = 12.7, ArgAcu = 7.1, ArgFil = 5.7;
 // 密度系数
-static constexpr double Den56 = 1.0, Den551 = 1.0, Den552 = 0.92;
+static constexpr double Den56 = 1.0, Den551 = 0.92, Den552 = 1.0;
 // 等级系数
 static constexpr double ArgLv[21] = { 1.0,1.08,1.16,1.24,1.32,1.4,1.48,1.56,1.64,1.72,1.8,1.87,1.94,2.01,2.08,2.15,2.22,2.29,2.36,2.43,2.5 };
 
@@ -23,7 +23,7 @@ GFChip::GFChip(const QJsonObject& object)
 	level = object.value("chip_level").toString().toInt();
 	color = object.value("color_id").toString().toInt();
 	gridID = object.value("grid_id").toString().toInt();
-	chipClass = ChipConfig::getConfig(gridID).chipClass; // 游戏内有的class不对。。。
+	chipClass = object.value("chip_id").toString().toInt();  //ChipConfig::getConfig(gridID).chipClass; // 游戏内有的class不对。。。
 	squad = object.value("squad_with_user_id").toString().toInt();
 	auto t = object.value("position").toString("0,0").split(",");
 	position.x = t[0].toInt();
