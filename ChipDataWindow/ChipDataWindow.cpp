@@ -91,10 +91,10 @@ void ChipDataWindow::squadChanged(int index)
 		max += chip;
 	}
 	auto M = CodeX::instance()->solver_->squadMaxValue(this->ui->squadComboBox->currentText());
-	this->ui->damageLabel->setText(trUtf8(u8"杀伤：") + QString("%1/%2/%3/%4").arg(sum.damageValue).arg(max.damageValue).arg(std::min(0, sum.damageValue - M.damageValue)).arg(sum.damageBlock));
-	this->ui->dbkLabel->setText(trUtf8(u8"破防：") + QString("%1/%2/%3/%4").arg(sum.defbreakValue).arg(max.defbreakValue).arg(std::min(0, sum.defbreakValue - M.defbreakValue)).arg(sum.defbreakBlock));
-	this->ui->hitLabel->setText(trUtf8(u8"精度：") + QString("%1/%2/%3/%4").arg(sum.hitValue).arg(max.hitValue).arg(std::min(0, sum.hitValue - M.hitValue)).arg(sum.hitBlock));
-	this->ui->reloadLabel->setText(trUtf8(u8"装填：") + QString("%1/%2/%3/%4").arg(sum.reloadValue).arg(max.reloadValue).arg(std::min(0, sum.reloadValue - M.reloadValue)).arg(sum.reloadBlock));
+	this->ui->damageLabel->setText(trUtf8(u8"杀伤：") + QString("%1/%2/%3/%4").arg(sum.damageValue).arg(max.damageValue).arg(std::min(0, max.damageValue - M.damageValue)).arg(sum.damageBlock));
+	this->ui->dbkLabel->setText(trUtf8(u8"破防：") + QString("%1/%2/%3/%4").arg(sum.defbreakValue).arg(max.defbreakValue).arg(std::min(0, max.defbreakValue - M.defbreakValue)).arg(sum.defbreakBlock));
+	this->ui->hitLabel->setText(trUtf8(u8"精度：") + QString("%1/%2/%3/%4").arg(sum.hitValue).arg(max.hitValue).arg(std::min(0, max.hitValue - M.hitValue)).arg(sum.hitBlock));
+	this->ui->reloadLabel->setText(trUtf8(u8"装填：") + QString("%1/%2/%3/%4").arg(sum.reloadValue).arg(max.reloadValue).arg(std::min(0, max.reloadValue - M.reloadValue)).arg(sum.reloadBlock));
 }
 
 void ChipDataWindow::connect()
