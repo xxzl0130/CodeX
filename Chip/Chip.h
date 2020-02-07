@@ -150,4 +150,6 @@ struct CHIP_EXPORT Solution
 	std::vector<ChipPuzzleOption> chips;
 	// 得到的重装总属性，以level为总等级，id为属性偏差，no为旋转次数
 	GFChip totalValue;
+
+	bool operator <(const Solution& r) const;
 };

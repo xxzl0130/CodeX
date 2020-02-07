@@ -31,7 +31,8 @@ TargetBlock SettingWindow::getTargetBlock(const QString& squad)
 			break;
 		}
 	}
-	target.upper = this->ui->numbersSpinBox->value();
+	target.showNumber = this->ui->numbersSpinBox->value();
+	target.maxNumber = this->ui->maxSpinBox->value();
 	return target;
 }
 
@@ -49,6 +50,7 @@ void SettingWindow::reset()
 		dynamic_cast<QSpinBox*>(this->ui->gridLayout->itemAtPosition(i + 1, 5)->widget())->setValue(0);
 	}
 	this->ui->numbersSpinBox->setValue(1000);
+	this->ui->maxSpinBox->setValue(10000);
 }
 
 void SettingWindow::connect()

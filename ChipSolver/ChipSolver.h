@@ -6,6 +6,7 @@
 #include <map>
 #include <set>
 #include <vector>
+#include <queue>
 #include "Chip/Chip.h"
 
 struct CHIPSOLVER_EXPORT TargetBlock
@@ -20,11 +21,13 @@ struct CHIPSOLVER_EXPORT TargetBlock
 	int reloadBlock;
 	// 偏差格数
 	int error;
-	// 最大方案数量
-	int upper;
+	// 最大显示方案数量
+	int showNumber;
+	// 最大计算方案数量
+	int maxNumber;
 
-	explicit TargetBlock(int dmg = 0, int dbk = 0, int hit = 0, int r = 0,  int e = 0, int u = 1e9) :
-		damageBlock(dmg), defbreakBlock(dbk), hitBlock(hit), reloadBlock(r), error(e), upper(u)
+	explicit TargetBlock(int dmg = 0, int dbk = 0, int hit = 0, int r = 0,  int e = 0, int u = 1e3,int m = 1e9) :
+		damageBlock(dmg), defbreakBlock(dbk), hitBlock(hit), reloadBlock(r), error(e), showNumber(u),maxNumber(m)
 	{}
 };
 
@@ -122,6 +125,10 @@ private:
 	bool running_;
 	// 当前芯片
 	std::vector<int> tmpChips_;
+	// 优先级队列
+	std::priority_queue<Solution> queue_;
+	// 方案数
+	int tmpSolutionNumber_;
 
 	//检查当前芯片数量是否满足该拼法最低需要
 	bool satisfyConfig(const Config& config);

@@ -158,9 +158,11 @@ void ChipSolver::run()
 	tmpTarget_.error += plans.optional; // 附加额外的可空格
 	int percent = 0;
 	solutions.clear();
+	queue_ = std::priority_queue<Solution>();
 	t0_ = clock();
 	tmpChips_.resize(8, 0);
 	tmpSquadConfig_ = configs_[targetConfigName_];
+	tmpSolutionNumber_ = 0;
 	for(auto i = 0;i < plans.configs.size();++i)
 	{
 		// 计算当前进度百分比
@@ -183,11 +185,16 @@ void ChipSolver::run()
 
 		solutionSet_.clear();
 		findSolution(0);
-		emit solveNumberChanged(lastSolveNumber_ = solutions.size());
+		emit solveNumberChanged(lastSolveNumber_ = tmpSolutionNumber_);
 		auto t1 = clock();
 		emit solveTimeChanged(double(t1 - t0_) / CLOCKS_PER_SEC);
-		if (solutions.size() >= targetBlock_.upper)
+		if (tmpSolutionNumber_ >= targetBlock_.maxNumber)
 			break;
+	}
+	while(!queue_.empty())
+	{
+		solutions.push_back(queue_.top());
+		queue_.pop();
 	}
 	emit solvePercentChanged(100);
 }
@@ -258,15 +265,20 @@ void ChipSolver::findSolution(int k)
 		tmpSolution_.totalValue.id += std::min(0, tmpSolution_.totalValue.damageValue - tmpSquadConfig_.maxValue.damageValue);
 		tmpSolution_.totalValue.id += std::min(0, tmpSolution_.totalValue.reloadValue - tmpSquadConfig_.maxValue.reloadValue);
 		tmpSolution_.totalValue.id += std::min(0, tmpSolution_.totalValue.hitValue - tmpSquadConfig_.maxValue.hitValue);
-		solutions.push_back(tmpSolution_);
-		tmpSolution_.chips.resize(t);
-
-		if(solutions.size() - lastSolveNumber_ > 100)
+		queue_.push(tmpSolution_);
+		if(queue_.size() > targetBlock_.showNumber)
 		{
-			emit solveNumberChanged(lastSolveNumber_ = solutions.size());
+			queue_.pop();
+		}
+		tmpSolution_.chips.resize(t);
+		++tmpSolutionNumber_;
+
+		if(tmpSolutionNumber_ - lastSolveNumber_ > 100)
+		{
+			emit solveNumberChanged(lastSolveNumber_ = tmpSolutionNumber_);
 			auto t1 = clock();
 			emit solveTimeChanged(double(t1 - t0_) / CLOCKS_PER_SEC);
-			if(solutions.size() > targetBlock_.upper)
+			if(tmpSolutionNumber_ > targetBlock_.maxNumber)
 			{
 				running_ = false;
 			}

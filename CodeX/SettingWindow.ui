@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>545</width>
-    <height>389</height>
+    <height>306</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -629,7 +629,7 @@
       <item>
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>最大方案数</string>
+         <string>显示方案数</string>
         </property>
        </widget>
       </item>
@@ -646,6 +646,29 @@
         </property>
         <property name="value">
          <number>1000</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_14">
+        <property name="text">
+         <string>计算方案数</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="maxSpinBox">
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="maximum">
+         <number>100000000</number>
+        </property>
+        <property name="singleStep">
+         <number>1000</number>
+        </property>
+        <property name="value">
+         <number>10000</number>
         </property>
        </widget>
       </item>

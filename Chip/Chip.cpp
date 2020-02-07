@@ -253,3 +253,8 @@ ChipPuzzleOption::ChipPuzzleOption(const QJsonObject& object)
 	y = object.value("y").toInt();
 	rotate = object.value("rotate").toInt();
 }
+
+bool Solution::operator<(const Solution& r) const
+{
+	return this->totalValue.id > r.totalValue.id;
+}
