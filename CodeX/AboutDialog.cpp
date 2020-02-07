@@ -5,7 +5,7 @@
 AboutDialog::AboutDialog(QWidget *parent)
 	: QDialog(parent),
 	ui(new Ui::AboutDialog()),
-	version(1,4)
+	version(1,5)
 {
 	ui->setupUi(this);
 	ui->nameLabel->setText(trUtf8(u8"CodeXÖØ×°Ğ¾Æ¬¼ÆËãÆ÷ v") + version.toString());
