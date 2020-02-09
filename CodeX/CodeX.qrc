@@ -1,4 +1,5 @@
 <RCC>
-    <qresource prefix="CodeX">
+    <qresource prefix="/CodeX">
+        <file>Resources/pay.png</file>
     </qresource>
 </RCC>
