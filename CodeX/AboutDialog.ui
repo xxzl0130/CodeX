@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>333</width>
-    <height>172</height>
+    <width>504</width>
+    <height>295</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -15,6 +15,12 @@
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>504</width>
+    <height>295</height>
+   </size>
   </property>
   <property name="font">
    <font>
@@ -26,7 +32,7 @@
    <string>关于</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
+   <item row="0" column="1">
     <widget class="QLabel" name="nameLabel">
      <property name="text">
       <string>CodeX重装芯片计算器</string>
@@ -36,7 +42,30 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="0">
+   <item row="1" column="1">
+    <widget class="QLabel" name="copyrightLabel">
+     <property name="text">
+      <string>Copyright © 2020 轩轩醉了</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1">
+    <widget class="QLabel" name="infoLabel">
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/xxzl0130/CodeX/blob/master/doc/%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E.md&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;使用说明&lt;/span&gt;&lt;/a&gt; | &lt;a href=&quot;https://bbs.nga.cn/read.php?tid=20284990&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;NGA&lt;/span&gt;&lt;/a&gt; | &lt;a href=&quot;https://github.com/xxzl0130/CodeX&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;GitHub&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="textFormat">
+      <enum>Qt::AutoText</enum>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0" colspan="2">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <spacer name="horizontalSpacer">
@@ -54,36 +83,13 @@
      <item>
       <widget class="QPushButton" name="pushButton">
        <property name="text">
-        <string>确定</string>
+        <string>关闭</string>
        </property>
       </widget>
      </item>
-     <item>
-      <spacer name="horizontalSpacer_2">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
     </layout>
    </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="copyrightLabel">
-     <property name="text">
-      <string>Copyright © 2020 轩轩醉了</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0">
+   <item row="3" column="1">
     <widget class="QLabel" name="copyrightLabel_2">
      <property name="text">
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;mailto:zaxs0130@gmail.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Mail: zaxs0130@gmail.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -93,7 +99,7 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="0">
+   <item row="2" column="1">
     <widget class="QLabel" name="opensourceLabel">
      <property name="text">
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;本程序遵循&lt;a href=&quot;http://www.gnu.org/licenses/lgpl-3.0.html&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;LGPL 3.0&lt;/span&gt;&lt;/a&gt;开源&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -103,13 +109,31 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="0">
-    <widget class="QLabel" name="infoLabel">
-     <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/xxzl0130/CodeX/blob/master/doc/%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E.md&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;使用说明&lt;/span&gt;&lt;/a&gt; | &lt;a href=&quot;https://bbs.nga.cn/read.php?tid=20284990&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;NGA&lt;/span&gt;&lt;/a&gt; | &lt;a href=&quot;https://github.com/xxzl0130/CodeX&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;GitHub&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   <item row="1" column="0" rowspan="4">
+    <widget class="QLabel" name="label">
+     <property name="maximumSize">
+      <size>
+       <width>200</width>
+       <height>200</height>
+      </size>
      </property>
-     <property name="textFormat">
-      <enum>Qt::AutoText</enum>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="pixmap">
+      <pixmap>Resources/pay.png</pixmap>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>觉得好就支持一下吧~</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
