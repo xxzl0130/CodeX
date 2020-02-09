@@ -78,21 +78,18 @@ QVariant ChipTableModel::data(const QModelIndex& index, int role) const
 	case Qt::TextAlignmentRole:
 		return int(Qt::AlignHCenter | Qt::AlignVCenter);
 	case Qt::BackgroundRole:
+		if (index.column() == 0 && showColor_)
+		{
+			return QColor::fromRgb(ChipView::index2color(index.row() + 1));
+		}
 		if (index.row() % 2)
 		{
 			return QColor::fromRgb(ChipView::index2color(0));
 		}
-		else
-		{
-			return QColor(Qt::white);
-		}
+		return QColor(Qt::white);
 	case Qt::FontRole:
 		return font_;
 	case Qt::ForegroundRole:
-		if(index.column() == 0 && showColor_)
-		{
-			return QColor::fromRgb(ChipView::index2color(index.row() + 1));
-		}
 		return QVariant();
 	default:
 		return QVariant();

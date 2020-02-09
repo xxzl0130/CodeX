@@ -5,7 +5,8 @@
 AboutDialog::AboutDialog(QWidget *parent)
 	: QDialog(parent),
 	ui(new Ui::AboutDialog()),
-	version(1,5)
+	version(1,6),
+	accessManager_(new QNetworkAccessManager(this))
 {
 	ui->setupUi(this);
 	ui->nameLabel->setText(trUtf8(u8"CodeX重装芯片计算器 v") + version.toString());
@@ -18,31 +19,35 @@ AboutDialog::~AboutDialog()
 
 void AboutDialog::checkUpdate()
 {
-	QNetworkAccessManager accessManager;
-	QNetworkRequest request;
-	request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded; charset=UTF-8");
-	QSslConfiguration config = request.sslConfiguration();
+#ifdef _DEBUG
+	QNetworkProxy proxy;
+	proxy.setType(QNetworkProxy::Socks5Proxy);
+	proxy.setHostName("127.0.0.1");
+	proxy.setPort(10808);
+	QNetworkProxy::setApplicationProxy(proxy);
+#endif
+	request_.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded; charset=UTF-8");
+	QSslConfiguration config = request_.sslConfiguration();
 	config.setPeerVerifyMode(QSslSocket::VerifyNone);
 	config.setProtocol(QSsl::SecureProtocols);
-	request.setSslConfiguration(config);
-	request.setUrl(QUrl("https://api.github.com/repos/xxzl0130/CodeX/releases/latest"));
+	request_.setSslConfiguration(config);
+	request_.setUrl(QUrl("https://api.github.com/repos/xxzl0130/CodeX/releases/latest"));
 	auto onReply =
 		QObject::connect(
-			&accessManager,
+			accessManager_,
 			&QNetworkAccessManager::finished,
 			[&](QNetworkReply* reply)
 			{
 				if (reply->error() != QNetworkReply::NoError)
 				{
-					qDebug() << reply->errorString();
 					reply->deleteLater();
 					return;
 				}
 				auto json = QJsonDocument::fromJson(reply->readAll()).object();
 				auto ver = json["tag_name"].toString("v1.0").toLower().split("v");
-				if (!ver.isEmpty())
+				if (ver.size() > 1)
 				{
-					auto newVersion = QVersionNumber::fromString(ver[0]);
+					auto newVersion = QVersionNumber::fromString(ver[1]);
 					if (newVersion > version)
 					{
 						auto ret = QMessageBox::information(nullptr, u8"提示", u8"检测到新版本，是否下载？", QMessageBox::Yes | QMessageBox::No);
@@ -54,5 +59,5 @@ void AboutDialog::checkUpdate()
 				}
 				reply->deleteLater();
 			});
-	accessManager.get(request);
+	accessManager_->get(request_);
 }

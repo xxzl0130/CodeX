@@ -2,6 +2,7 @@
 少女前线芯片计算器CodeX  
 [使用说明](./doc/使用说明.md)  
 转载请注明出处，禁止用于商业。  
+![GitHub](https://img.shields.io/github/license/xxzl0130/CodeX) ![GitHub release (latest by date)](https://img.shields.io/github/v/release/xxzl0130/CodeX) ![GitHub All Releases](https://img.shields.io/github/downloads/xxzl0130/CodeX/total)  
 
 ## 第一版
 目前功能：  
