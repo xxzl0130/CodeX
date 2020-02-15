@@ -5,8 +5,11 @@
 AboutDialog::AboutDialog(QWidget *parent)
 	: QDialog(parent),
 	ui(new Ui::AboutDialog()),
+<<<<<<< HEAD
 	version(1,8,0),
-	accessManager_(new QNetworkAccessManager(this))
+=======
+	version(1,7),
+>>>>>>> è°ƒæ•´ä¸ºé™æ€ç¼–è¯?	accessManager_(new QNetworkAccessManager(this))
 {
 	ui->setupUi(this);
 	ui->nameLabel->setText(trUtf8(u8"CodeXÖØ×°Ð¾Æ¬¼ÆËãÆ÷ v") + version.toString());
