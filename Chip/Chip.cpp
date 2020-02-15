@@ -3,10 +3,12 @@
 #include <QStringList>
 #include <cmath>
 #include <QJsonArray>
+#include <QJsonObject>
 #include <QJsonDocument>
 #include <algorithm>
 #include <QDebug>
 #include <QResource>
+#include <QFile>
 
 // 各属性系数
 static constexpr double ArgDmg = 4.4, ArgDbk = 12.7, ArgAcu = 7.1, ArgFil = 5.7;

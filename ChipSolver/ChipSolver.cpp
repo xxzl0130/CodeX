@@ -6,6 +6,7 @@
 #include <ctime>
 #include "CodeX/CodeX.h"
 #include <cstdlib>
+#include <QFile>
 
 constexpr auto QrcBase = ":/ChipSolver/Resources/";
 

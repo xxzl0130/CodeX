@@ -5,6 +5,7 @@
 
 #include <QTextCodec>
 #include <QSslSocket>
+#include <QSslConfiguration>
 #include <QMessageBox>
 #include <QJsonObject>
 #include <QJsonDocument>

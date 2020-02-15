@@ -95,7 +95,7 @@ bool GetChipWindow::parseChipData(const QByteArray& bytes)
 	}
 	catch (const std::runtime_error & e)
 	{
-		qDebug() << trUtf8(u8"数据解析失败！\n") + e.what();
+		//qDebug() << trUtf8(u8"数据解析失败！\n") + e.what();
 		return false;
 	}
 }
