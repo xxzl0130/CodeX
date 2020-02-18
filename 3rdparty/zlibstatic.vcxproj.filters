@@ -9,85 +9,36 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="zlib\CMakeLists.txt" />
+    <ClCompile Include="C:\Users\zaxs0\source\repos\CodeX\3rdparty\zlib\adler32.c" />
+    <ClCompile Include="C:\Users\zaxs0\source\repos\CodeX\3rdparty\zlib\compress.c" />
+    <ClCompile Include="C:\Users\zaxs0\source\repos\CodeX\3rdparty\zlib\crc32.c" />
+    <ClCompile Include="C:\Users\zaxs0\source\repos\CodeX\3rdparty\zlib\deflate.c" />
+    <ClCompile Include="C:\Users\zaxs0\source\repos\CodeX\3rdparty\zlib\gzclose.c" />
+    <ClCompile Include="C:\Users\zaxs0\source\repos\CodeX\3rdparty\zlib\gzlib.c" />
+    <ClCompile Include="C:\Users\zaxs0\source\repos\CodeX\3rdparty\zlib\gzread.c" />
+    <ClCompile Include="C:\Users\zaxs0\source\repos\CodeX\3rdparty\zlib\gzwrite.c" />
+    <ClCompile Include="C:\Users\zaxs0\source\repos\CodeX\3rdparty\zlib\inflate.c" />
+    <ClCompile Include="C:\Users\zaxs0\source\repos\CodeX\3rdparty\zlib\infback.c" />
+    <ClCompile Include="C:\Users\zaxs0\source\repos\CodeX\3rdparty\zlib\inftrees.c" />
+    <ClCompile Include="C:\Users\zaxs0\source\repos\CodeX\3rdparty\zlib\inffast.c" />
+    <ClCompile Include="C:\Users\zaxs0\source\repos\CodeX\3rdparty\zlib\trees.c" />
+    <ClCompile Include="C:\Users\zaxs0\source\repos\CodeX\3rdparty\zlib\uncompr.c" />
+    <ClCompile Include="C:\Users\zaxs0\source\repos\CodeX\3rdparty\zlib\zutil.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="zlib\adler32.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="zlib\compress.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="zlib\crc32.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="zlib\deflate.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="zlib\gzclose.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="zlib\gzlib.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="zlib\gzread.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="zlib\gzwrite.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="zlib\infback.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="zlib\inffast.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="zlib\inflate.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="zlib\inftrees.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="zlib\trees.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="zlib\uncompr.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="zlib\zutil.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
+    <ClInclude Include="C:\Users\zaxs0\source\repos\CodeX\3rdparty\build\zconf.h" />
+    <ClInclude Include="C:\Users\zaxs0\source\repos\CodeX\3rdparty\zlib\zlib.h" />
+    <ClInclude Include="C:\Users\zaxs0\source\repos\CodeX\3rdparty\zlib\crc32.h" />
+    <ClInclude Include="C:\Users\zaxs0\source\repos\CodeX\3rdparty\zlib\deflate.h" />
+    <ClInclude Include="C:\Users\zaxs0\source\repos\CodeX\3rdparty\zlib\gzguts.h" />
+    <ClInclude Include="C:\Users\zaxs0\source\repos\CodeX\3rdparty\zlib\inffast.h" />
+    <ClInclude Include="C:\Users\zaxs0\source\repos\CodeX\3rdparty\zlib\inffixed.h" />
+    <ClInclude Include="C:\Users\zaxs0\source\repos\CodeX\3rdparty\zlib\inflate.h" />
+    <ClInclude Include="C:\Users\zaxs0\source\repos\CodeX\3rdparty\zlib\inftrees.h" />
+    <ClInclude Include="C:\Users\zaxs0\source\repos\CodeX\3rdparty\zlib\trees.h" />
+    <ClInclude Include="C:\Users\zaxs0\source\repos\CodeX\3rdparty\zlib\zutil.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="zlib\crc32.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="zlib\deflate.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="zlib\gzguts.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="zlib\inffast.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="zlib\inffixed.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="zlib\inflate.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="zlib\inftrees.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="zlib\trees.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="zlib\zlib.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="zlib\zutil.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
+    <CustomBuild Include="C:\Users\zaxs0\source\repos\CodeX\3rdparty\zlib\CMakeLists.txt" />
   </ItemGroup>
 </Project>
