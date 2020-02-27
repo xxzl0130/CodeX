@@ -17,5 +17,6 @@
         <file>Resources/QLZ-04.json</file>
         <file>Resources/QLZ-04-result.json</file>
         <file>Resources/squads.json</file>
+        <file>Resources/2B14-52-result.json</file>
     </qresource>
 </RCC>

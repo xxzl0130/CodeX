@@ -1,13 +1,14 @@
 {
     "name": "2B14",
     "optional": {
-        "2B14": 0
+        "6格+5格1类": 0,
+        "带5格2类": 0
     },
     "width": 8,
     "height": 6,
     "blocks": 32,
     "color": 1,
-    "palindrome" : 2,
+    "palindrome": 2,
     "map": [
         "11011011",
         "10000001",
