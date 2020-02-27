@@ -20,6 +20,7 @@ static bool ChipResourceInit = false;
 GFChip::GFChip(const QJsonObject& object)
 {
 	id = object.value("id").toString("0").toInt();
+	exp = object.value("chip_exp").toString("0").toInt();
 	level = object.value("chip_level").toString().toInt();
 	color = object.value("color_id").toString().toInt();
 	gridID = object.value("grid_id").toString().toInt();
@@ -65,8 +66,8 @@ QString GFChip::squadName() const
 	return squadString(squad);
 }
 
-GFChip::GFChip(): id(0), no(0), chipClass(0), level(0), color(Orange), gridID(0), squad(0), position({0, 0}), rotate(0),
-                  damageBlock(0),
+GFChip::GFChip(): id(0), no(0), chipClass(0), exp(0), level(0), color(Orange), gridID(0), squad(0), position({0, 0}),
+                  rotate(0),damageBlock(0),
                   reloadBlock(0), hitBlock(0), defbreakBlock(0), damageValue(0), reloadValue(0), hitValue(0),
                   defbreakValue(0), locked(false)
 {

@@ -41,6 +41,8 @@ public:
 	int no;
 	// 芯片类别，5061/5051/5052...
 	int chipClass;
+	// 芯片经验
+	int exp;
 	// 芯片等级
 	int level;
 	// 芯片颜色

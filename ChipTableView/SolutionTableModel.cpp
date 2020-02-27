@@ -80,7 +80,7 @@ QVariant SolutionTableModel::data(const QModelIndex& index, int role) const
 		case 5:
 			return solution.totalValue.id;
 		case 6:
-			return solution.totalValue.level;
+			return solution.totalValue.exp;
 		case 7:
 			return solution.totalValue.no * 50;
 		default:
@@ -139,7 +139,7 @@ QVariant SolutionTableModel::headerData(int section, Qt::Orientation orientation
 	case 5:
 		return trUtf8(u8"总偏差");
 	case 6:
-		return trUtf8(u8"总等级");
+		return trUtf8(u8"总强化");
 	case 7:
 		return trUtf8(u8"校准券");
 	default:
@@ -189,7 +189,7 @@ void SolutionTableModel::sort(int column, Qt::SortOrder order)
 	case 6:
 		std::sort(solution_->begin(), solution_->end(),
 			[&](const Solution& a, const Solution& b)
-			{return cmp(a.totalValue.level, b.totalValue.level); });
+			{return cmp(a.totalValue.exp, b.totalValue.exp); });
 		break;
 	case 7:
 		std::sort(solution_->begin(), solution_->end(),

@@ -238,12 +238,12 @@ void ChipSolver::findSolution(int k)
 		tmpSolution_.chips.resize(k);
 		tmpSolution_.totalValue.no = 0;
 		tmpSolution_.totalValue.id = 0;
-		tmpSolution_.totalValue.level = 0;
+		tmpSolution_.totalValue.exp = 0;
 		for(const auto& it : tmpSolution_.chips)
 		{
 			const auto& chip = CodeX::instance()->chips[it.id];
 			tmpSolution_.totalValue.no += int(it.rotate != chip.rotate);
-			tmpSolution_.totalValue.level += chip.level;
+			tmpSolution_.totalValue.exp += chip.exp;
 		}
 		if(tmpSquadConfig_.palindrome > 0)
 		{
