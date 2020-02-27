@@ -4,8 +4,7 @@
 转载请注明出处，禁止用于商业。  
 ![GitHub](https://img.shields.io/github/license/xxzl0130/CodeX) ![GitHub release (latest by date)](https://img.shields.io/github/v/release/xxzl0130/CodeX) ![GitHub All Releases](https://img.shields.io/github/downloads/xxzl0130/CodeX/total)  
 
-## 第一版
-目前功能：  
+## 目前功能：  
 * 从本地代理/网络代理获取芯片数据  
 * 配置各小队参数  
 * 为各小队配置不同的芯片组合方案（例如用不用5格）  
@@ -17,7 +16,6 @@
 TODO：
 - [ ] 保存为各小队选择的配置  
 - [ ] 在计算中排除已经选择的配置中的芯片  
-- [ ] 等级总和改为开发值总和
 
 ## 依赖
 [zlib](https://github.com/madler/zlib)  
