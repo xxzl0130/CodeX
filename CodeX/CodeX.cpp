@@ -42,6 +42,10 @@ void CodeX::solveFinished()
 	this->ui->useLockedCheckBox->setEnabled(true);
 	this->solutionTableModel_->setSolution(&this->solver_->solutions);
 	this->solutionTableModel_->setMaxValue(this->solver_->squadMaxValue(this->ui->squadsComboBox->currentText()));
+	if(this->solver_->solutions.empty())
+	{
+		QMessageBox::information(this, u8"提示", u8"没有算出可行解哦！\n攒更多芯片后再来试试吧~\n也可以修改格数方案以及自由格数尝试哦~");
+	}
 }
 
 void CodeX::selectSolution(int index)
