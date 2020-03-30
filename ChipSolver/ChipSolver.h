@@ -31,9 +31,6 @@ struct CHIPSOLVER_EXPORT TargetBlock
 	{}
 };
 
-// 一个重装的所有解
-typedef std::vector<Solution> SquadSolution;
-
 class CHIPSOLVER_EXPORT ChipSolver : public QThread
 {
 	Q_OBJECT
@@ -51,7 +48,7 @@ public:
 	GFChip squadMaxValue(const QString& squad);
 
 	// 将一个方案转为可显示的图形信息
-	ChipViewInfo solution2ChipView(const Solution& solution);
+	ChipViewInfo solution2ChipView(const Solution& solution, const QString& squad = "");
 
 public slots:
 	// 设置目标格数

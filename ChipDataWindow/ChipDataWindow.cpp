@@ -38,12 +38,14 @@ void ChipDataWindow::init()
 	this->ui->squadTableView->setSelectionBehavior(QAbstractItemView::SelectRows);
 	this->ui->squadTableView->setColumnHidden(0, true);
 	this->ui->squadTableView->setColumnHidden(2, true);
+	this->ui->squadTableView->setColumnHidden(8, true);
 	this->squadModel_->setShowStatus(false);
 }
 
 void ChipDataWindow::recvChipJsonObject(const QJsonObject& object)
 {
 	auto squads = object["squad_with_user_info"].toObject();
+	static bool first = true;
 	std::map<int, int> squadID;
 	for(const auto& it : squads)
 	{
@@ -76,6 +78,9 @@ void ChipDataWindow::recvChipJsonObject(const QJsonObject& object)
 	this->tableModel_->setChips(chips);
 	this->ui->squadComboBox->setCurrentIndex(1);
 	this->ui->squadComboBox->setCurrentIndex(0);
+	if (!first)// 第一次是从配置读取数据，不算修改芯片
+		emit chipsChanged();
+	first = false;
 }
 
 void ChipDataWindow::squadChanged(int index)

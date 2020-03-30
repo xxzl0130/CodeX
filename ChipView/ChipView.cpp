@@ -110,6 +110,11 @@ uint32_t ChipView::index2color(int i)
 
 void ChipView::resizeEvent(QResizeEvent* event)
 {
+	if(this->size.height() == 0 || this->size.width() == 0)
+	{
+		QWidget::resizeEvent(event);
+		return;
+	}
 	this->setFixedHeight(this->width());
 	int bHeight = (this->height() - marging * 2 - spacing * (this->size.height() - 1)) / this->size.height();
 	int bWidth = (this->width() - marging * 2 - spacing * (this->size.width() - 1)) / this->size.width();

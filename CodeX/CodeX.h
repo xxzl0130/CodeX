@@ -3,6 +3,7 @@
 #include <QtWidgets/QMainWindow>
 #include <QList>
 #include <QMap>
+#include <Chip/Chip.h>
 
 namespace Ui { class CodeX; }
 class GFChip;
@@ -15,6 +16,7 @@ class ChipTableDelegate;
 class SolutionTableModel;
 class SettingWindow;
 class AboutDialog;
+class AltSolutionWindow;
 
 class CodeX : public QMainWindow
 {
@@ -37,6 +39,8 @@ protected slots:
 	void solve();
 	void solveFinished();
 	void selectSolution(int index);
+	void addAltSolution();
+	void chipsChanged();
 	
 private:
 	CodeX(QWidget* parent = Q_NULLPTR);
@@ -51,9 +55,12 @@ private:
 	QProgressBar* progressBar_;
 	QLabel* solveNumberLabel_;
 	QLabel* timeLabel_;
+	// 保存解决方案
+	std::map < QString, std::map<QString, SquadSolution> > solutions_;
 
 	ChipTableModel* chipTableModel_;
 	ChipTableDelegate* chipTableDelegate_;
 	SolutionTableModel* solutionTableModel_;
 	AboutDialog* aboutDialog_;
+	AltSolutionWindow* altSolutionWindow_;
 };

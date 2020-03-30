@@ -8,7 +8,8 @@
 
 SolutionTableModel::SolutionTableModel(QObject *parent)
 	: QAbstractItemModel(parent),
-	solution_(nullptr)
+	solution_(nullptr),
+	showError_(true)
 {
 	font_.setFamily(QString::fromUtf8("\347\255\211\347\272\277"));
 	font_.setPointSize(12);
@@ -37,7 +38,7 @@ int SolutionTableModel::rowCount(const QModelIndex& parent) const
 
 int SolutionTableModel::columnCount(const QModelIndex& parent) const
 {
-	return 8;
+	return 9;
 }
 
 bool SolutionTableModel::hasChildren(const QModelIndex& parent) const
@@ -66,23 +67,33 @@ QVariant SolutionTableModel::data(const QModelIndex& index, int role) const
 		case 0:
 			return index.row() + 1;
 		case 1:
-			return QString("%1 (%2)").arg(solution.totalValue.damageValue)
-			.arg(min(0, solution.totalValue.damageValue - maxValue_.damageValue));
+			if (showError_)
+				return QString("%1 (%2)").arg(solution.totalValue.damageValue)
+				.arg(min(0, solution.totalValue.damageValue - maxValue_.damageValue));
+			return solution.totalValue.damageValue;
 		case 2:
-			return QString("%1 (%2)").arg(solution.totalValue.defbreakValue)
+			if (showError_)
+				return QString("%1 (%2)").arg(solution.totalValue.defbreakValue)
 				.arg(min(0, solution.totalValue.defbreakValue - maxValue_.defbreakValue));
+			return solution.totalValue.defbreakValue;
 		case 3:
-			return QString("%1 (%2)").arg(solution.totalValue.hitValue)
+			if (showError_)
+				return QString("%1 (%2)").arg(solution.totalValue.hitValue)
 				.arg(min(0, solution.totalValue.hitValue - maxValue_.hitValue));
+			return solution.totalValue.hitValue;
 		case 4:
-			return QString("%1 (%2)").arg(solution.totalValue.reloadValue)
-		.arg(min(0, solution.totalValue.reloadValue - maxValue_.reloadValue));
+			if (showError_)
+				return QString("%1 (%2)").arg(solution.totalValue.reloadValue)
+				.arg(min(0, solution.totalValue.reloadValue - maxValue_.reloadValue));
+			return solution.totalValue.reloadValue;
 		case 5:
 			return solution.totalValue.id;
 		case 6:
 			return solution.totalValue.exp;
 		case 7:
 			return solution.totalValue.no * 50;
+		case 8:
+			return solution.squad;
 		default:
 			return QVariant();
 		}
@@ -142,6 +153,8 @@ QVariant SolutionTableModel::headerData(int section, Qt::Orientation orientation
 		return trUtf8(u8"总强化");
 	case 7:
 		return trUtf8(u8"校准券");
+	case 8:
+		return trUtf8(u8"重装");
 	default:
 		return QAbstractItemModel::headerData(section, orientation, role);
 	}
@@ -211,5 +224,11 @@ void SolutionTableModel::setSolution(SquadSolution* ptr)
 void SolutionTableModel::setMaxValue(const GFChip& value)
 {
 	maxValue_ = value;
+	refresh();
+}
+
+void SolutionTableModel::setShowError(bool en)
+{
+	showError_ = en;
 	refresh();
 }

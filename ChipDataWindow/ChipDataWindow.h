@@ -18,6 +18,10 @@ public:
 
 	void init();
 
+signals:
+	// 芯片数据更新了
+	void chipsChanged();
+
 public slots:
 	void recvChipJsonObject(const QJsonObject& object);
 

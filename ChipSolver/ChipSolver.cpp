@@ -129,13 +129,17 @@ void ChipSolver::stop()
 		running_ = false;
 }
 
-ChipViewInfo ChipSolver::solution2ChipView(const Solution& solution)
+ChipViewInfo ChipSolver::solution2ChipView(const Solution& solution, const QString& squad)
 {
 	auto view = squadView_[targetSquadName_];
+	if(squad != "")
+	{
+		view = squadView_[squad];
+	}
 	for(auto i = 0;i < solution.chips.size();++i)
 	{
 		const auto& chip = solution.chips[i];
-		const auto& chipConfig = ChipConfig::getConfig(CodeX::instance()->chips[chip.id].gridID).rotate90(chip.rotate);
+		const auto& chipConfig = ChipConfig::getConfig(CodeX::instance()->chips[chip.no].gridID).rotate90(chip.rotate);
 		for(auto x = 0;x < chipConfig.width;++x)
 		{
 			for(auto y = 0;y < chipConfig.height;++y)
@@ -206,7 +210,7 @@ bool ChipSolver::satisfyConfig(const Config& config)
 	bool ans = true;
 	for(const auto& it : config)
 	{
-		++require[it.id];
+		++require[it.no];
 	}
 	for(const auto& it : require.keys())
 	{
@@ -241,7 +245,7 @@ void ChipSolver::findSolution(int k)
 		tmpSolution_.totalValue.exp = 0;
 		for(const auto& it : tmpSolution_.chips)
 		{
-			const auto& chip = CodeX::instance()->chips[it.id];
+			const auto& chip = CodeX::instance()->chips[it.no];
 			tmpSolution_.totalValue.no += int(it.rotate != chip.rotate);
 			tmpSolution_.totalValue.exp += chip.exp;
 		}
@@ -254,7 +258,7 @@ void ChipSolver::findSolution(int k)
 				// 对每个芯片附加一次旋转
 				for (const auto& it : tmpSolution_.chips)
 				{
-					const auto& chip = CodeX::instance()->chips[it.id];
+					const auto& chip = CodeX::instance()->chips[it.no];
 					auto r = chip.rotate + tmpSquadConfig_.palindrome;
 					r %= ChipConfig::getConfig(chip.gridID).direction; // 考虑芯片自身对称问题
 					sum += int(r != it.rotate);
@@ -288,7 +292,7 @@ void ChipSolver::findSolution(int k)
 		return;
 	}
 	//获取当前所需型号的芯片列表
-	auto& chips = CodeX::instance()->gridChips[tmpSquadConfig_.color][tmpConfig_[k].id];
+	auto& chips = CodeX::instance()->gridChips[tmpSquadConfig_.color][tmpConfig_[k].no];
 	// 先保存这一步的芯片配置，后续更新id
 	tmpSolution_.chips[k] = tmpConfig_[k];
 	for (auto& chip : chips)
@@ -307,7 +311,7 @@ void ChipSolver::findSolution(int k)
 		}
 		chip.squad |= 0x8000; //符号位置1，反正小队号都是正数
 		tmpSolution_.totalValue += chip;
-		tmpSolution_.chips[k].id = chip.no; // 更新id
+		tmpSolution_.chips[k].no = chip.no; // 更新id
 		tmpChips_[k] = chip.no;
 		findSolution(k + 1);
 		chip.squad &= ~0x8000; // 符号位置0

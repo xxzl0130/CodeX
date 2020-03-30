@@ -3,6 +3,9 @@
 #include "ui_CodeX.h"
 #include "SettingWindow.h"
 #include "AboutDialog.h"
+#include "AltSolutionWindow.h"
+
+#define CURRENT_SOLUTION (this->solutions_[this->ui->squadsComboBox->currentText()][this->ui->configsComboBox->currentText()])
 
 CodeX* CodeX::instance()
 {
@@ -40,7 +43,8 @@ void CodeX::solveFinished()
 	this->ui->solveButton->setEnabled(true);
 	this->ui->useEquippedCheckBox->setEnabled(true);
 	this->ui->useLockedCheckBox->setEnabled(true);
-	this->solutionTableModel_->setSolution(&this->solver_->solutions);
+	CURRENT_SOLUTION = this->solver_->solutions;
+	this->solutionTableModel_->setSolution(&CURRENT_SOLUTION);
 	this->solutionTableModel_->setMaxValue(this->solver_->squadMaxValue(this->ui->squadsComboBox->currentText()));
 	this->solutionTableModel_->sort(5, Qt::DescendingOrder);
 	if(this->solver_->solutions.empty())
@@ -52,13 +56,29 @@ void CodeX::solveFinished()
 void CodeX::selectSolution(int index)
 {
 	Chips solutionChips;
-	const auto& solution = this->solver_->solutions[index];
+	const auto& solution = CURRENT_SOLUTION[index];
 	for(const auto& it : solution.chips)
 	{
-		solutionChips.push_back(this->chips[it.id]);
+		solutionChips.push_back(this->chips[it.no]);
 	}
 	this->chipTableModel_->setChips(solutionChips);
 	this->ui->chipView->setView(this->solver_->solution2ChipView(solution));
+}
+
+void CodeX::addAltSolution()
+{
+	auto index = this->ui->solutionTable->currentIndex().row();
+	if (index < 0)
+		return;
+	auto s = CURRENT_SOLUTION[index];
+	s.squad = this->ui->squadsComboBox->currentText();
+	this->altSolutionWindow_->addSolution(s);
+}
+
+void CodeX::chipsChanged()
+{
+	this->solutions_.clear();
+	this->altSolutionWindow_->clearSolution();
 }
 
 CodeX::CodeX(QWidget *parent)
@@ -73,7 +93,8 @@ CodeX::CodeX(QWidget *parent)
 	chipTableModel_(new ChipTableModel(this)),
 	chipTableDelegate_(new ChipTableDelegate(this)),
 	solutionTableModel_(new SolutionTableModel(this)),
-	aboutDialog_(new AboutDialog(this))
+	aboutDialog_(new AboutDialog(this)),
+	altSolutionWindow_(new AltSolutionWindow(this))
 {
 	CodeX::singleton = this;
 	ui->setupUi(this);
@@ -99,6 +120,7 @@ CodeX::CodeX(QWidget *parent)
 	this->ui->solutionTable->setSelectionBehavior(QAbstractItemView::SelectRows);
 	this->ui->solutionTable->setSelectionMode(QAbstractItemView::SingleSelection);
 	this->ui->solutionTable->setSortingEnabled(true);
+	this->ui->solutionTable->setColumnHidden(8, true);
 
 	connect();
 
@@ -106,6 +128,7 @@ CodeX::CodeX(QWidget *parent)
 	this->ui->squadsComboBox->addItems(this->solver_->squadList());
 	this->solver_->setTargetBlock(TargetBlock(20,2,4,6,0));
 	this->settingWindow_->reset();
+	this->altSolutionWindow_->init();
 	this->show();
 	this->aboutDialog_->checkUpdate();
 }
@@ -154,16 +177,24 @@ void CodeX::connect()
 		this->ui->squadsComboBox,
 		&QComboBox::currentTextChanged,
 		[&](const QString& squad)
-	{
+		{
 			this->ui->configsComboBox->clear();
 			this->ui->configsComboBox->addItems(this->solver_->configList(squad));
-	});
+			this->solutionTableModel_->setSolution(&CURRENT_SOLUTION);
+		});
 	QObject::connect(
 		this->ui->configsComboBox,
 		&QComboBox::currentTextChanged,
 		this->solver_,
 		&ChipSolver::setTargetConfig
 	);
+	QObject::connect(
+		this->ui->configsComboBox,
+		&QComboBox::currentTextChanged,
+		[&](const QString config)
+		{
+			this->solutionTableModel_->setSolution(&CURRENT_SOLUTION);
+		});
 	QObject::connect(
 		this->ui->useLockedCheckBox,
 		&QCheckBox::stateChanged,
@@ -180,9 +211,9 @@ void CodeX::connect()
 		this->ui->solutionTable,
 		&QTableView::clicked,
 		[&](QModelIndex index)
-	{
+		{
 			this->selectSolution(index.row());
-	});
+		});
 	QObject::connect(
 		this->ui->settingPushButton,
 		&QPushButton::clicked,
@@ -196,10 +227,28 @@ void CodeX::connect()
 		&SettingWindow::show
 	);
 	QObject::connect(
+		this->ui->altButton,
+		&QPushButton::clicked,
+		this->altSolutionWindow_,
+		&AltSolutionWindow::show
+	);
+	QObject::connect(
 		this->ui->stopPushButton,
 		&QPushButton::clicked,
 		this->solver_,
 		&ChipSolver::stop,
 		Qt::DirectConnection
+	);
+	QObject::connect(
+		this->ui->addAltButton,
+		&QPushButton::clicked,
+		this,
+		&CodeX::addAltSolution
+	);
+	QObject::connect(
+		this->chipDataWindow_,
+		&ChipDataWindow::chipsChanged,
+		this,
+		&CodeX::chipsChanged
 	);
 }

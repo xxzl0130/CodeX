@@ -1,5 +1,5 @@
 #pragma once
-
+#pragma warning(disable:26812)
 #include "chip_global.h"
 #include <QJsonObject>
 #include <QPixmap>
@@ -15,6 +15,7 @@ public:
 	explicit GFChip(const QJsonObject& object);
 	GFChip();
 	static GFChip fromJsonObject(const QJsonObject& object);
+	QJsonObject toObject() const;
 	QPixmap icon() const;
 	QString name() const;
 	QString squadName() const;
@@ -129,12 +130,14 @@ private:
 // 芯片在拼图解法中的参数
 struct CHIP_EXPORT ChipPuzzleOption
 {
-	int id;
+	int no;
 	uint8_t x, y;
 	// 顺时针旋转90度的次数
 	uint8_t rotate;
-	explicit ChipPuzzleOption(int _x = 0, int _y = 0, int _r = 0, int _no = 0) :id(_no), x(_x), y(_y), rotate(_r) {}
+	explicit ChipPuzzleOption(int _x = 0, int _y = 0, int _r = 0, int _no = 0) :no(_no), x(_x), y(_y), rotate(_r) {}
 	explicit ChipPuzzleOption(const QJsonObject& object);
+	QJsonObject toObject() const;
+	static ChipPuzzleOption fromJsonObject(const QJsonObject& object);
 };
 
 // 芯片摆放信息，0为空，>0为芯片编号（下标+1),<0为无法使用
@@ -152,6 +155,14 @@ struct CHIP_EXPORT Solution
 	std::vector<ChipPuzzleOption> chips;
 	// 得到的重装总属性，以level为总等级，id为属性偏差，no为旋转次数
 	GFChip totalValue;
+	// 重装小队名称
+	QString squad;
 
 	bool operator <(const Solution& r) const;
+
+	QJsonObject toObject() const;
+	static Solution fromJsonObject(const QJsonObject& obj);
 };
+
+// 一个重装的所有解
+typedef std::vector<Solution> SquadSolution;

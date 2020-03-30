@@ -33,6 +33,7 @@ public:
 
     void setSolution(std::vector<Solution>* ptr);
     void setMaxValue(const GFChip& value);
+    void setShowError(bool en = true);
 	
     void refresh()
     {
@@ -44,4 +45,5 @@ private:
     std::vector<Solution>* solution_;
     GFChip maxValue_;
     QFont font_;
+    bool showError_;
 };

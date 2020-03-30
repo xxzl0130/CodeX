@@ -45,6 +45,26 @@ GFChip GFChip::fromJsonObject(const QJsonObject& object)
 	return GFChip(object);
 }
 
+QJsonObject GFChip::toObject() const
+{
+	QJsonObject obj;
+	obj["id"] = QString::number(id);
+	obj["chip_exp"] = QString::number(exp);
+	obj["chip_level"] = QString::number(level);
+	obj["color_id"] = QString::number(color);
+	obj["grid_id"] = QString::number(gridID);
+	obj["chip_id"] = QString::number(chipClass);
+	obj["squad_with_user_id"] = QString::number(squad);
+	obj["position"] = QString("%1,%2").arg(position.x).arg(position.y);
+	obj["shape_info"] = QString("%1,0").arg(rotate);
+	obj["assist_damage"] = QString::number(damageBlock);
+	obj["assist_reload"] = QString::number(reloadBlock);
+	obj["assist_hit"] = QString::number(hitBlock);
+	obj["assist_def_break"] = QString::number(defbreakBlock);
+	obj["is_locked"] = QString::number(locked);
+	return obj;
+}
+
 QPixmap GFChip::icon() const
 {
 	if(!ChipResourceInit)
@@ -249,13 +269,55 @@ ChipConfig::ChipConfig(const QJsonObject& object)
 
 ChipPuzzleOption::ChipPuzzleOption(const QJsonObject& object)
 {
-	id = object.value("ID").toInt();
+	no = object.value("ID").toInt();
 	x = object.value("x").toInt();
 	y = object.value("y").toInt();
 	rotate = object.value("rotate").toInt();
 }
 
+QJsonObject ChipPuzzleOption::toObject() const
+{
+	QJsonObject obj;
+	obj["ID"] = no;
+	obj["x"] = x;
+	obj["y"] = y;
+	obj["rotate"] = rotate;
+	return obj;
+}
+
+ChipPuzzleOption ChipPuzzleOption::fromJsonObject(const QJsonObject& object)
+{
+	return ChipPuzzleOption(object);
+}
+
 bool Solution::operator<(const Solution& r) const
 {
 	return this->totalValue.id > r.totalValue.id;
+}
+
+QJsonObject Solution::toObject() const
+{
+	QJsonObject obj;
+	QJsonArray arr;
+	for(const auto& it:chips)
+	{
+		arr.append(it.toObject());
+	}
+	obj["totalValue"] = totalValue.toObject();
+	obj["squad"] = squad;
+	obj["chips"] = arr;
+	return obj;
+}
+
+Solution Solution::fromJsonObject(const QJsonObject& obj)
+{
+	Solution s;
+	s.totalValue = GFChip::fromJsonObject(obj["totalValue"].toObject());
+	auto arr = obj["chips"].toArray();
+	for(const auto& it : arr)
+	{
+		s.chips.push_back(ChipPuzzleOption::fromJsonObject(it.toObject()));
+	}
+	s.squad = obj["squad"].toString();
+	return s;
 }
