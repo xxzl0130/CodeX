@@ -19,6 +19,9 @@ public:
 
 	QVersionNumber version;
 
+private slots:
+	void showOnStart(bool b);
+
 private:
 	Ui::AboutDialog *ui;
 	QNetworkAccessManager* accessManager_;

@@ -5,11 +5,17 @@
 AboutDialog::AboutDialog(QWidget *parent)
 	: QDialog(parent),
 	ui(new Ui::AboutDialog()),
-	version(1,8,2),
+	version(2,0,0),
 	accessManager_(new QNetworkAccessManager(this))
 {
 	ui->setupUi(this);
 	ui->nameLabel->setText(trUtf8(u8"CodeXÖØ×°Ð¾Æ¬¼ÆËãÆ÷ v") + version.toString());
+	QSettings settings;
+	auto s = settings.value("/Sys/AboutShowOnStart", true).toBool();
+	this->ui->checkBox->setChecked(s);
+	if (s)
+		this->show();
+	QObject::connect(this->ui->checkBox, &QCheckBox::stateChanged, this, &AboutDialog::showOnStart);
 }
 
 AboutDialog::~AboutDialog()
@@ -60,4 +66,10 @@ void AboutDialog::checkUpdate()
 				reply->deleteLater();
 			});
 	accessManager_->get(request_);
+}
+
+void AboutDialog::showOnStart(bool b)
+{
+	QSettings settings;
+	settings.setValue("/Sys/AboutShowOnStart", b);
 }

@@ -17,7 +17,7 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string>AltSolutionWindow</string>
+   <string>候选方案窗口</string>
   </property>
   <layout class="QGridLayout" name="gridLayout" columnstretch="5,0,2">
    <item row="4" column="0" colspan="2">
