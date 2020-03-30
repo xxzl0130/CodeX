@@ -57,6 +57,7 @@ public slots:
 	void setTargetConfig(const QString& name);
 	void setUseEquipped(bool b);
 	void setUseLocked(bool b);
+	void setUseAlt(bool b);
 	void stop();
 
 signals:
@@ -120,6 +121,8 @@ private:
 	bool useEquipped_;
 	// 使用已锁定
 	bool useLocked_;
+	// 使用备选
+	bool useAlt_;
 	// 运行标志，用于停止解算
 	bool running_;
 	// 当前芯片

@@ -20,6 +20,10 @@ AltSolutionWindow::~AltSolutionWindow()
 
 void AltSolutionWindow::addSolution(const Solution& s)
 {
+	for(const auto& it : s.chips)
+	{
+		chipCount_[it.no]++;
+	}
 	this->solutions_.push_back(s);
 	this->solutionTableModel_->refresh();
 	saveSolutions();
@@ -28,6 +32,7 @@ void AltSolutionWindow::addSolution(const Solution& s)
 void AltSolutionWindow::clearSolution()
 {
 	this->solutions_.clear();
+	this->chipCount_.clear();
 	this->solutionTableModel_->refresh();
 	saveSolutions();
 }
@@ -59,9 +64,14 @@ void AltSolutionWindow::init()
 	this->solutions_.clear();
 	for(const auto& it : doc.array())
 	{
-		this->solutions_.push_back(Solution::fromJsonObject(it.toObject()));
+		this->addSolution(Solution::fromJsonObject(it.toObject()));
 	}
 	this->solutionTableModel_->refresh();
+}
+
+bool AltSolutionWindow::chipUsed(int no)
+{
+	return chipCount_[no] > 0;
 }
 
 void AltSolutionWindow::closeEvent(QCloseEvent* e)
@@ -114,8 +124,12 @@ void AltSolutionWindow::selectSolution(int index)
 void AltSolutionWindow::delSolution()
 {
 	auto index = this->ui->solutionTable->currentIndex().row();
-	if (index < 0)
+	if (index < 0 || index >= solutions_.size())
 		return;
+	for(const auto& it : solutions_[index].chips)
+	{
+		chipCount_[it.no]--;
+	}
 	solutions_.erase(solutions_.begin() + index);
 	solutionTableModel_->refresh();
 }

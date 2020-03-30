@@ -16,13 +16,18 @@ CodeX* CodeX::instance()
 	return singleton;
 }
 
+bool CodeX::chipUsed(int no)
+{
+	return this->altSolutionWindow_->chipUsed(no);
+}
+
 void CodeX::solve()
 {
 	this->ui->solutionTable->setEnabled(false);
 	this->ui->chipsTable->setEnabled(false);
 	this->ui->squadsComboBox->setEnabled(false);
 	this->ui->configsComboBox->setEnabled(false);
-	this->ui->useLockedCheckBox->setEnabled(false);
+	this->ui->useAltCheckBox->setEnabled(false);
 	this->ui->useEquippedCheckBox->setEnabled(false);
 	this->ui->solveButton->setEnabled(false);
 	this->ui->useEquippedCheckBox->setEnabled(false);
@@ -38,11 +43,11 @@ void CodeX::solveFinished()
 	this->ui->chipsTable->setEnabled(true);
 	this->ui->squadsComboBox->setEnabled(true);
 	this->ui->configsComboBox->setEnabled(true);
-	this->ui->useLockedCheckBox->setEnabled(true);
 	this->ui->useEquippedCheckBox->setEnabled(true);
 	this->ui->solveButton->setEnabled(true);
 	this->ui->useEquippedCheckBox->setEnabled(true);
 	this->ui->useLockedCheckBox->setEnabled(true);
+	this->ui->useAltCheckBox->setEnabled(true);
 	CURRENT_SOLUTION = this->solver_->solutions;
 	this->solutionTableModel_->setSolution(&CURRENT_SOLUTION);
 	this->solutionTableModel_->setMaxValue(this->solver_->squadMaxValue(this->ui->squadsComboBox->currentText()));
@@ -206,6 +211,12 @@ void CodeX::connect()
 		&QCheckBox::stateChanged,
 		this->solver_,
 		&ChipSolver::setUseEquipped
+	);
+	QObject::connect(
+		this->ui->useAltCheckBox,
+		&QCheckBox::stateChanged,
+		this->solver_,
+		&ChipSolver::setUseAlt
 	);
 	QObject::connect(
 		this->ui->solutionTable,

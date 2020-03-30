@@ -35,6 +35,8 @@ public:
 	// Çó½âÆ÷
 	ChipSolver* solver_;
 
+	bool chipUsed(int no);
+
 protected slots:
 	void solve();
 	void solveFinished();

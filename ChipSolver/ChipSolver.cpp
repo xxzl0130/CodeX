@@ -13,6 +13,7 @@ ChipSolver::ChipSolver(QObject* parent):
 	QThread(parent),
 	useEquipped_(false),
 	useLocked_(false),
+	useAlt_(false),
 	running_(false)
 {
 	Q_INIT_RESOURCE(ChipSolver);
@@ -121,6 +122,11 @@ void ChipSolver::setUseEquipped(bool b)
 void ChipSolver::setUseLocked(bool b)
 {
 	useLocked_ = b;
+}
+
+void ChipSolver::setUseAlt(bool b)
+{
+	useAlt_ = b;
 }
 
 void ChipSolver::stop()
@@ -301,6 +307,11 @@ void ChipSolver::findSolution(int k)
 			continue;
 		if ((chip.locked && !useLocked_)// 已锁定且不使用已锁定
 			|| (chip.squad && !useEquipped_))// 已装备且不使用已装备
+		{
+			continue;
+		}
+		// 已使用且不使用已装备
+		if(CodeX::instance()->chipUsed(chip.no) && !useAlt_)
 		{
 			continue;
 		}

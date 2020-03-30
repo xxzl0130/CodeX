@@ -21,6 +21,7 @@ public:
 	void clearSolution();
 
 	void init();
+	bool chipUsed(int no);
 
 protected:
 	void closeEvent(QCloseEvent*) override;
@@ -35,6 +36,7 @@ private:
 	ChipTableDelegate* chipTableDelegate_;
 	SolutionTableModel* solutionTableModel_;
 	std::vector<Solution> solutions_;
+	std::map<int, int> chipCount_;
 
 	void saveSolutions();
 	void connect();
