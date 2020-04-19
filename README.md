@@ -23,5 +23,6 @@
 芯片图片素材来自[GFTool](https://github.com/hycdes/GFTool)  
 芯片解法数据来自[GFChipToolX](https://github.com/xxzl0130/GFChipToolX)  
 
-## 赞助
+## 打赏
+微信扫码支持一下~  
 ![微信打赏](https://raw.githubusercontent.com/xxzl0130/CodeX/master/CodeX/Resources/pay.png)
