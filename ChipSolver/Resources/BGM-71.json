@@ -23,9 +23,9 @@
         "reload": 3
     },
     "MaxValues": {
-        "damage": 190,
-        "def_break": 329,
-        "hit": 191,
-        "reload": 46
+        "damage": 189,
+        "def_break": 328,
+        "hit": 140,
+        "reload": 45
     }
 }
