@@ -157,6 +157,23 @@ ChipViewInfo ChipSolver::solution2ChipView(const Solution& solution, const QStri
 			}
 		}
 	}
+	typedef std::vector<std::vector<int>> Map;
+	auto rotate = [](const Map& map) -> Map
+	{
+		auto r = map;
+		for (auto i = 0u; i < r.size(); ++i)
+		{
+			for (auto j = 0u; j < r[i].size(); ++j)
+			{
+				r[i][j] = map[map.size() - j - 1][i];
+			}
+		}
+		return r;
+	};
+	for(auto i = 0;i < solution.totalValue.rotate;++i)
+	{
+		view.map = rotate(view.map);
+	}
 	return view;
 }
 
@@ -249,6 +266,7 @@ void ChipSolver::findSolution(int k)
 		tmpSolution_.totalValue.no = 0;
 		tmpSolution_.totalValue.id = 0;
 		tmpSolution_.totalValue.exp = 0;
+		tmpSolution_.totalValue.rotate = 0;
 		for(const auto& it : tmpSolution_.chips)
 		{
 			const auto& chip = CodeX::instance()->chips[it.no];
@@ -265,11 +283,15 @@ void ChipSolver::findSolution(int k)
 				for (const auto& it : tmpSolution_.chips)
 				{
 					const auto& chip = CodeX::instance()->chips[it.no];
-					auto r = chip.rotate + tmpSquadConfig_.palindrome;
+					auto r = chip.rotate + i;
 					r %= ChipConfig::getConfig(chip.gridID).direction; // 考虑芯片自身对称问题
 					sum += int(r != it.rotate);
 				}
-				tmpSolution_.totalValue.no = std::min(tmpSolution_.totalValue.no, sum);
+				if (sum < tmpSolution_.totalValue.no)
+				{
+					tmpSolution_.totalValue.no = sum;
+					tmpSolution_.totalValue.rotate = i;
+				}
 			}
 		}
 		tmpSolution_.totalValue.id += std::min(0, tmpSolution_.totalValue.defbreakValue - tmpSquadConfig_.maxValue.defbreakValue);
