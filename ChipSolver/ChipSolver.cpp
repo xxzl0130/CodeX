@@ -160,7 +160,10 @@ ChipViewInfo ChipSolver::solution2ChipView(const Solution& solution, const QStri
 	typedef std::vector<std::vector<int>> Map;
 	auto rotate = [](const Map& map) -> Map
 	{
-		auto r = map;
+		Map r;
+		std::vector<int> row;
+		row.resize(map.size(), 0);
+		r.resize(map[0].size(), row);
 		for (auto i = 0u; i < r.size(); ++i)
 		{
 			for (auto j = 0u; j < r[i].size(); ++j)
@@ -270,7 +273,8 @@ void ChipSolver::findSolution(int k)
 		for(const auto& it : tmpSolution_.chips)
 		{
 			const auto& chip = CodeX::instance()->chips[it.no];
-			tmpSolution_.totalValue.no += int(it.rotate != chip.rotate);
+			auto r = chip.rotate % ChipConfig::getConfig(chip.gridID).direction;
+			tmpSolution_.totalValue.no += int(it.rotate != r);
 			tmpSolution_.totalValue.exp += chip.exp;
 		}
 		if(tmpSquadConfig_.palindrome > 0)
