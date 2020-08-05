@@ -4,8 +4,8 @@
 
 AboutDialog::AboutDialog(QWidget *parent)
 	: QDialog(parent),
+	version(2,0,3),
 	ui(new Ui::AboutDialog()),
-	version(2,0,2),
 	accessManager_(new QNetworkAccessManager(this))
 {
 	ui->setupUi(this);

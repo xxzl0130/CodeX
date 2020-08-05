@@ -4,7 +4,7 @@
 #include <QFile>
 
 constexpr auto pacUrl = "http://static.xuanxuan.tech/GF/GF.pac";
-constexpr auto serverHost = "https://ar.xuanxuan.tech:8080/";
+constexpr auto serverHost = "https://codex.xuanxuan.tech:8080/";
 constexpr auto localHost = "http://127.0.0.1:8080/";
 constexpr auto jsonPath = "chipJson";
 #ifdef Q_OS_WIN
