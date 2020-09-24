@@ -20,5 +20,9 @@
     },
     "QLZ-04": {
         "QLZ-04": "QLZ-04-result.json"
+    },
+    "Mk-153": {
+        "6格+5格1类": "Mk-153-result.json",
+        "带5格2类": "Mk-153-52-result.json"
     }
 }
