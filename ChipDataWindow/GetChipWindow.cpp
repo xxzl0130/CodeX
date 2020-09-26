@@ -149,7 +149,7 @@ void GetChipWindow::recvData(QNetworkReply* reply)
 	else
 	{
 		QMessageBox::warning(this, trUtf8(u8"´íÎó"),
-			trUtf8(u8"ÍøÂçÁ¬½Ó´íÎó£¡") + " code:" + (int)reply->error() + "\n" + reply->errorString());
+			trUtf8(u8"ÍøÂçÁ¬½Ó´íÎó£¡") + " code:" + QString::number(reply->error()) + "\n" + reply->errorString());
 	}
 	reply->deleteLater();
 }
