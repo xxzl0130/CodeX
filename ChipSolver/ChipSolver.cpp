@@ -82,7 +82,7 @@ ChipSolver::ChipSolver(QObject* parent):
 				squadConfig.configs.push_back(config);
 			}
 			// name是方案名
-			configs_[name] = squadConfig;
+			configs_[squad][name] = squadConfig;
 			maxValues_[squad] = squadConfig.maxValue;
 		}
 	}
@@ -182,7 +182,7 @@ ChipViewInfo ChipSolver::solution2ChipView(const Solution& solution, const QStri
 
 void ChipSolver::run()
 {
-	const auto& plans = configs_[targetConfigName_];
+	const auto& plans = configs_[targetSquadName_][targetConfigName_];
 	running_ = true;
 	lastSolveNumber_ = 0;
 	tmpTarget_ = targetBlock_;
@@ -192,7 +192,7 @@ void ChipSolver::run()
 	queue_ = std::priority_queue<Solution>();
 	t0_ = clock();
 	tmpChips_.resize(8, 0);
-	tmpSquadConfig_ = configs_[targetConfigName_];
+	tmpSquadConfig_ = configs_[targetSquadName_][targetConfigName_];
 	tmpSolutionNumber_ = 0;
 	for(auto i = 0;i < plans.configs.size();++i)
 	{
