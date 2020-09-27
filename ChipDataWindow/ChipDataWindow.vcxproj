@@ -65,11 +65,11 @@
     <Import Project="$(QtMsBuild)\qt_defaults.props" />
   </ImportGroup>
   <PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <QtInstall>Qt 5.12.9 x64</QtInstall>
+    <QtInstall>Qt 5.12.9 x64 static</QtInstall>
     <QtModules>core;network;sql;widgets</QtModules>
   </PropertyGroup>
   <PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <QtInstall>Qt 5.12.9 x64</QtInstall>
+    <QtInstall>Qt 5.12.9 x64 static</QtInstall>
     <QtModules>core;network;sql;widgets</QtModules>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'" Label="QtSettings">
