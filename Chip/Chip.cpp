@@ -37,7 +37,17 @@ GFChip::GFChip(const QJsonObject& object)
 	defbreakBlock = object.value("assist_def_break").toString("0").toInt();
 	locked = object.value("is_locked").toString("0").toInt();
 	no = 0;
-	calcValue();
+	if(object.contains("damage_value"))
+	{
+		damageValue = object["damage_value"].toInt();
+		reloadValue = object["reload_value"].toInt();
+		hitValue = object["hit_value"].toInt();
+		defbreakValue = object["def_break_value"].toInt();
+	}
+	else
+	{
+		calcValue();
+	}
 }
 
 GFChip GFChip::fromJsonObject(const QJsonObject& object)
@@ -61,7 +71,11 @@ QJsonObject GFChip::toObject() const
 	obj["assist_reload"] = QString::number(reloadBlock);
 	obj["assist_hit"] = QString::number(hitBlock);
 	obj["assist_def_break"] = QString::number(defbreakBlock);
-	obj["is_locked"] = QString::number(locked);
+	obj["damage_value"] = damageValue;
+	obj["reload_value"] = reloadValue;
+	obj["hit_value"] = hitValue;
+	obj["def_break_value"] = defbreakValue;
+	obj["is_locked"] = locked;
 	return obj;
 }
 
