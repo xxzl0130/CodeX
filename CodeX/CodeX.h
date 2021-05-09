@@ -2,6 +2,7 @@
 #pragma warning(disable:26812)
 #include <QtWidgets/QMainWindow>
 #include <QList>
+#include <QDateTime>
 #include <QMap>
 #include <Chip/Chip.h>
 
@@ -43,6 +44,7 @@ protected slots:
 	void selectSolution(int index);
 	void addAltSolution();
 	void chipsChanged();
+	void solutionNumberChanged(long long);
 	
 private:
 	CodeX(QWidget* parent = Q_NULLPTR);
@@ -65,4 +67,7 @@ private:
 	SolutionTableModel* solutionTableModel_;
 	AboutDialog* aboutDialog_;
 	AltSolutionWindow* altSolutionWindow_;
+
+	QTimer* timer_;
+	QDateTime startTime_;
 };

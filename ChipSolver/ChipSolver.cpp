@@ -131,8 +131,7 @@ void ChipSolver::setUseAlt(bool b)
 
 void ChipSolver::stop()
 {
-	if(this->isRunning())
-		running_ = false;
+	running_ = false;
 }
 
 ChipViewInfo ChipSolver::solution2ChipView(const Solution& solution, const QString& squad)
@@ -192,7 +191,6 @@ void ChipSolver::run()
 	configIndex_ = 0;
 	solutions.clear();
 	queue_ = std::priority_queue<Solution>();
-	t0_ = clock();
 	tmpChips_.resize(8, 0);
 
 	// 对153特殊处理
@@ -221,101 +219,19 @@ void ChipSolver::run()
 		}
 	}
 
-	static auto func = [&]()
-	{
-		SolverParam param;
-		param.chips = CodeX::instance()->chips;
-		param.gridChips = CodeX::instance()->gridChips;
-		
-		while (true)
-		{
-			int index = 0;
-			{
-				QMutexLocker locker(&configIndexLock_);
-				index = configIndex_;
-				// 取出本线程轮到的配置序号
-				if (index < tmpSquadConfig_.configs.size())
-					++configIndex_;
-				else // 结束当前线程
-					return;
-			}
-
-			// 计算当前进度百分比
-			int per = round((index + 1) * 100.0 / tmpSquadConfig_.configs.size());
-			if (per > percent)
-			{
-				percent = per;
-				emit solvePercentChanged(percent);
-			}
-
-
-			if (!satisfyConfig(tmpSquadConfig_.configs[index]))
-			{
-				continue;
-			}
-
-			param.config = tmpSquadConfig_.configs[index];
-			param.solutionSet.clear();
-			param.k = 0;
-			param.curChips.resize(8, 0);
-			param.solution.chips.resize(8, ChipPuzzleOption());
-			
-			findSolution(param);
-			
-			lastSolveNumber_.store(tmpSolutionNumber_);
-			emit solveNumberChanged(tmpSolutionNumber_);
-			auto t1 = clock();
-			emit solveTimeChanged(double(t1 - t0_) / CLOCKS_PER_SEC);
-			if (targetBlock_.maxNumber > 0 && tmpSolutionNumber_ >= targetBlock_.maxNumber)
-				break;
-		}
-	};
-
-#if 1
-	for(auto i = 0;i < tmpSquadConfig_.configs.size();++i)
-	{
-		// 计算当前进度百分比
-		int per = round((i + 1) * 100.0 / tmpSquadConfig_.configs.size());
-		if(per > percent)
-		{
-			percent = per;
-			emit solvePercentChanged(percent);
-		}
-
-		// 当前配置方案
-		tmpConfig_ = tmpSquadConfig_.configs[i];
-		
-		if(!satisfyConfig(tmpSquadConfig_.configs[i]))
-		{
-			continue;
-		}
-		// 临时记录方案
-		tmpSolution_.chips.resize(8, ChipPuzzleOption());
-
-		solutionSet_.clear();
-		findSolution(0);
-		lastSolveNumber_.store(tmpSolutionNumber_);
-		emit solveNumberChanged(tmpSolutionNumber_);
-		auto t1 = clock();
-		emit solveTimeChanged(double(t1 - t0_) / CLOCKS_PER_SEC);
-		if (targetBlock_.maxNumber > 0 && tmpSolutionNumber_ >= targetBlock_.maxNumber)
-			break;
-	}
-#else
 	std::vector<std::thread*> threads(QThread::idealThreadCount());
+	std::thread mergeTh([&]() {this->merge(); });
 	for(auto& th : threads)
-		th = new std::thread(func);
+		th = new std::thread([&]() {this->startSolve(); });
 	for (auto& th : threads)
 		th->join();
 	// 此时已经全部运行完了
 	for (auto& th : threads)
 		delete th;
-#endif
-	while(!queue_.empty())
-	{
-		solutions.push_back(queue_.top());
-		queue_.pop();
-	}
+
+	running_ = false;
+	mergeTh.join();
+	
 	emit solvePercentChanged(100);
 }
 
@@ -344,108 +260,6 @@ bool ChipSolver::checkOverflow(const TargetBlock& target, const GFChip& chips) c
 	return over > target.error;
 }
 
-void ChipSolver::findSolution(int k)
-{
-	if (!running_)
-		return;
-	if (k >= tmpConfig_.size())
-	{
-		if (solutionSet_.count(tmpChips_) > 0)
-			return;
-		solutionSet_.insert(tmpChips_);
-		auto t = tmpSolution_.chips.size();
-		tmpSolution_.chips.resize(k);
-		tmpSolution_.totalValue.no = 0;
-		tmpSolution_.totalValue.id = 0;
-		tmpSolution_.totalValue.exp = 0;
-		tmpSolution_.totalValue.rotate = 0;
-		for(const auto& it : tmpSolution_.chips)
-		{
-			const auto& chip = CodeX::instance()->chips[it.no];
-			auto r = chip.rotate % ChipConfig::getConfig(chip.gridID).direction;
-			tmpSolution_.totalValue.no += int(it.rotate != r);
-			tmpSolution_.totalValue.exp += chip.exp;
-		}
-		if(tmpSquadConfig_.palindrome > 0)
-		{
-			// 枚举整体旋转方向
-			for(auto i = tmpSquadConfig_.palindrome;i < 4;i += tmpSquadConfig_.palindrome)
-			{
-				int sum = 0;
-				// 对每个芯片附加一次旋转
-				for (const auto& it : tmpSolution_.chips)
-				{
-					const auto& chip = CodeX::instance()->chips[it.no];
-					auto r = chip.rotate + i;
-					r %= ChipConfig::getConfig(chip.gridID).direction; // 考虑芯片自身对称问题
-					sum += int(r != it.rotate);
-				}
-				if (sum < tmpSolution_.totalValue.no)
-				{
-					tmpSolution_.totalValue.no = sum;
-					tmpSolution_.totalValue.rotate = i;
-				}
-			}
-		}
-		tmpSolution_.totalValue.id += std::min(0, tmpSolution_.totalValue.defbreakValue - tmpSquadConfig_.maxValue.defbreakValue);
-		tmpSolution_.totalValue.id += std::min(0, tmpSolution_.totalValue.damageValue - tmpSquadConfig_.maxValue.damageValue);
-		tmpSolution_.totalValue.id += std::min(0, tmpSolution_.totalValue.reloadValue - tmpSquadConfig_.maxValue.reloadValue);
-		tmpSolution_.totalValue.id += std::min(0, tmpSolution_.totalValue.hitValue - tmpSquadConfig_.maxValue.hitValue);
-		queue_.push(tmpSolution_);
-		if(queue_.size() > targetBlock_.showNumber)
-		{
-			queue_.pop();
-		}
-		tmpSolution_.chips.resize(t);
-		++tmpSolutionNumber_;
-
-		if(tmpSolutionNumber_ - lastSolveNumber_ > 10000)
-		{
-			lastSolveNumber_.store(tmpSolutionNumber_);
-			emit solveNumberChanged(tmpSolutionNumber_);
-			auto t1 = clock();
-			emit solveTimeChanged(double(t1 - t0_) / CLOCKS_PER_SEC);
-			if(targetBlock_.maxNumber > 0 && tmpSolutionNumber_ > targetBlock_.maxNumber)
-			{
-				running_ = false;
-			}
-		}
-		
-		return;
-	}
-	//获取当前所需型号的芯片列表
-	auto& chips = CodeX::instance()->gridChips[tmpSquadConfig_.color][tmpConfig_[k].no];
-	// 先保存这一步的芯片配置，后续更新id
-	tmpSolution_.chips[k] = tmpConfig_[k];
-	for (auto& chip : chips)
-	{
-		if (chip.squad & 0x8000) //已使用
-			continue;
-		if ((chip.locked && !useLocked_)// 已锁定且不使用已锁定
-			|| (chip.squad && !useEquipped_))// 已装备且不使用已装备
-		{
-			continue;
-		}
-		// 已使用且不使用已装备
-		if(CodeX::instance()->chipUsed(chip.no) && !useAlt_)
-		{
-			continue;
-		}
-		// 溢出了不满足要求
-		if (checkOverflow(tmpTarget_, tmpSolution_.totalValue + chip))
-		{
-			continue;
-		}
-		chip.squad |= 0x8000; //符号位置1，反正小队号都是正数
-		tmpSolution_.totalValue += chip;
-		tmpSolution_.chips[k].no = chip.no; // 更新id
-		tmpChips_[k] = chip.no;
-		findSolution(k + 1);
-		chip.squad &= ~0x8000; // 符号位置0
-		tmpSolution_.totalValue -= chip;
-	}
-}
-
 void ChipSolver::findSolution(SolverParam& param)
 {
 	if (!running_)
@@ -456,7 +270,6 @@ void ChipSolver::findSolution(SolverParam& param)
 			return;
 		param.solutionSet.insert(param.curChips);
 		
-		auto t = param.solution.chips.size();
 		param.solution.chips.resize(param.k);
 		param.solution.totalValue.no = 0;
 		param.solution.totalValue.id = 0;
@@ -495,23 +308,14 @@ void ChipSolver::findSolution(SolverParam& param)
 		param.solution.totalValue.id += std::min(0, param.solution.totalValue.reloadValue - tmpSquadConfig_.maxValue.reloadValue);
 		param.solution.totalValue.id += std::min(0, param.solution.totalValue.hitValue - tmpSquadConfig_.maxValue.hitValue);
 
-		queueLock_.lock();
-		queue_.push(param.solution);
-		while (queue_.size() > targetBlock_.showNumber)
-		{
-			queue_.pop();
-		}
-		queueLock_.unlock();
+		param.queue->push(param.solution);
 		
-		param.solution.chips.resize(t);
 		++tmpSolutionNumber_;
 
-		if (tmpSolutionNumber_ - lastSolveNumber_ > 10000)
+		if (tmpSolutionNumber_ - lastSolveNumber_ >= 10000)
 		{
 			lastSolveNumber_.store(tmpSolutionNumber_);
 			emit solveNumberChanged(tmpSolutionNumber_);
-			auto t1 = clock();
-			emit solveTimeChanged(double(t1 - t0_) / CLOCKS_PER_SEC);
 			if (targetBlock_.maxNumber >= 0 && tmpSolutionNumber_ > targetBlock_.maxNumber)
 			{
 				running_ = false;
@@ -550,7 +354,93 @@ void ChipSolver::findSolution(SolverParam& param)
 		param.curChips[param.k] = chip.no;
 		++param.k;
 		findSolution(param);
+		--param.k;
 		chip.squad &= ~0x8000; // 符号位置0
-		tmpSolution_.totalValue -= chip;
+		param.solution.totalValue -= chip;
+	}
+}
+
+void ChipSolver::startSolve()
+{
+	SolverParam param;
+	param.chips = CodeX::instance()->chips;
+	param.gridChips = CodeX::instance()->gridChips;
+
+	while (true)
+	{
+		int index = 0;
+		{
+			QMutexLocker locker(&configIndexLock_);
+			index = configIndex_;
+			// 取出本线程轮到的配置序号
+			if (index < tmpSquadConfig_.configs.size())
+				++configIndex_;
+			else // 结束当前线程
+				return;
+		}
+
+		if (!satisfyConfig(tmpSquadConfig_.configs[index]))
+		{
+			continue;
+		}
+
+		param.config = tmpSquadConfig_.configs[index];
+		param.solutionSet.clear();
+		param.k = 0;
+		param.curChips.resize(8, 0);
+		param.solution.chips.resize(8, ChipPuzzleOption());
+		param.queue.reset(new std::priority_queue<Solution>());
+
+		findSolution(param);
+
+		// 放到队列里交给合并线程处理
+		{
+			QMutexLocker locker(&thSolutionLock_);
+			thSolutionQueue_.enqueue(param.queue);
+		}
+
+		// 计算当前进度百分比
+		int per = round((index + 1) * 100.0 / tmpSquadConfig_.configs.size());
+		if (per > percent)
+		{
+			percent = per;
+			emit solvePercentChanged(percent);
+		}
+
+		lastSolveNumber_.store(tmpSolutionNumber_);
+		emit solveNumberChanged(tmpSolutionNumber_);
+		if (targetBlock_.maxNumber > 0 && tmpSolutionNumber_ >= targetBlock_.maxNumber)
+			break;
+	}
+}
+
+void ChipSolver::merge()
+{
+	while(running_)
+	{
+		while (!thSolutionQueue_.empty())
+		{
+			std::shared_ptr<std::priority_queue<Solution>> it;
+			{
+				QMutexLocker locker(&thSolutionLock_);
+				it = thSolutionQueue_.head();
+				thSolutionQueue_.dequeue();
+			}
+
+			while(!it->empty())
+			{
+				solutions.push_back(it->top());
+				it->pop();
+			}
+		}
+
+		std::sort(solutions.begin(), solutions.end(),
+			[&](const Solution& a, const Solution& b)
+			{
+				return a > b;
+			});
+		if(solutions.size() > targetBlock_.showNumber)
+			solutions.resize(targetBlock_.showNumber);
+		QThread::msleep(1);
 	}
 }

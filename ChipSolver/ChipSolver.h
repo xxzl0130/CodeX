@@ -4,6 +4,7 @@
 #include <QThread>
 #include <QString>
 #include <QReadWriteLock>
+#include <QQueue>
 #include <map>
 #include <qmutex.h>
 #include <set>
@@ -68,8 +69,6 @@ signals:
 	void solvePercentChanged(int percent);
 	// 总方案数
 	void solveNumberChanged(long long number);
-	// 解算用时
-	void solveTimeChanged(double time);
 	
 protected:
 	void run() override;
@@ -126,8 +125,6 @@ private:
 	int configIndex_;
 	// 锁
 	QMutex configIndexLock_;
-	// 开始运行的时间
-	time_t t0_{};
 	// 使用已装备
 	bool useEquipped_;
 	// 使用已锁定
@@ -135,7 +132,7 @@ private:
 	// 使用备选
 	bool useAlt_;
 	// 运行标志，用于停止解算
-	bool running_;
+	std::atomic_bool running_;
 	// 当前芯片
 	std::vector<int> tmpChips_;
 	// 优先级队列
@@ -147,8 +144,6 @@ private:
 	bool satisfyConfig(const Config& config);
 	// 检查芯片方案是否满足目标的格数溢出要求，只计算上溢，溢出返回true
 	bool checkOverflow(const TargetBlock& target, const GFChip& chips) const;
-	// 递归求解方案
-	void findSolution(int k);
 
 	struct SolverParam
 	{
@@ -165,6 +160,8 @@ private:
 		Chips chips;
 		// 外层按颜色分类，内层按grid编号分类的芯片，保存强制+20的属性
 		std::map<int, std::map<int, std::vector<GFChip>>> gridChips;
+		// 优先级队列
+		std::shared_ptr<std::priority_queue<Solution>> queue;
 
 		SolverParam()
 		{
@@ -172,4 +169,10 @@ private:
 		}
 	};
 	void findSolution(SolverParam& param);
+	void startSolve();
+	// 各个线程给出的结果的队列
+	QQueue<std::shared_ptr<std::priority_queue<Solution>>> thSolutionQueue_;
+	// 锁
+	QMutex thSolutionLock_;
+	void merge();
 };

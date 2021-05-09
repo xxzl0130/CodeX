@@ -720,7 +720,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="maximum">
-         <number>10000000</number>
+         <number>1000000</number>
         </property>
         <property name="singleStep">
          <number>100</number>

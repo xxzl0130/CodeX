@@ -159,6 +159,7 @@ struct CHIP_EXPORT Solution
 	QString squad;
 
 	bool operator <(const Solution& r) const;
+	bool operator >(const Solution& r) const;
 
 	QJsonObject toObject() const;
 	static Solution fromJsonObject(const QJsonObject& obj);

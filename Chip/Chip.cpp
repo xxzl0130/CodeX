@@ -309,6 +309,11 @@ bool Solution::operator<(const Solution& r) const
 	return this->totalValue.id > r.totalValue.id;
 }
 
+bool Solution::operator>(const Solution& r) const
+{
+	return this->totalValue.id < r.totalValue.id;
+}
+
 QJsonObject Solution::toObject() const
 {
 	QJsonObject obj;

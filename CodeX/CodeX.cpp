@@ -34,6 +34,8 @@ void CodeX::solve()
 	this->ui->useLockedCheckBox->setEnabled(false);
 	
 	this->solver_->setTargetBlock(this->settingWindow_->getTargetBlock(this->ui->squadsComboBox->currentText()));
+	this->timer_->start(100);
+	this->startTime_ = QDateTime::currentDateTime();
 	this->solver_->start();
 }
 
@@ -52,6 +54,7 @@ void CodeX::solveFinished()
 	this->solutionTableModel_->setSolution(&CURRENT_SOLUTION);
 	this->solutionTableModel_->setMaxValue(this->solver_->squadMaxValue(this->ui->squadsComboBox->currentText()));
 	this->solutionTableModel_->sort(5, Qt::DescendingOrder);
+	this->timer_->stop();
 	if(this->solver_->solutions.empty())
 	{
 		QMessageBox::information(this, u8"提示", u8"没有算出可行解哦！\n攒更多芯片后再来试试吧~\n也可以修改格数方案以及自由格数尝试哦~");
@@ -86,6 +89,11 @@ void CodeX::chipsChanged()
 	this->altSolutionWindow_->clearSolution();
 }
 
+void CodeX::solutionNumberChanged(long long n)
+{
+	this->solveNumberLabel_->setText(trUtf8(u8"方案数：") + QString::number(n));
+}
+
 CodeX::CodeX(QWidget *parent)
 	: QMainWindow(parent),
 	solver_(new ChipSolver(this)),
@@ -99,7 +107,8 @@ CodeX::CodeX(QWidget *parent)
 	chipTableDelegate_(new ChipTableDelegate(this)),
 	solutionTableModel_(new SolutionTableModel(this)),
 	aboutDialog_(new AboutDialog(this)),
-	altSolutionWindow_(new AltSolutionWindow(this))
+	altSolutionWindow_(new AltSolutionWindow(this)),
+	timer_(new QTimer(this))
 {
 	CodeX::singleton = this;
 	ui->setupUi(this);
@@ -155,17 +164,10 @@ void CodeX::connect()
 	QObject::connect(
 		this->solver_,
 		&ChipSolver::solveNumberChanged,
-		[&](int n)
-	{
-			this->solveNumberLabel_->setText(trUtf8(u8"方案数：") + QString::number(n));
-	});
-	QObject::connect(
-		this->solver_,
-		&ChipSolver::solveTimeChanged,
-		[&](double t)
-	{
-			this->timeLabel_->setText(trUtf8(u8"耗时：") + QString::number(t,'f',2) + "s");
-	});
+		this,
+		&CodeX::solutionNumberChanged,
+		Qt::QueuedConnection
+	);
 	QObject::connect(
 		this->solver_,
 		&ChipSolver::finished,
@@ -261,5 +263,14 @@ void CodeX::connect()
 		&ChipDataWindow::chipsChanged,
 		this,
 		&CodeX::chipsChanged
+	);
+	QObject::connect(
+		this->timer_,
+		&QTimer::timeout,
+		[&]()
+		{
+			auto t = startTime_.msecsTo(QDateTime::currentDateTime()) / 1000.0;
+			this->timeLabel_->setText(trUtf8(u8"耗时：") + QString::number(t, 'f', 2) + "s");
+		}
 	);
 }
