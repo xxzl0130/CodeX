@@ -9,6 +9,7 @@ SettingWindow::SettingWindow(QWidget *parent)
 {
 	ui->setupUi(this);
 	connect();
+	this->ui->threadLabel->setText(u8"ÍÆ¼öÖµ£º" + QString::number(QThread::idealThreadCount()));
 }
 
 SettingWindow::~SettingWindow()
