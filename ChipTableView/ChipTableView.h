@@ -27,6 +27,8 @@ public:
 
     QVariant headerData(int section, Qt::Orientation orientation,
         int role = Qt::DisplayRole) const override;
+
+    void sort(int column, Qt::SortOrder order = Qt::AscendingOrder) override;
 	
     void setChips(const Chips& chips);
     const Chips& chips() const;
@@ -52,10 +54,10 @@ private:
 
 class CHIPTABLEVIEW_EXPORT ChipTableDelegate : public QItemDelegate
 {
-    Q_OBJECT;
+    Q_OBJECT
 public:
     explicit ChipTableDelegate(QObject* parent = nullptr);
-    ~ChipTableDelegate() = default;
+    virtual ~ChipTableDelegate() = default;
 
     void paint(QPainter* painter,
         const QStyleOptionViewItem& option,

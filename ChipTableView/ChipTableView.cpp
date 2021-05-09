@@ -195,3 +195,86 @@ QVariant ChipTableModel::headerData(int section, Qt::Orientation orientation, in
 		return QAbstractItemModel::headerData(section, orientation, role);
 	}
 }
+
+void ChipTableModel::sort(int column, Qt::SortOrder order)
+{
+	static auto cmp = [&](int a, int b) -> bool
+	{
+		if (order == Qt::AscendingOrder)
+			return a < b;
+		return a > b;
+	};
+	switch (column)
+	{
+	case 0:
+		break;
+	case 1:
+		std::sort(chips_.begin(), chips_.end(),
+			[&](const GFChip& a, const GFChip& b)
+			{
+				if (a.gridID != b.gridID)
+					return cmp(a.gridID, b.gridID);
+				if (a.level != b.level)
+					return cmp(a.level, b.level);
+				if (a.hitValue != b.hitValue)
+					return cmp(a.hitValue, b.hitValue);
+				if (a.reloadValue != b.reloadValue)
+					return cmp(a.reloadValue, b.reloadValue);
+				if (a.damageValue != b.damageValue)
+					return cmp(a.damageValue, b.damageValue);
+				if (a.defbreakValue != b.defbreakValue)
+					return cmp(a.defbreakValue, b.defbreakValue);
+				if (a.locked != b.locked)
+					return cmp(a.locked, b.locked);
+				return cmp(a.squad, b.squad);
+			});
+		break;
+	case 2:
+		std::sort(chips_.begin(), chips_.end(),
+		          [&](const GFChip& a, const GFChip& b)
+		          {
+			          if (order == Qt::AscendingOrder)
+				          return a.name() < a.name();
+			          return a.name() > a.name();
+		          });
+		break;
+	case 3:
+		std::sort(chips_.begin(), chips_.end(),
+			[&](const GFChip& a, const GFChip& b)
+			{return cmp(a.level, b.level); });
+		break;
+	case 4:
+		std::sort(chips_.begin(), chips_.end(),
+			[&](const GFChip& a, const GFChip& b)
+			{return cmp(a.hitValue, b.hitValue); });
+		break;
+	case 5:
+		std::sort(chips_.begin(), chips_.end(),
+			[&](const GFChip& a, const GFChip& b)
+			{return cmp(a.reloadValue, b.reloadValue); });
+		break;
+	case 6:
+		std::sort(chips_.begin(), chips_.end(),
+			[&](const GFChip& a, const GFChip& b)
+			{return cmp(a.damageValue, b.damageValue); });
+		break;
+	case 7:
+		std::sort(chips_.begin(), chips_.end(),
+			[&](const GFChip& a, const GFChip& b)
+			{return cmp(a.defbreakValue, b.defbreakValue); });
+		break;
+	case 8:
+		std::sort(chips_.begin(), chips_.end(),
+			[&](const GFChip& a, const GFChip& b)
+			{return cmp(a.locked, b.locked); });
+		break;
+	case 9:
+		std::sort(chips_.begin(), chips_.end(),
+			[&](const GFChip& a, const GFChip& b)
+			{return cmp(a.squad, b.squad); });
+		break;
+	default:
+		return;
+	}
+	refresh();
+}

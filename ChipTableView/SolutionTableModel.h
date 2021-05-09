@@ -11,7 +11,7 @@ class CHIPTABLEVIEW_EXPORT SolutionTableModel : public QAbstractItemModel
 
 public:
 	SolutionTableModel(QObject *parent);
-	~SolutionTableModel();
+	virtual ~SolutionTableModel();
 
     QModelIndex index(int row, int column,
         const QModelIndex& parent = QModelIndex()) const override;

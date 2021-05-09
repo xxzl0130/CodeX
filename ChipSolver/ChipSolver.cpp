@@ -193,6 +193,33 @@ void ChipSolver::run()
 	t0_ = clock();
 	tmpChips_.resize(8, 0);
 	tmpSquadConfig_ = configs_[targetSquadName_][targetConfigName_];
+
+	// 对153特殊处理
+	if(targetSquadName_ == "Mk-153")
+	{
+		if(targetBlock_.damageBlock == 17 && targetBlock_.defbreakBlock == 9 && targetBlock_.hitBlock == 7 && targetBlock_.reloadBlock == 5)
+		{
+			tmpSquadConfig_.maxValue.damageValue = 195;
+			tmpSquadConfig_.maxValue.defbreakBlock = 273;
+			tmpSquadConfig_.maxValue.hitValue = 140;
+			tmpSquadConfig_.maxValue.reloadValue = 64;
+		}
+		else if (targetBlock_.damageBlock == 17 && targetBlock_.defbreakBlock == 8 && targetBlock_.hitBlock == 8 && targetBlock_.reloadBlock == 5)
+		{
+			tmpSquadConfig_.maxValue.damageValue = 195;
+			tmpSquadConfig_.maxValue.defbreakBlock = 263;
+			tmpSquadConfig_.maxValue.hitValue = 158;
+			tmpSquadConfig_.maxValue.reloadValue = 64;
+		}
+		else if (targetBlock_.damageBlock == 16 && targetBlock_.defbreakBlock == 8 && targetBlock_.hitBlock == 9 && targetBlock_.reloadBlock == 5)
+		{
+			tmpSquadConfig_.maxValue.damageValue = 189;
+			tmpSquadConfig_.maxValue.defbreakBlock = 263;
+			tmpSquadConfig_.maxValue.hitValue = 176;
+			tmpSquadConfig_.maxValue.reloadValue = 64;
+		}
+	}
+	
 	tmpSolutionNumber_ = 0;
 	for(auto i = 0;i < plans.configs.size();++i)
 	{
