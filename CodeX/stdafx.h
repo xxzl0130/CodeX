@@ -15,3 +15,7 @@
 #include "ChipSolver/ChipSolver.h"
 #include "ChipTableView/ChipTableView.h"
 #include "ChipTableView/SolutionTableModel.h"
+
+constexpr auto IniShowLimit = "/Sys/ShowLimit";
+constexpr auto IniCalcLimit = "/Sys/CalcLimit";
+constexpr auto IniNoLimit = "/Sys/NoLimit";

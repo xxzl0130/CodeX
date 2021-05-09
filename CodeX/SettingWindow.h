@@ -16,6 +16,8 @@ public:
 
 public slots:
 	void reset();
+	void show();
+	void accept() override;
 
 private:
 	void connect();

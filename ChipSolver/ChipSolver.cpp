@@ -310,12 +310,12 @@ void ChipSolver::findSolution(int k)
 		tmpSolution_.chips.resize(t);
 		++tmpSolutionNumber_;
 
-		if(tmpSolutionNumber_ - lastSolveNumber_ > 1000)
+		if(tmpSolutionNumber_ - lastSolveNumber_ > 10000)
 		{
 			emit solveNumberChanged(lastSolveNumber_ = tmpSolutionNumber_);
 			auto t1 = clock();
 			emit solveTimeChanged(double(t1 - t0_) / CLOCKS_PER_SEC);
-			if(tmpSolutionNumber_ > targetBlock_.maxNumber)
+			if(targetBlock_.maxNumber >= 0 && tmpSolutionNumber_ > targetBlock_.maxNumber)
 			{
 				running_ = false;
 			}

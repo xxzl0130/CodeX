@@ -64,7 +64,7 @@ signals:
 	// 解决方案百分比
 	void solvePercentChanged(int percent);
 	// 总方案数
-	void solveNumberChanged(int number);
+	void solveNumberChanged(long long number);
 	// 解算用时
 	void solveTimeChanged(double time);
 	
@@ -114,7 +114,9 @@ private:
 	// 去重用set
 	std::set<std::vector<int>> solutionSet_;
 	// 上一次上报的求解数量
-	int lastSolveNumber_;
+	long long lastSolveNumber_;
+	// 方案数
+	long long tmpSolutionNumber_;
 	// 开始运行的时间
 	time_t t0_;
 	// 使用已装备
@@ -129,8 +131,6 @@ private:
 	std::vector<int> tmpChips_;
 	// 优先级队列
 	std::priority_queue<Solution> queue_;
-	// 方案数
-	int tmpSolutionNumber_;
 
 	//检查当前芯片数量是否满足该拼法最低需要
 	bool satisfyConfig(const Config& config);

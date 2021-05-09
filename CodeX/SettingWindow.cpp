@@ -32,7 +32,7 @@ TargetBlock SettingWindow::getTargetBlock(const QString& squad)
 		}
 	}
 	target.showNumber = this->ui->numbersSpinBox->value();
-	target.maxNumber = this->ui->maxSpinBox->value();
+	target.maxNumber = this->ui->unlimitCheckBox->isChecked() ? -1 : this->ui->maxSpinBox->value();
 	return target;
 }
 
@@ -53,6 +53,24 @@ void SettingWindow::reset()
 	this->ui->maxSpinBox->setValue(10000);
 }
 
+void SettingWindow::show()
+{
+	QSettings settings;
+	this->ui->numbersSpinBox->setValue(settings.value(IniShowLimit, 1000).toInt());
+	this->ui->maxSpinBox->setValue(settings.value(IniCalcLimit, 10000).toInt());
+	this->ui->unlimitCheckBox->setChecked(settings.value(IniNoLimit, false).toBool());
+	QDialog::show();
+}
+
+void SettingWindow::accept()
+{
+	QSettings settings;
+	settings.setValue(IniShowLimit, this->ui->numbersSpinBox->value());
+	settings.setValue(IniCalcLimit, this->ui->maxSpinBox->value());
+	settings.setValue(IniNoLimit, this->ui->unlimitCheckBox->isChecked());
+	QDialog::accept();
+}
+
 void SettingWindow::connect()
 {
 	QObject::connect(
@@ -66,5 +84,13 @@ void SettingWindow::connect()
 		&QPushButton::clicked,
 		this,
 		&SettingWindow::accept
+	);
+	QObject::connect(
+		this->ui->unlimitCheckBox,
+		&QCheckBox::stateChanged,
+		[&](int state)
+		{
+			this->ui->maxSpinBox->setEnabled(state != Qt::CheckState::Checked);
+		}
 	);
 }
