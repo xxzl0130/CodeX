@@ -3,10 +3,13 @@
 #include "chipsolver_global.h"
 #include <QThread>
 #include <QString>
+#include <QReadWriteLock>
 #include <map>
+#include <qmutex.h>
 #include <set>
 #include <vector>
 #include <queue>
+#include <atomic>
 #include "Chip/Chip.h"
 
 struct CHIPSOLVER_EXPORT TargetBlock
@@ -36,7 +39,7 @@ class CHIPSOLVER_EXPORT ChipSolver : public QThread
 	Q_OBJECT
 public:
 	explicit ChipSolver(QObject* parent = nullptr);
-	~ChipSolver() = default;
+	virtual ~ChipSolver() = default;
 
 	SquadSolution solutions;
 	
@@ -114,11 +117,17 @@ private:
 	// 去重用set
 	std::set<std::vector<int>> solutionSet_;
 	// 上一次上报的求解数量
-	long long lastSolveNumber_;
+	std::atomic_int64_t lastSolveNumber_{};
 	// 方案数
-	long long tmpSolutionNumber_;
+	std::atomic_int64_t tmpSolutionNumber_{};
+	// 百分比
+	std::atomic_int percent;
+	// 当前配置序号
+	int configIndex_;
+	// 锁
+	QMutex configIndexLock_;
 	// 开始运行的时间
-	time_t t0_;
+	time_t t0_{};
 	// 使用已装备
 	bool useEquipped_;
 	// 使用已锁定
@@ -131,6 +140,8 @@ private:
 	std::vector<int> tmpChips_;
 	// 优先级队列
 	std::priority_queue<Solution> queue_;
+	// 锁
+	QMutex queueLock_;
 
 	//检查当前芯片数量是否满足该拼法最低需要
 	bool satisfyConfig(const Config& config);
@@ -138,4 +149,27 @@ private:
 	bool checkOverflow(const TargetBlock& target, const GFChip& chips) const;
 	// 递归求解方案
 	void findSolution(int k);
+
+	struct SolverParam
+	{
+		int k;
+		// 临时记录方案
+		Solution solution;
+		// 选择的方案
+		Config config;
+		// 当前芯片列表，用于去重
+		std::vector<int> curChips;
+		// 去重用set
+		std::set<std::vector<int>> solutionSet;
+		// 芯片列表
+		Chips chips;
+		// 外层按颜色分类，内层按grid编号分类的芯片，保存强制+20的属性
+		std::map<int, std::map<int, std::vector<GFChip>>> gridChips;
+
+		SolverParam()
+		{
+			k = 0;
+		}
+	};
+	void findSolution(SolverParam& param);
 };

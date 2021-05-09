@@ -235,7 +235,7 @@ void CodeX::connect()
 		this->ui->aboutPushButton,
 		&QPushButton::clicked,
 		this->aboutDialog_,
-		&SettingWindow::show
+		&AboutDialog::show
 	);
 	QObject::connect(
 		this->ui->altButton,

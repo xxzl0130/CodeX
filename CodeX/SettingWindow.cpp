@@ -31,8 +31,10 @@ TargetBlock SettingWindow::getTargetBlock(const QString& squad)
 			break;
 		}
 	}
+	this->show();
 	target.showNumber = this->ui->numbersSpinBox->value();
 	target.maxNumber = this->ui->unlimitCheckBox->isChecked() ? -1 : this->ui->maxSpinBox->value();
+	this->hide();
 	return target;
 }
 
