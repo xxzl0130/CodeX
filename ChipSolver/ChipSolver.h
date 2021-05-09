@@ -132,7 +132,8 @@ private:
 	// 使用备选
 	bool useAlt_;
 	// 运行标志，用于停止解算
-	std::atomic_bool running_;
+	bool running_;
+	bool solveRunning_;
 	// 当前芯片
 	std::vector<int> tmpChips_;
 	// 优先级队列

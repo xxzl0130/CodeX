@@ -61,6 +61,8 @@ void SettingWindow::show()
 	this->ui->numbersSpinBox->setValue(settings.value(IniShowLimit, 1000).toInt());
 	this->ui->maxSpinBox->setValue(settings.value(IniCalcLimit, 10000).toInt());
 	this->ui->unlimitCheckBox->setChecked(settings.value(IniNoLimit, false).toBool());
+	this->ui->threadSpinBox->setValue(settings.value(IniThreads, 1).toInt());
+	this->ui->threadSpinBox->setMaximum(QThread::idealThreadCount() * 5);
 	QDialog::show();
 }
 
@@ -70,6 +72,7 @@ void SettingWindow::accept()
 	settings.setValue(IniShowLimit, this->ui->numbersSpinBox->value());
 	settings.setValue(IniCalcLimit, this->ui->maxSpinBox->value());
 	settings.setValue(IniNoLimit, this->ui->unlimitCheckBox->isChecked());
+	settings.setValue(IniThreads, this->ui->threadSpinBox->value());
 	QDialog::accept();
 }
 

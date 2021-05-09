@@ -6,6 +6,7 @@
 #include <ctime>
 #include "CodeX/CodeX.h"
 #include <cstdlib>
+#include <QSettings>
 
 constexpr auto QrcBase = ":/ChipSolver/Resources/";
 
@@ -132,6 +133,7 @@ void ChipSolver::setUseAlt(bool b)
 void ChipSolver::stop()
 {
 	running_ = false;
+	solveRunning_ = false;
 }
 
 ChipViewInfo ChipSolver::solution2ChipView(const Solution& solution, const QString& squad)
@@ -192,6 +194,8 @@ void ChipSolver::run()
 	solutions.clear();
 	queue_ = std::priority_queue<Solution>();
 	tmpChips_.resize(8, 0);
+	thSolutionQueue_.clear();
+	emit solvePercentChanged(0);
 
 	// 对153特殊处理
 	if(targetSquadName_ == "Mk-153")
@@ -218,9 +222,10 @@ void ChipSolver::run()
 			tmpSquadConfig_.maxValue.reloadValue = 64;
 		}
 	}
-
-	std::vector<std::thread*> threads(QThread::idealThreadCount());
+	QSettings settings;
+	std::vector<std::thread*> threads(settings.value("/Sys/Threads",1).toInt());
 	std::thread mergeTh([&]() {this->merge(); });
+	solveRunning_ = true;
 	for(auto& th : threads)
 		th = new std::thread([&]() {this->startSolve(); });
 	for (auto& th : threads)
@@ -228,9 +233,10 @@ void ChipSolver::run()
 	// 此时已经全部运行完了
 	for (auto& th : threads)
 		delete th;
-
-	running_ = false;
+	// 等待合并结果
+	solveRunning_ = false;
 	mergeTh.join();
+	running_ = false;
 	
 	emit solvePercentChanged(100);
 }
@@ -309,6 +315,8 @@ void ChipSolver::findSolution(SolverParam& param)
 		param.solution.totalValue.id += std::min(0, param.solution.totalValue.hitValue - tmpSquadConfig_.maxValue.hitValue);
 
 		param.queue->push(param.solution);
+		if (param.queue->size() > targetBlock_.showNumber)
+			param.queue->pop();
 		
 		++tmpSolutionNumber_;
 
@@ -331,6 +339,8 @@ void ChipSolver::findSolution(SolverParam& param)
 	param.solution.chips[param.k] = param.config[param.k];
 	for (auto& chip : chips)
 	{
+		if (!running_)
+			return;
 		if (chip.squad & 0x8000) //已使用
 			continue;
 		if ((chip.locked && !useLocked_)// 已锁定且不使用已锁定
@@ -385,7 +395,7 @@ void ChipSolver::startSolve()
 		}
 
 		param.config = tmpSquadConfig_.configs[index];
-		param.solutionSet.clear();
+		param.solutionSet = decltype(param.solutionSet)();
 		param.k = 0;
 		param.curChips.resize(8, 0);
 		param.solution.chips.resize(8, ChipPuzzleOption());
@@ -432,15 +442,16 @@ void ChipSolver::merge()
 				solutions.push_back(it->top());
 				it->pop();
 			}
+			std::sort(solutions.begin(), solutions.end(),
+				[&](const Solution& a, const Solution& b)
+				{
+					return a > b;
+				});
+			if (solutions.size() > targetBlock_.showNumber)
+				solutions.resize(targetBlock_.showNumber);
 		}
-
-		std::sort(solutions.begin(), solutions.end(),
-			[&](const Solution& a, const Solution& b)
-			{
-				return a > b;
-			});
-		if(solutions.size() > targetBlock_.showNumber)
-			solutions.resize(targetBlock_.showNumber);
+		if(!solveRunning_)
+			return;
 		QThread::msleep(1);
 	}
 }

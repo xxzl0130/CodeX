@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>545</width>
-    <height>423</height>
+    <width>527</width>
+    <height>643</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -699,22 +699,67 @@
     </widget>
    </item>
    <item>
+    <widget class="QGroupBox" name="groupBox_3">
+     <property name="title">
+      <string>多线程</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="1">
+       <widget class="QLabel" name="label_16">
+        <property name="text">
+         <string>线程数量</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QSpinBox" name="threadSpinBox">
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="maximum">
+         <number>1000</number>
+        </property>
+        <property name="singleStep">
+         <number>1</number>
+        </property>
+        <property name="value">
+         <number>1</number>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="1" column="1" colspan="3">
+       <widget class="QLabel" name="label_17">
+        <property name="text">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;警告&lt;/span&gt;&lt;/p&gt;&lt;p&gt;多线程会增加电脑资源消耗，降低程序稳定性，如果出现程序闪退请降低线程数量。&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
       <string>其他</string>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout_2">
-      <property name="spacing">
-       <number>9</number>
-      </property>
-      <item>
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>显示方案数</string>
-        </property>
-       </widget>
-      </item>
-      <item>
+     <layout class="QGridLayout" name="gridLayout_3">
+      <item row="0" column="1">
        <widget class="QSpinBox" name="numbersSpinBox">
         <property name="alignment">
          <set>Qt::AlignCenter</set>
@@ -730,14 +775,21 @@
         </property>
        </widget>
       </item>
-      <item>
+      <item row="0" column="2">
        <widget class="QLabel" name="label_14">
         <property name="text">
          <string>计算方案数</string>
         </property>
        </widget>
       </item>
-      <item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>显示方案数</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3">
        <widget class="QSpinBox" name="maxSpinBox">
         <property name="alignment">
          <set>Qt::AlignCenter</set>
@@ -753,25 +805,22 @@
         </property>
        </widget>
       </item>
-      <item>
+      <item row="0" column="4">
        <widget class="QCheckBox" name="unlimitCheckBox">
         <property name="text">
          <string>不限</string>
         </property>
        </widget>
       </item>
-      <item>
-       <spacer name="horizontalSpacer_2">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
+      <item row="1" column="0" colspan="5">
+       <widget class="QLabel" name="label_18">
+        <property name="text">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;警告&lt;/span&gt;&lt;/p&gt;&lt;p&gt;增大显示方案数目会增加电脑资源消耗，降低程序稳定性，如果出现程序闪退请降低显示方案数目。&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
+        <property name="wordWrap">
+         <bool>true</bool>
         </property>
-       </spacer>
+       </widget>
       </item>
      </layout>
     </widget>

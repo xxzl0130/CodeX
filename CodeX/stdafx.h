@@ -19,3 +19,4 @@
 constexpr auto IniShowLimit = "/Sys/ShowLimit";
 constexpr auto IniCalcLimit = "/Sys/CalcLimit";
 constexpr auto IniNoLimit = "/Sys/NoLimit";
+constexpr auto IniThreads = "/Sys/Threads";
