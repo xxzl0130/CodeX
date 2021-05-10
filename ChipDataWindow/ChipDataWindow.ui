@@ -82,6 +82,11 @@
           <string>QLZ-04</string>
          </property>
         </item>
+        <item>
+         <property name="text">
+          <string>Mk-153</string>
+         </property>
+        </item>
        </widget>
       </item>
       <item row="6" column="0">

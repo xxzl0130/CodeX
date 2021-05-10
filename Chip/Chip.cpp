@@ -209,6 +209,8 @@ QString squadString(int i)
 		return QString("AT4");
 	case 6:
 		return QString("QLZ");
+	case 7:
+		return QString("Mk153");
 	default:
 		return QString("");
 	}
