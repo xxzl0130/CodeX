@@ -445,7 +445,7 @@ void ChipSolver::merge()
 			std::sort(solutions.begin(), solutions.end(),
 				[&](const Solution& a, const Solution& b)
 				{
-					return a > b;
+					return a < b;
 				});
 			if (solutions.size() > targetBlock_.showNumber)
 				solutions.resize(targetBlock_.showNumber);
