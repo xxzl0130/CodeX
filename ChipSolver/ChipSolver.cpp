@@ -442,11 +442,7 @@ void ChipSolver::merge()
 				solutions.push_back(it->top());
 				it->pop();
 			}
-			std::sort(solutions.begin(), solutions.end(),
-				[&](const Solution& a, const Solution& b)
-				{
-					return a < b;
-				});
+			std::sort(solutions.begin(), solutions.end());
 			if (solutions.size() > targetBlock_.showNumber)
 				solutions.resize(targetBlock_.showNumber);
 		}
