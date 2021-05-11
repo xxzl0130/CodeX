@@ -192,7 +192,6 @@ void ChipSolver::run()
 	percent = 0;
 	configIndex_ = 0;
 	solutions.clear();
-	queue_ = std::priority_queue<Solution>();
 	tmpChips_.resize(8, 0);
 	thSolutionQueue_.clear();
 	emit solvePercentChanged(0);
@@ -234,6 +233,10 @@ void ChipSolver::run()
 	for (auto& th : threads)
 		delete th;
 	// 等待合并结果
+	while (!thSolutionQueue_.empty())
+	{
+		QThread::msleep(1);
+	}
 	solveRunning_ = false;
 	mergeTh.join();
 	running_ = false;
@@ -405,9 +408,10 @@ void ChipSolver::startSolve()
 
 		// 放到队列里交给合并线程处理
 		{
-			QMutexLocker locker(&thSolutionLock_);
+			std::unique_lock<std::mutex> locker(queueMutex_);
 			thSolutionQueue_.enqueue(param.queue);
 		}
+		queueCV_.notify_all();
 
 		// 计算当前进度百分比
 		int per = round((index + 1) * 100.0 / tmpSquadConfig_.configs.size());
@@ -428,14 +432,14 @@ void ChipSolver::merge()
 {
 	while(running_)
 	{
+		{
+			std::unique_lock<std::mutex> locker(queueMutex_);
+			queueCV_.wait(locker, [&]() {return !thSolutionQueue_.empty(); });
+		}
 		while (!thSolutionQueue_.empty())
 		{
-			std::shared_ptr<std::priority_queue<Solution>> it;
-			{
-				QMutexLocker locker(&thSolutionLock_);
-				it = thSolutionQueue_.head();
-				thSolutionQueue_.dequeue();
-			}
+			auto it = thSolutionQueue_.head();
+			thSolutionQueue_.dequeue();
 
 			while(!it->empty())
 			{
@@ -448,6 +452,5 @@ void ChipSolver::merge()
 		}
 		if(!solveRunning_)
 			return;
-		QThread::msleep(1);
 	}
 }

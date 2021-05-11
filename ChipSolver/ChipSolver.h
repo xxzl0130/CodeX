@@ -136,10 +136,6 @@ private:
 	bool solveRunning_;
 	// 当前芯片
 	std::vector<int> tmpChips_;
-	// 优先级队列
-	std::priority_queue<Solution> queue_;
-	// 锁
-	QMutex queueLock_;
 
 	//检查当前芯片数量是否满足该拼法最低需要
 	bool satisfyConfig(const Config& config);
@@ -174,6 +170,7 @@ private:
 	// 各个线程给出的结果的队列
 	QQueue<std::shared_ptr<std::priority_queue<Solution>>> thSolutionQueue_;
 	// 锁
-	QMutex thSolutionLock_;
+	std::mutex queueMutex_;
+	std::condition_variable queueCV_;
 	void merge();
 };
