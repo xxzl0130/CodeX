@@ -434,7 +434,7 @@ void ChipSolver::merge()
 	{
 		{
 			std::unique_lock<std::mutex> locker(queueMutex_);
-			queueCV_.wait(locker, [&]() {return !thSolutionQueue_.empty(); });
+			queueCV_.wait_for(locker, std::chrono::milliseconds(10), [&]() {return !thSolutionQueue_.empty(); });
 		}
 		while (!thSolutionQueue_.empty())
 		{
