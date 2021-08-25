@@ -197,7 +197,13 @@ void SolutionTableModel::sort(int column, Qt::SortOrder order)
 	case 5:
 		std::sort(solution_->begin(), solution_->end(),
 			[&](const Solution& a, const Solution& b)
-			{return cmp(a.totalValue.id, b.totalValue.id); });
+			{
+				if(a.totalValue.id != b.totalValue.id)
+					return !cmp(a.totalValue.id, b.totalValue.id); 
+				if(a.totalValue.no != b.totalValue.no)
+					return !cmp(a.totalValue.no, b.totalValue.no);
+				return cmp(a.totalValue.exp, b.totalValue.exp);
+			});
 		break;
 	case 6:
 		std::sort(solution_->begin(), solution_->end(),
