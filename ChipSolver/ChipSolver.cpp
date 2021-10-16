@@ -133,7 +133,6 @@ void ChipSolver::setUseAlt(bool b)
 void ChipSolver::stop()
 {
 	running_ = false;
-	solveRunning_ = false;
 }
 
 ChipViewInfo ChipSolver::solution2ChipView(const Solution& solution, const QString& squad)
@@ -193,7 +192,7 @@ void ChipSolver::run()
 	configIndex_ = 0;
 	solutions.clear();
 	tmpChips_.resize(8, 0);
-	thSolutionQueue_.clear();
+	thSolutionQueue_ = std::queue<std::shared_ptr<std::priority_queue<Solution>>>();
 	emit solvePercentChanged(0);
 
 	// 对153特殊处理
@@ -379,11 +378,11 @@ void ChipSolver::startSolve()
 	param.chips = CodeX::instance()->chips;
 	param.gridChips = CodeX::instance()->gridChips;
 
-	while (true)
+	while (running_)
 	{
 		int index = 0;
 		{
-			QMutexLocker locker(&configIndexLock_);
+			std::unique_lock<std::mutex> locker(configIndexLock_);
 			index = configIndex_;
 			// 取出本线程轮到的配置序号
 			if (index < tmpSquadConfig_.configs.size())
@@ -409,7 +408,7 @@ void ChipSolver::startSolve()
 		// 放到队列里交给合并线程处理
 		{
 			std::unique_lock<std::mutex> locker(queueMutex_);
-			thSolutionQueue_.enqueue(param.queue);
+			thSolutionQueue_.push(param.queue);
 		}
 		queueCV_.notify_all();
 
@@ -430,16 +429,18 @@ void ChipSolver::startSolve()
 
 void ChipSolver::merge()
 {
-	while(running_)
+	do
 	{
 		{
 			std::unique_lock<std::mutex> locker(queueMutex_);
-			queueCV_.wait_for(locker, std::chrono::milliseconds(10), [&]() {return !thSolutionQueue_.empty(); });
+			queueCV_.wait_for(locker, std::chrono::milliseconds(10)/*, [&]() {return !thSolutionQueue_.empty() || !solveRunning_; }*/);
 		}
+
+		std::unique_lock<std::mutex> locker(queueMutex_);
 		while (!thSolutionQueue_.empty())
 		{
-			auto it = thSolutionQueue_.head();
-			thSolutionQueue_.dequeue();
+			auto it = thSolutionQueue_.front();
+			thSolutionQueue_.pop();
 
 			while(!it->empty())
 			{
@@ -450,7 +451,5 @@ void ChipSolver::merge()
 			if (solutions.size() > targetBlock_.showNumber)
 				solutions.resize(targetBlock_.showNumber);
 		}
-		if(!solveRunning_)
-			return;
-	}
+	} while (solveRunning_);
 }

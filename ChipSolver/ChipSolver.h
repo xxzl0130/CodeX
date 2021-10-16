@@ -124,7 +124,7 @@ private:
 	// 当前配置序号
 	int configIndex_;
 	// 锁
-	QMutex configIndexLock_;
+	std::mutex configIndexLock_;
 	// 使用已装备
 	bool useEquipped_;
 	// 使用已锁定
@@ -168,7 +168,7 @@ private:
 	void findSolution(SolverParam& param);
 	void startSolve();
 	// 各个线程给出的结果的队列
-	QQueue<std::shared_ptr<std::priority_queue<Solution>>> thSolutionQueue_;
+	std::queue<std::shared_ptr<std::priority_queue<Solution>>> thSolutionQueue_;
 	// 锁
 	std::mutex queueMutex_;
 	std::condition_variable queueCV_;

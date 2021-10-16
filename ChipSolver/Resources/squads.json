@@ -24,5 +24,10 @@
     "Mk-153": {
         "6格+5格1类": "Mk-153-result.json",
         "带5格2类": "Mk-153-52-result.json"
+    },
+    "PP-93":{
+        "填满": "PP-93-result.json",
+        "最多空2格": "PP-93-2-result.json",
+        "最多空4格": "PP-93-4-result.json"
     }
 }
