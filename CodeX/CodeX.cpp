@@ -141,7 +141,6 @@ CodeX::CodeX(QWidget *parent)
 	this->chipDataWindow_->init();
 	this->ui->squadsComboBox->addItems(this->solver_->squadList());
 	this->solver_->setTargetBlock(TargetBlock(20,2,4,6,0));
-	this->settingWindow_->reset();
 	this->altSolutionWindow_->init();
 	this->show();
 	this->aboutDialog_->checkUpdate();
