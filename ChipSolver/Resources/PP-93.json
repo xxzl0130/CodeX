@@ -1,0 +1,35 @@
+{
+    "name": "PP-93",
+    "optional": {
+        "PP-93":0,
+        "PP-93-2":2,
+        "PP-93-4":4
+    },
+    "width": 8,
+    "height": 8,
+    "blocks": 32,
+    "color": 1,
+    "palindrome": 1,
+    "map": [
+        "11100111",
+        "11100111",
+        "11000011",
+        "00000000",
+        "00000000",
+        "11000011",
+        "11100111",
+        "11100111"
+    ],
+    "MaxBlocks": {
+        "damage": 16,
+        "def_break": 2,
+        "hit": 6,
+        "reload": 7
+    },
+    "MaxValues": {
+        "damage": 169,
+        "def_break": 55,
+        "hit": 100,
+        "reload": 91
+    }
+}
