@@ -5,7 +5,7 @@
 
 constexpr auto pacUrl = "http://static.xuanxuan.tech/GF/GF.pac";
 constexpr auto serverHost = "https://codex.xuanxuan.tech:8080/";
-constexpr auto localHost = "http://127.0.0.1:8080/";
+static QString localHost = "http://127.0.0.1:8080";
 constexpr auto jsonPath = "chipJson";
 #ifdef Q_OS_WIN
 constexpr auto exeName = "GF_Tool_Server.exe";
@@ -106,7 +106,7 @@ void GetChipWindow::setLocalProxy()
 		u8"说明：将手机连接与电脑相同的WiFi，长按打开WiFi的高级设置，选择“手动代理”，地址如下："));
 	this->ui->proxyAddressLineEdit->setText(trUtf8(u8"地址:") + localProxyAddr_ + trUtf8(u8" 端口:") + localProxyPort_);
 	this->ui->startLocalPushButton->setEnabled(this->process_->state() != QProcess::Running);
-	request_->setUrl(QUrl(QString(localHost) + jsonPath));
+	request_->setUrl(QUrl(localHost + jsonPath));
 }
 
 void GetChipWindow::setNetProxy()
@@ -190,10 +190,13 @@ void GetChipWindow::processDataReady()
 	// 解析本地地址
 	if(data.indexOf(u8"代理地址") != -1)
 	{
-		auto list = data.split(" ");
-		list = list[2].split(":");
-		this->localProxyAddr_ = list[0];
-		this->localProxyPort_ = list[1];
+		auto lines = data.split("\n");
+		auto proxyList = lines[0].split(" ")[2].split(":");
+		this->localProxyAddr_ = proxyList[0];
+		this->localProxyPort_ = proxyList[1];
+		auto webList = lines[1].split(" ");
+		localHost = webList[2];
+		request_->setUrl(QUrl(QString(localHost) + localWebPort_ + "/" + jsonPath));
 		setLocalProxy();
 		QMessageBox::information(this, trUtf8(u8"成功"), trUtf8(u8"本地代理程序启动成功！"));
 	}
