@@ -66,20 +66,24 @@ void GetChipWindow::closeEvent(QCloseEvent* e)
 
 bool GetChipWindow::parseChipData(const QByteArray& bytes)
 {
-	if (bytes.isEmpty() || bytes[0] != '#')
+	if (bytes.isEmpty())
 	{
 		return false;
 	}
-	auto data = QByteArray::fromBase64(
-		QByteArray(bytes.data() + 1, bytes.size() - 1), QByteArray::Base64Encoding);
 	try {
-		auto res = gzip::decompress(data.data(), data.size());
-		/*QFile file("chip.json");
-		file.open(QIODevice::WriteOnly);
-		file.write(res.c_str());
-		file.close();*/
+		QByteArray data;
+		if(bytes[0] == '#')
+		{
+			auto raw = QByteArray::fromBase64(
+				QByteArray(bytes.data() + 1, bytes.size() - 1), QByteArray::Base64Encoding);
+			data = QByteArray::fromStdString(gzip::decompress(raw.data(), raw.size()));
+		}
+		else
+		{
+			data = bytes;
+		}
 		QJsonParseError jsonError;
-		QJsonDocument doucment = QJsonDocument::fromJson(res.c_str(), &jsonError);  // 转化为 JSON 文档
+		QJsonDocument doucment = QJsonDocument::fromJson(data, &jsonError);  // 转化为 JSON 文档
 		if (!doucment.isNull() && jsonError.error == QJsonParseError::NoError && doucment.isObject())
 		{  // 解析未发生错误 JSON 文档为对象
 			auto obj = doucment.object();
@@ -194,9 +198,15 @@ void GetChipWindow::processDataReady()
 		auto proxyList = lines[0].split(" ")[2].split(":");
 		this->localProxyAddr_ = proxyList[0];
 		this->localProxyPort_ = proxyList[1];
-		auto webList = lines[1].split(" ");
-		localHost = webList[2];
-		request_->setUrl(QUrl(QString(localHost) + localWebPort_ + "/" + jsonPath));
+		if(lines.size() > 1)
+		{
+			auto webList = lines[1].split(" ");
+			if(webList.size() > 2)
+			{
+				localHost = webList[2];
+				request_->setUrl(QUrl(QString(localHost) + localWebPort_ + "/" + jsonPath));
+			}
+		}
 		setLocalProxy();
 		QMessageBox::information(this, trUtf8(u8"成功"), trUtf8(u8"本地代理程序启动成功！"));
 	}

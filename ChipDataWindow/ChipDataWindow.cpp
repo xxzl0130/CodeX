@@ -102,6 +102,45 @@ void ChipDataWindow::squadChanged(int index)
 	this->ui->reloadLabel->setText(trUtf8(u8"装填：") + QString("%1/%2/%3/%4").arg(sum.reloadValue).arg(max.reloadValue).arg(std::min(0, max.reloadValue - M.reloadValue)).arg(sum.reloadBlock));
 }
 
+void ChipDataWindow::importChipJson()
+{
+	auto filename = QFileDialog::getOpenFileName(this, u8"打开芯片数据JSON", "", "JSON (*.json)");
+	if(filename.isEmpty())
+		return;
+	QFile file(filename);
+	if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
+	{
+		QMessageBox::warning(this, u8"错误", u8"打开文件失败");
+		return;
+	}
+	auto data = file.readAll();
+	QJsonParseError jsonError;
+	QJsonDocument doucment = QJsonDocument::fromJson(data, &jsonError);  // 转化为 JSON 文档
+	if (!doucment.isNull() && jsonError.error == QJsonParseError::NoError && doucment.isObject())
+	{  // 解析未发生错误 JSON 文档为对象
+		auto obj = doucment.object();
+		if(obj.contains("squad_with_user_info") && obj.contains("chip_with_user_info"))
+		{
+			try
+			{
+				recvChipJsonObject(obj);
+				QSettings settings;
+				settings.setValue("/User/Chip", data);
+			}
+			catch (const std::exception& e)
+			{
+				QMessageBox::warning(this, u8"错误", QString(u8"解析JSON失败！\n") + e.what());
+				return;
+			}
+		}
+		QMessageBox::information(this, u8"成功", u8"导入芯片数据成功！");
+	}
+	else
+	{
+		QMessageBox::warning(this, u8"错误", QString(u8"解析JSON失败！\n"));
+	}
+}
+
 void ChipDataWindow::connect()
 {
 	QObject::connect(
@@ -109,6 +148,12 @@ void ChipDataWindow::connect()
 		&QPushButton::clicked,
 		this->getChipWindow,
 		&GetChipWindow::show
+	);
+	QObject::connect(
+		this->ui->importDataPushButton,
+		&QPushButton::clicked,
+		this,
+		&ChipDataWindow::importChipJson
 	);
 	QObject::connect(
 		this->getChipWindow,

@@ -11,3 +11,4 @@
 #include <QJsonValue>
 #include <QJsonParseError>
 #include <QSettings>
+#include <QFileDialog>

@@ -28,6 +28,8 @@ public slots:
 private slots:
 	void squadChanged(int index);
 
+	void importChipJson();
+
 private:
 	void connect();
 
