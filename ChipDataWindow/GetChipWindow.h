@@ -55,5 +55,5 @@ private:
 	QNetworkRequest* request_;
 	QNetworkAccessManager* accessManager_;
 	QProcess* process_;
-	QString localProxyAddr_, localProxyPort_, localWebPort_;
+	QString localProxyAddr_, localProxyPort_;
 };

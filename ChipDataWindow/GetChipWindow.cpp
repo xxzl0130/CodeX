@@ -2,10 +2,11 @@
 #include "GetChipWindow.h"
 #include "ui_GetChipWindow.h"
 #include <QFile>
+#include <QThread>
 
 constexpr auto pacUrl = "http://static.xuanxuan.tech/GF/GF.pac";
 constexpr auto serverHost = "https://codex.xuanxuan.tech:8080/";
-static QString localHost = "http://127.0.0.1:8080";
+static QString localHost = "http://127.0.0.1:8080/";
 constexpr auto jsonPath = "chipJson";
 #ifdef Q_OS_WIN
 constexpr auto exeName = "GF_Tool_Server.exe";
@@ -190,25 +191,28 @@ void GetChipWindow::processError(QProcess::ProcessError error)
 
 void GetChipWindow::processDataReady()
 {
-	auto data = QString::fromUtf8(process_->readAllStandardOutput());
-	// 解析本地地址
-	if(data.indexOf(u8"代理地址") != -1)
+	while (process_->canReadLine())
 	{
-		auto lines = data.split("\n");
-		auto proxyList = lines[0].split(" ")[2].split(":");
-		this->localProxyAddr_ = proxyList[0];
-		this->localProxyPort_ = proxyList[1];
-		if(lines.size() > 1)
+		auto data = QString::fromUtf8(process_->readLine().trimmed());
+		if(data.startsWith(u8"代理地址"))
 		{
-			auto webList = lines[1].split(" ");
-			if(webList.size() > 2)
-			{
-				localHost = webList[2];
-				request_->setUrl(QUrl(QString(localHost) + localWebPort_ + "/" + jsonPath));
-			}
+			auto proxyList = data.split(" ")[2].split(":");
+			this->localProxyAddr_ = proxyList[0];
+			this->localProxyPort_ = proxyList[1];
+			setLocalProxy();
+			QMessageBox::information(this, trUtf8(u8"成功"), trUtf8(u8"本地代理程序启动成功！"));
 		}
-		setLocalProxy();
-		QMessageBox::information(this, trUtf8(u8"成功"), trUtf8(u8"本地代理程序启动成功！"));
+		else if(data.startsWith(u8"网页地址"))
+		{
+			auto webList = data.split(" ");
+			localHost = QString("http://127.0.0.1:%1/").arg(webList[2].split(":")[1]);
+			request_->setUrl(QUrl(localHost + jsonPath));
+		}
+		else if(data.contains(u8"失败"))
+		{
+			QMessageBox::warning(this, u8"失败", data);
+			return;
+		}
 	}
 }
 
