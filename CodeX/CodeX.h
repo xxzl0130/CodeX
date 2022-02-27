@@ -38,6 +38,8 @@ public:
 
 	bool chipUsed(int no);
 
+	std::function<int(int)> getChipUsedFunc();
+
 protected slots:
 	void solve();
 	void solveFinished();

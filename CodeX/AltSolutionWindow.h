@@ -36,7 +36,7 @@ private:
 	ChipTableDelegate* chipTableDelegate_;
 	SolutionTableModel* solutionTableModel_;
 	std::vector<Solution> solutions_;
-	std::map<int, int> chipCount_;
+	std::unordered_map<int, int> chipCount_;
 
 	void saveSolutions();
 	void connect();

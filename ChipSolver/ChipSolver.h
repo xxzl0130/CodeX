@@ -34,6 +34,15 @@ struct CHIPSOLVER_EXPORT TargetBlock
 		damageBlock(dmg), defbreakBlock(dbk), hitBlock(hit), reloadBlock(r), error(e), showNumber(u),maxNumber(m)
 	{}
 };
+template <class _Ty, class _Container = std::vector<_Ty>, class _Pr = std::less<typename _Container::value_type>>
+class priority_queue:public std::priority_queue<_Ty, _Container, _Pr>
+{
+public:
+	const _Container& getContainer() const
+	{
+		return this->c;
+	}
+};
 
 class CHIPSOLVER_EXPORT ChipSolver : public QThread
 {
@@ -140,7 +149,7 @@ private:
 	//检查当前芯片数量是否满足该拼法最低需要
 	bool satisfyConfig(const Config& config);
 	// 检查芯片方案是否满足目标的格数溢出要求，只计算上溢，溢出返回true
-	bool checkOverflow(const TargetBlock& target, const GFChip& chips) const;
+	bool checkOverflow(const TargetBlock& target, const GFChip& chips, const GFChip& add) const;
 
 	struct SolverParam
 	{
@@ -150,15 +159,15 @@ private:
 		// 选择的方案
 		Config config;
 		// 当前芯片列表，用于去重
-		std::vector<int> curChips;
+		std::vector<int16_t> curChips;
 		// 去重用set
-		std::set<std::vector<int>> solutionSet;
+		std::set<std::vector<int16_t>> solutionSet;
 		// 芯片列表
 		Chips chips;
 		// 外层按颜色分类，内层按grid编号分类的芯片，保存强制+20的属性
 		std::map<int, std::map<int, std::vector<GFChip>>> gridChips;
 		// 优先级队列
-		std::shared_ptr<std::priority_queue<Solution>> queue;
+		std::shared_ptr<priority_queue<Solution>> queue;
 
 		SolverParam()
 		{
@@ -168,9 +177,10 @@ private:
 	void findSolution(SolverParam& param);
 	void startSolve();
 	// 各个线程给出的结果的队列
-	std::queue<std::shared_ptr<std::priority_queue<Solution>>> thSolutionQueue_;
+	std::queue<std::shared_ptr<priority_queue<Solution>>> thSolutionQueue_;
 	// 锁
 	std::mutex queueMutex_;
 	std::condition_variable queueCV_;
+	std::function<int(int)> chipUsedFunc;
 	void merge();
 };

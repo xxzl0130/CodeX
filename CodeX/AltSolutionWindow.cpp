@@ -71,7 +71,10 @@ void AltSolutionWindow::init()
 
 bool AltSolutionWindow::chipUsed(int no)
 {
-	return chipCount_[no] > 0;
+	auto it = chipCount_.find(no);
+	if (it != chipCount_.end() && it->second > 0)
+		return true;
+	return false;
 }
 
 void AltSolutionWindow::closeEvent(QCloseEvent* e)

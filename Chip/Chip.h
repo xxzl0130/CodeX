@@ -7,6 +7,8 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <unordered_map>
+#include <array>
 
 // 游戏内的芯片数据
 class CHIP_EXPORT GFChip
@@ -117,14 +119,15 @@ public:
 	Map map;
 
 	// 通过gridID获取芯片配置
-	static const ChipConfig& getConfig(int id);
+	static const ChipConfig& getConfig(int id) { return configs_[id]; }
+	static void initConfig();
 
 	ChipConfig rotate90(int n = 1) const; // clockwise
 
 private:
 	explicit ChipConfig(const QJsonObject& object);
-
-	static std::map<int, ChipConfig> configs_;
+	// 目前编号最大不到40
+	static std::array<ChipConfig, 50> configs_;
 };
 
 // 芯片在拼图解法中的参数

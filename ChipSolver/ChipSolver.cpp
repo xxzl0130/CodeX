@@ -25,7 +25,7 @@ ChipSolver::ChipSolver(QObject* parent):
 	file.open(QIODevice::ReadOnly);
 	configInfo_ = QJsonDocument::fromJson(file.readAll()).object();
 	file.close();
-
+	ChipConfig::initConfig();
 	for(const auto& squad : configInfo_.keys())
 	{
 		file.setFileName(QrcBase + squad + ".json");
@@ -192,8 +192,9 @@ void ChipSolver::run()
 	configIndex_ = 0;
 	solutions.clear();
 	tmpChips_.resize(8, 0);
-	thSolutionQueue_ = std::queue<std::shared_ptr<std::priority_queue<Solution>>>();
+	thSolutionQueue_ = std::queue<std::shared_ptr<priority_queue<Solution>>>();
 	emit solvePercentChanged(0);
+	chipUsedFunc = CodeX::instance()->getChipUsedFunc();
 
 	// 对153特殊处理
 	if(targetSquadName_ == "Mk-153")
@@ -258,13 +259,19 @@ bool ChipSolver::satisfyConfig(const Config& config)
 	return ans;
 }
 
-bool ChipSolver::checkOverflow(const TargetBlock& target, const GFChip& chips) const
+bool ChipSolver::checkOverflow(const TargetBlock& target, const GFChip& chips, const GFChip& add) const
 {
 	int over = 0;
-	over += std::max(0, chips.defbreakBlock - target.defbreakBlock);
-	over += std::max(0, chips.damageBlock - target.damageBlock);
-	over += std::max(0, chips.reloadBlock - target.reloadBlock);
-	over += std::max(0, chips.hitBlock - target.hitBlock);
+	over += std::max(0, chips.defbreakBlock + add.defbreakBlock - target.defbreakBlock);
+	if (over > target.error)
+		return true;
+	over += std::max(0, chips.damageBlock + add.damageBlock - target.damageBlock);
+	if (over > target.error)
+		return true;
+	over += std::max(0, chips.reloadBlock + add.reloadBlock - target.reloadBlock);
+	if (over > target.error)
+		return true;
+	over += std::max(0, chips.hitBlock + add.hitBlock - target.hitBlock);
 	return over > target.error;
 }
 
@@ -351,12 +358,12 @@ void ChipSolver::findSolution(SolverParam& param)
 			continue;
 		}
 		// 已使用且不使用已装备
-		if (CodeX::instance()->chipUsed(chip.no) && !useAlt_)
+		if (!useAlt_ && chipUsedFunc(chip.no))
 		{
 			continue;
 		}
 		// 溢出了不满足要求
-		if (checkOverflow(tmpTarget_, param.solution.totalValue + chip))
+		if (checkOverflow(tmpTarget_, param.solution.totalValue, chip))
 		{
 			continue;
 		}
@@ -401,7 +408,7 @@ void ChipSolver::startSolve()
 		param.k = 0;
 		param.curChips.resize(8, 0);
 		param.solution.chips.resize(8, ChipPuzzleOption());
-		param.queue.reset(new std::priority_queue<Solution>());
+		param.queue.reset(new priority_queue<Solution>());
 
 		findSolution(param);
 
@@ -436,18 +443,21 @@ void ChipSolver::merge()
 			queueCV_.wait_for(locker, std::chrono::milliseconds(10)/*, [&]() {return !thSolutionQueue_.empty() || !solveRunning_; }*/);
 		}
 
+		bool add = false;
 		std::unique_lock<std::mutex> locker(queueMutex_);
 		while (!thSolutionQueue_.empty())
 		{
 			auto it = thSolutionQueue_.front();
+			qDebug() << thSolutionQueue_.size();
 			thSolutionQueue_.pop();
-
-			while(!it->empty())
-			{
-				solutions.push_back(it->top());
-				it->pop();
-			}
+			solutions.insert(solutions.end(), it->getContainer().begin(), it->getContainer().end());
+			add = true;
+		}
+		if (add)
+		{
+			qDebug() << "size:" << solutions.size();
 			std::sort(solutions.begin(), solutions.end());
+			qDebug() << "sort end";
 			if (solutions.size() > targetBlock_.showNumber)
 				solutions.resize(targetBlock_.showNumber);
 		}

@@ -216,29 +216,25 @@ QString squadString(int i)
 	}
 }
 
-std::map<int, ChipConfig> ChipConfig::configs_ = std::map<int, ChipConfig>();
+std::array<ChipConfig, 50> ChipConfig::configs_;
 
-const ChipConfig& ChipConfig::getConfig(int id)
+void ChipConfig::initConfig()
 {
-	if(configs_.empty())
+	if (!ChipResourceInit)
 	{
-		if (!ChipResourceInit)
-		{
-			ChipResourceInit = true;
-			Q_INIT_RESOURCE(Chip);
-		}
-		// 初始化
-		QFile json(":/Chip/Resources/chips.json");
-		json.open(QIODevice::ReadOnly);
-		auto data = json.readAll();
-		auto doc = QJsonDocument::fromJson(data);
-		for(const auto& it : doc.array())
-		{
-			auto config = ChipConfig(it.toObject());
-			configs_[config.gridID] = config;
-		}
+		ChipResourceInit = true;
+		Q_INIT_RESOURCE(Chip);
 	}
-	return configs_[id];
+	// 初始化
+	QFile json(":/Chip/Resources/chips.json");
+	json.open(QIODevice::ReadOnly);
+	auto data = json.readAll();
+	auto doc = QJsonDocument::fromJson(data);
+	for (const auto& it : doc.array())
+	{
+		auto config = ChipConfig(it.toObject());
+		configs_[config.gridID] = config;
+	}
 }
 
 ChipConfig ChipConfig::rotate90(int n) const

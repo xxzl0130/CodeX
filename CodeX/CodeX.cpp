@@ -21,6 +21,11 @@ bool CodeX::chipUsed(int no)
 	return this->altSolutionWindow_->chipUsed(no);
 }
 
+std::function<int(int)> CodeX::getChipUsedFunc()
+{
+	return std::bind(&AltSolutionWindow::chipUsed, this->altSolutionWindow_, std::placeholders::_1);
+}
+
 void CodeX::solve()
 {
 	this->ui->solutionTable->setEnabled(false);
