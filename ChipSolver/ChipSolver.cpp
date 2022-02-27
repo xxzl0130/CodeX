@@ -133,6 +133,12 @@ void ChipSolver::setUseAlt(bool b)
 void ChipSolver::stop()
 {
 	running_ = false;
+	for (auto th : threads_)
+	{
+		th->terminate();
+		delete th;
+		th = nullptr;
+	}
 }
 
 ChipViewInfo ChipSolver::solution2ChipView(const Solution& solution, const QString& squad)
@@ -222,23 +228,26 @@ void ChipSolver::run()
 		}
 	}
 	QSettings settings;
-	std::vector<std::thread*> threads(settings.value("/Sys/Threads",1).toInt());
-	std::thread mergeTh([&]() {this->merge(); });
 	solveRunning_ = true;
-	for(auto& th : threads)
-		th = new std::thread([&]() {this->startSolve(); });
-	for (auto& th : threads)
-		th->join();
-	// 此时已经全部运行完了
-	for (auto& th : threads)
-		delete th;
+	
+	threads_.resize(settings.value("/Sys/Threads", 1).toInt(), nullptr);
+	for (auto& th : threads_)
+	{
+		th = QThread::create(&ChipSolver::startSolve, this);
+		th->start();
+	}
+	auto mergeTh = QThread::create(&ChipSolver::merge, this);
+	mergeTh->start();
+	for (auto th : threads_)
+		th->wait();
 	// 等待合并结果
 	while (!thSolutionQueue_.empty())
 	{
 		QThread::msleep(1);
 	}
 	solveRunning_ = false;
-	mergeTh.join();
+	mergeTh->wait();
+	delete mergeTh;
 	running_ = false;
 	
 	emit solvePercentChanged(100);
@@ -387,16 +396,11 @@ void ChipSolver::startSolve()
 
 	while (running_)
 	{
-		int index = 0;
-		{
-			std::unique_lock<std::mutex> locker(configIndexLock_);
-			index = configIndex_;
-			// 取出本线程轮到的配置序号
-			if (index < tmpSquadConfig_.configs.size())
-				++configIndex_;
-			else // 结束当前线程
-				return;
-		}
+		int index =
+			index = ++configIndex_;
+		// 取出本线程轮到的配置序号
+		if (index >= tmpSquadConfig_.configs.size()) // 结束当前线程
+			return;
 
 		if (!satisfyConfig(tmpSquadConfig_.configs[index]))
 		{
@@ -430,7 +434,10 @@ void ChipSolver::startSolve()
 		lastSolveNumber_.store(tmpSolutionNumber_);
 		emit solveNumberChanged(tmpSolutionNumber_);
 		if (targetBlock_.maxNumber > 0 && tmpSolutionNumber_ >= targetBlock_.maxNumber)
+		{
+			running_ = false;
 			break;
+		}
 	}
 }
 
@@ -448,16 +455,13 @@ void ChipSolver::merge()
 		while (!thSolutionQueue_.empty())
 		{
 			auto it = thSolutionQueue_.front();
-			qDebug() << thSolutionQueue_.size();
 			thSolutionQueue_.pop();
 			solutions.insert(solutions.end(), it->getContainer().begin(), it->getContainer().end());
 			add = true;
 		}
 		if (add)
 		{
-			qDebug() << "size:" << solutions.size();
 			std::sort(solutions.begin(), solutions.end());
-			qDebug() << "sort end";
 			if (solutions.size() > targetBlock_.showNumber)
 				solutions.resize(targetBlock_.showNumber);
 		}

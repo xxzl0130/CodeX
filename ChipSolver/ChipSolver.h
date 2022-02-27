@@ -131,9 +131,9 @@ private:
 	// 百分比
 	std::atomic_int percent;
 	// 当前配置序号
-	int configIndex_;
+	std::atomic_int configIndex_;
 	// 锁
-	std::mutex configIndexLock_;
+	//std::mutex configIndexLock_;
 	// 使用已装备
 	bool useEquipped_;
 	// 使用已锁定
@@ -183,4 +183,5 @@ private:
 	std::condition_variable queueCV_;
 	std::function<int(int)> chipUsedFunc;
 	void merge();
+	std::vector<QThread*> threads_;
 };
