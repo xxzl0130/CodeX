@@ -149,6 +149,7 @@ CodeX::CodeX(QWidget *parent)
 	this->altSolutionWindow_->init();
 	this->show();
 	this->aboutDialog_->checkUpdate();
+	this->settingWindow_->reset();
 }
 
 void CodeX::connect()
