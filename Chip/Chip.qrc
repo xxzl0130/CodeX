@@ -61,5 +61,7 @@
         <file>Resources/img/icon-dbk.png</file>
         <file>Resources/img/icon-dmg.png</file>
         <file>Resources/img/icon-fil.png</file>
+        <file>Resources/img/clockwise.png</file>
+        <file>Resources/img/counterclockwise.png</file>
     </qresource>
 </RCC>
