@@ -2,7 +2,6 @@
 #include "ChipDataWindow.h"
 #include "ui_ChipDataWindow.h"
 #include "GetChipWindow.h"
-#include "AddChipWindow.h"
 #include "CodeX/CodeX.h"
 #include "ChipSolver/ChipSolver.h"
 
@@ -10,7 +9,6 @@ ChipDataWindow::ChipDataWindow(QWidget* parent, Qt::WindowFlags f):
 	QDialog(parent,f),
 	ui(new Ui::ChipDataWindow),
 	getChipWindow(new GetChipWindow(this)),
-	addChipWindow(new AddChipWindow(this)),
 	tableModel_(new ChipTableModel(this)),
 	squadModel_(new ChipTableModel(this)),
 	tableDelegate_(new ChipTableDelegate(this)),
@@ -46,16 +44,13 @@ void ChipDataWindow::init()
 
 void ChipDataWindow::recvChipJsonObject(const QJsonObject& object)
 {
+	auto squads = object["squad_with_user_info"].toObject();
 	static bool first = true;
 	std::map<int, int> squadID;
-	if (object.contains("squad_with_user_info"))
+	for(const auto& it : squads)
 	{
-		auto squads = object["squad_with_user_info"].toObject();
-		for (const auto& it : squads)
-		{
-			auto obj = it.toObject();
-			squadID[obj["id"].toString().toInt()] = obj["squad_id"].toString().toInt();
-		}
+		auto obj = it.toObject();
+		squadID[obj["id"].toString().toInt()] = obj["squad_id"].toString().toInt();
 	}
 
 	auto& chips = CodeX::instance()->chips;

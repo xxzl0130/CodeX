@@ -7,7 +7,6 @@
 
 namespace Ui {	class ChipDataWindow; }
 class GetChipWindow;
-class AddChipWindow;
 
 class CHIPDATAWINDOW_EXPORT ChipDataWindow : public QDialog
 {
@@ -36,7 +35,6 @@ private:
 
 	Ui::ChipDataWindow* ui;
 	GetChipWindow* getChipWindow;
-	AddChipWindow* addChipWindow;
 	ChipTableModel* tableModel_;
 	ChipTableModel* squadModel_;
 	ChipTableDelegate* tableDelegate_;

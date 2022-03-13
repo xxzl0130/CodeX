@@ -143,7 +143,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AddChipWindow.cpp" />
     <ClCompile Include="ChipDataWindow.cpp" />
     <ClCompile Include="GetChipWindow.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -154,13 +153,11 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="ChipDataWindow.h" />
-    <QtMoc Include="AddChipWindow.h" />
     <ClInclude Include="chipdatawindow_global.h" />
     <QtMoc Include="GetChipWindow.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="AddChipWindow.ui" />
     <QtUic Include="ChipDataWindow.ui" />
     <QtUic Include="GetChipWindow.ui" />
   </ItemGroup>
