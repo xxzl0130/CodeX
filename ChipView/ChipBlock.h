@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "chipview_global.h"
 #include <QtWidgets/QLabel>

@@ -1,4 +1,4 @@
-#include "ChipBlock.h"
+﻿#include "ChipBlock.h"
 #include "ChipView.h"
 #include <QDebug>
 

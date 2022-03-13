@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "chipdatawindow_global.h"
 #include <QDialog>
@@ -24,31 +24,31 @@ signals:
 	void sendChipJsonObject(const QJsonObject& object);
 
 protected slots:
-	// ÉèÖÃ±¾µØ´úÀí£¬ÏÔÊ¾ÌáÊ¾£¬¿ªÆô´úÀí³ÌĞò
+	// è®¾ç½®æœ¬åœ°ä»£ç†ï¼Œæ˜¾ç¤ºæç¤ºï¼Œå¼€å¯ä»£ç†ç¨‹åº
 	void setLocalProxy();
-	// ÉèÖÃÍøÂç´úÀí£¬ÏÔÊ¾ÌáÊ¾
+	// è®¾ç½®ç½‘ç»œä»£ç†ï¼Œæ˜¾ç¤ºæç¤º
 	void setNetProxy();
-	// »ñÈ¡Êı¾İ£¬Òì²½
+	// è·å–æ•°æ®ï¼Œå¼‚æ­¥
 	void getData();
 
-	// ´Ó·şÎñÆ÷½ÓÊÜµ½Êı¾İ
+	// ä»æœåŠ¡å™¨æ¥å—åˆ°æ•°æ®
 	void recvData(QNetworkReply* reply);
 
-	// ×ÓÏß³Ì´íÎó
+	// å­çº¿ç¨‹é”™è¯¯
 	void processError(QProcess::ProcessError error);
-	// ×ÓÏß³ÌÊı¾İ¿É¶Á
+	// å­çº¿ç¨‹æ•°æ®å¯è¯»
 	void processDataReady();
-	// Æô¶¯±¾µØ´úÀí
+	// å¯åŠ¨æœ¬åœ°ä»£ç†
 	void startLocalProxy();
 
 	void closeEvent(QCloseEvent*) override;
 
 private:
 	void connect();
-	// ½âÎö´Ó·şÎñÆ÷»òÕß±£´æµÄÅäÖÃÖĞ¶ÁÈ¡µÄĞ¾Æ¬ĞÅÏ¢
+	// è§£æä»æœåŠ¡å™¨æˆ–è€…ä¿å­˜çš„é…ç½®ä¸­è¯»å–çš„èŠ¯ç‰‡ä¿¡æ¯
 	bool parseChipData(const QByteArray& data);
 
-	// É±ËÀÒÑ¾­´æÔÚµÄ½ø³Ì
+	// æ€æ­»å·²ç»å­˜åœ¨çš„è¿›ç¨‹
 	void killProcess();
 
 	Ui::GetChipWindow *ui;

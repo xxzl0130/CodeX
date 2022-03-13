@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "ChipView/ChipView.h"
 #include "gzip/decompress.hpp"
 #include "gzip/utils.hpp"

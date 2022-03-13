@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "SettingWindow.h"
 #include "ui_SettingWindow.h"
 #include "CodeX.h"
@@ -9,7 +9,7 @@ SettingWindow::SettingWindow(QWidget *parent)
 {
 	ui->setupUi(this);
 	connect();
-	this->ui->threadLabel->setText(u8"ÍÆ¼öÖµ£º" + QString::number(QThread::idealThreadCount()));
+	this->ui->threadLabel->setText(u8"æ¨èå€¼ï¼š" + QString::number(QThread::idealThreadCount()));
 }
 
 SettingWindow::~SettingWindow()

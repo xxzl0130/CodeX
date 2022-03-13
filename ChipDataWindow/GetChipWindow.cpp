@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "GetChipWindow.h"
 #include "ui_GetChipWindow.h"
 #include <QFile>
@@ -20,7 +20,7 @@ GetChipWindow::GetChipWindow(QWidget *parent)
 	request_(new QNetworkRequest()),
 	accessManager_(new QNetworkAccessManager(this)),
 	process_(new QProcess(this)),
-	localProxyAddr_(trUtf8(u8"³ÌĞò´ıÆô¶¯"))
+	localProxyAddr_(trUtf8(u8"ç¨‹åºå¾…å¯åŠ¨"))
 {
 	ui->setupUi(this);
 	connect();
@@ -47,7 +47,7 @@ void GetChipWindow::init()
 
 	killProcess();
 
-	// Æô¶¯ºó³¢ÊÔ¼ÓÔØÊı¾İ
+	// å¯åŠ¨åå°è¯•åŠ è½½æ•°æ®
 	QSettings settings;
 	parseChipData(settings.value("/User/Chip").toByteArray());
 }
@@ -84,12 +84,12 @@ bool GetChipWindow::parseChipData(const QByteArray& bytes)
 			data = bytes;
 		}
 		QJsonParseError jsonError;
-		QJsonDocument doucment = QJsonDocument::fromJson(data, &jsonError);  // ×ª»¯Îª JSON ÎÄµµ
+		QJsonDocument doucment = QJsonDocument::fromJson(data, &jsonError);  // è½¬åŒ–ä¸º JSON æ–‡æ¡£
 		if (!doucment.isNull() && jsonError.error == QJsonParseError::NoError && doucment.isObject())
-		{  // ½âÎöÎ´·¢Éú´íÎó JSON ÎÄµµÎª¶ÔÏó
+		{  // è§£ææœªå‘ç”Ÿé”™è¯¯ JSON æ–‡æ¡£ä¸ºå¯¹è±¡
 			auto obj = doucment.object();
 			emit sendChipJsonObject(obj);
-			QSettings settings; // ½âÎö³É¹¦Ôò±£´æÊı¾İ
+			QSettings settings; // è§£ææˆåŠŸåˆ™ä¿å­˜æ•°æ®
 			settings.setValue("/User/Chip", bytes);
 			return true;
 		}
@@ -100,7 +100,7 @@ bool GetChipWindow::parseChipData(const QByteArray& bytes)
 	}
 	catch (const std::runtime_error & e)
 	{
-		qDebug() << trUtf8(u8"Êı¾İ½âÎöÊ§°Ü£¡\n") + e.what();
+		qDebug() << trUtf8(u8"æ•°æ®è§£æå¤±è´¥ï¼\n") + e.what();
 		return false;
 	}
 }
@@ -108,8 +108,8 @@ bool GetChipWindow::parseChipData(const QByteArray& bytes)
 void GetChipWindow::setLocalProxy()
 {
 	this->ui->noteLabel->setText(trUtf8(
-		u8"ËµÃ÷£º½«ÊÖ»úÁ¬½ÓÓëµçÄÔÏàÍ¬µÄWiFi£¬³¤°´´ò¿ªWiFiµÄ¸ß¼¶ÉèÖÃ£¬Ñ¡Ôñ¡°ÊÖ¶¯´úÀí¡±£¬µØÖ·ÈçÏÂ£º"));
-	this->ui->proxyAddressLineEdit->setText(trUtf8(u8"µØÖ·:") + localProxyAddr_ + trUtf8(u8" ¶Ë¿Ú:") + localProxyPort_);
+		u8"è¯´æ˜ï¼šå°†æ‰‹æœºè¿æ¥ä¸ç”µè„‘ç›¸åŒçš„WiFiï¼Œé•¿æŒ‰æ‰“å¼€WiFiçš„é«˜çº§è®¾ç½®ï¼Œé€‰æ‹©â€œæ‰‹åŠ¨ä»£ç†â€ï¼Œåœ°å€å¦‚ä¸‹ï¼š"));
+	this->ui->proxyAddressLineEdit->setText(trUtf8(u8"åœ°å€:") + localProxyAddr_ + trUtf8(u8" ç«¯å£:") + localProxyPort_);
 	this->ui->startLocalPushButton->setEnabled(this->process_->state() != QProcess::Running);
 	request_->setUrl(QUrl(localHost + jsonPath));
 }
@@ -117,7 +117,7 @@ void GetChipWindow::setLocalProxy()
 void GetChipWindow::setNetProxy()
 {
 	this->ui->noteLabel->setText(trUtf8(
-		u8"ËµÃ÷£º½«ÊÖ»úÁ¬½ÓÈÎÒâWiFi£¬³¤°´´ò¿ªWiFiµÄ¸ß¼¶ÉèÖÃ£¬´úÀíÑ¡Ôñ¡°×Ô¶¯´úÀí¡±£¬´úÀíµØÖ·Îª£º"));
+		u8"è¯´æ˜ï¼šå°†æ‰‹æœºè¿æ¥ä»»æ„WiFiï¼Œé•¿æŒ‰æ‰“å¼€WiFiçš„é«˜çº§è®¾ç½®ï¼Œä»£ç†é€‰æ‹©â€œè‡ªåŠ¨ä»£ç†â€ï¼Œä»£ç†åœ°å€ä¸ºï¼š"));
 	this->ui->proxyAddressLineEdit->setText(pacUrl);
 	request_->setUrl(QUrl(QString(serverHost) + jsonPath));
 	process_->kill();
@@ -139,29 +139,29 @@ void GetChipWindow::recvData(QNetworkReply* reply)
 		QByteArray bytes = reply->readAll();
 		if (bytes[0] != '#')
 		{
-			QMessageBox::warning(this, trUtf8(u8"Ê§°Ü"), trUtf8(u8"»ñÈ¡Êı¾İÊ§°Ü£¡Çë¼ì²é´úÀí²Ù×÷ºÍÓÃ»§ĞÅÏ¢£¡"));
+			QMessageBox::warning(this, trUtf8(u8"å¤±è´¥"), trUtf8(u8"è·å–æ•°æ®å¤±è´¥ï¼è¯·æ£€æŸ¥ä»£ç†æ“ä½œå’Œç”¨æˆ·ä¿¡æ¯ï¼"));
 		}
 		else if(parseChipData(bytes))
 		{
-			QMessageBox::information(this, trUtf8(u8"³É¹¦"), trUtf8(u8"»ñÈ¡Ğ¾Æ¬Êı¾İ³É¹¦£¡"));
+			QMessageBox::information(this, trUtf8(u8"æˆåŠŸ"), trUtf8(u8"è·å–èŠ¯ç‰‡æ•°æ®æˆåŠŸï¼"));
 			this->close();
 		}
 		else
 		{
-			QMessageBox::warning(this, trUtf8(u8"Ê§°Ü"), trUtf8(u8"½âÎöÊı¾İÊ§°Ü£¡"));
+			QMessageBox::warning(this, trUtf8(u8"å¤±è´¥"), trUtf8(u8"è§£ææ•°æ®å¤±è´¥ï¼"));
 		}
 	}
 	else
 	{
-		QMessageBox::warning(this, trUtf8(u8"´íÎó"),
-			trUtf8(u8"ÍøÂçÁ¬½Ó´íÎó£¡") + " code:" + QString::number(reply->error()) + "\n" + reply->errorString());
+		QMessageBox::warning(this, trUtf8(u8"é”™è¯¯"),
+			trUtf8(u8"ç½‘ç»œè¿æ¥é”™è¯¯ï¼") + " code:" + QString::number(reply->error()) + "\n" + reply->errorString());
 	}
 	reply->deleteLater();
 }
 
 void GetChipWindow::processError(QProcess::ProcessError error)
 {
-	localProxyAddr_ = trUtf8(u8"³ÌĞò´ıÆô¶¯");
+	localProxyAddr_ = trUtf8(u8"ç¨‹åºå¾…å¯åŠ¨");
 	localProxyPort_ = "";
 	if (this->ui->netProxyRadioButton->isChecked())
 		return;
@@ -169,22 +169,22 @@ void GetChipWindow::processError(QProcess::ProcessError error)
 	switch (error)
 	{
 	case QProcess::FailedToStart:
-		QMessageBox::warning(this, trUtf8(u8"´íÎó"), trUtf8(u8"³ÌĞòÆô¶¯Ê§°Ü£¡"));
+		QMessageBox::warning(this, trUtf8(u8"é”™è¯¯"), trUtf8(u8"ç¨‹åºå¯åŠ¨å¤±è´¥ï¼"));
 		break;
 	case QProcess::Crashed:
-		QMessageBox::warning(this, trUtf8(u8"´íÎó"), trUtf8(u8"³ÌĞò±ÀÀ££¡"));
+		QMessageBox::warning(this, trUtf8(u8"é”™è¯¯"), trUtf8(u8"ç¨‹åºå´©æºƒï¼"));
 		break;
 	case QProcess::Timedout:
-		QMessageBox::warning(this, trUtf8(u8"´íÎó"), trUtf8(u8"³ÌĞò³¬Ê±£¡"));
+		QMessageBox::warning(this, trUtf8(u8"é”™è¯¯"), trUtf8(u8"ç¨‹åºè¶…æ—¶ï¼"));
 		break;
 	case QProcess::ReadError:
-		QMessageBox::warning(this, trUtf8(u8"´íÎó"), trUtf8(u8"³ÌĞò¶ÁÈ¡Ê§°Ü£¡"));
+		QMessageBox::warning(this, trUtf8(u8"é”™è¯¯"), trUtf8(u8"ç¨‹åºè¯»å–å¤±è´¥ï¼"));
 		break;
 	case QProcess::WriteError:
-		QMessageBox::warning(this, trUtf8(u8"´íÎó"), trUtf8(u8"³ÌĞòĞ´ÈëÊ§°Ü£¡"));
+		QMessageBox::warning(this, trUtf8(u8"é”™è¯¯"), trUtf8(u8"ç¨‹åºå†™å…¥å¤±è´¥ï¼"));
 		break;
 	case QProcess::UnknownError:
-		QMessageBox::warning(this, trUtf8(u8"´íÎó"), trUtf8(u8"³ÌĞòÎ´Öª´íÎó£¡"));
+		QMessageBox::warning(this, trUtf8(u8"é”™è¯¯"), trUtf8(u8"ç¨‹åºæœªçŸ¥é”™è¯¯ï¼"));
 		break;
 	}
 }
@@ -194,23 +194,23 @@ void GetChipWindow::processDataReady()
 	while (process_->canReadLine())
 	{
 		auto data = QString::fromUtf8(process_->readLine().trimmed());
-		if(data.startsWith(u8"´úÀíµØÖ·"))
+		if(data.startsWith(u8"ä»£ç†åœ°å€"))
 		{
 			auto proxyList = data.split(" ")[2].split(":");
 			this->localProxyAddr_ = proxyList[0];
 			this->localProxyPort_ = proxyList[1];
 			setLocalProxy();
-			QMessageBox::information(this, trUtf8(u8"³É¹¦"), trUtf8(u8"±¾µØ´úÀí³ÌĞòÆô¶¯³É¹¦£¡"));
+			QMessageBox::information(this, trUtf8(u8"æˆåŠŸ"), trUtf8(u8"æœ¬åœ°ä»£ç†ç¨‹åºå¯åŠ¨æˆåŠŸï¼"));
 		}
-		else if(data.startsWith(u8"ÍøÒ³µØÖ·"))
+		else if(data.startsWith(u8"ç½‘é¡µåœ°å€"))
 		{
 			auto webList = data.split(" ");
 			localHost = QString("http://127.0.0.1:%1/").arg(webList[2].split(":")[1]);
 			request_->setUrl(QUrl(localHost + jsonPath));
 		}
-		else if(data.contains(u8"Ê§°Ü"))
+		else if(data.contains(u8"å¤±è´¥"))
 		{
-			QMessageBox::warning(this, u8"Ê§°Ü", data);
+			QMessageBox::warning(this, u8"å¤±è´¥", data);
 			return;
 		}
 	}

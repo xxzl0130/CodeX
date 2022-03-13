@@ -1,4 +1,4 @@
-#include "ChipSolver.h"
+ï»¿#include "ChipSolver.h"
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QDebug>
@@ -33,7 +33,7 @@ ChipSolver::ChipSolver(QObject* parent):
 		auto obj = QJsonDocument::fromJson(file.readAll()).object();
 		file.close();
 		
-		// ¶ÁÈë¸ñ×ÓĞÅÏ¢
+		// è¯»å…¥æ ¼å­ä¿¡æ¯
 		ChipViewInfo info;
 		info.width = obj["width"].toInt();
 		info.height = obj["height"].toInt();
@@ -48,12 +48,12 @@ ChipSolver::ChipSolver(QObject* parent):
 		}
 		squadView_[squad] = info;
 
-		// ¶ÁÈ¡Ğ¾Æ¬Æ´Í¼·½°¸
+		// è¯»å–èŠ¯ç‰‡æ‹¼å›¾æ–¹æ¡ˆ
 		const auto& configFile = configInfo_[squad].toObject();
 		for(const auto& name : configFile.keys())
 		{
 			SquadConfig squadConfig;
-			// ÖØ×°µÄ»ù±¾ĞÅÏ¢£¬Êµ¼ÊÉÏºÍ·½°¸ÎŞ¹Ø£¬µ«ÊÇÃ»µØ·½´æÁË£¬ÀÁµÃµ¥¶ÀÔÙ´æ
+			// é‡è£…çš„åŸºæœ¬ä¿¡æ¯ï¼Œå®é™…ä¸Šå’Œæ–¹æ¡ˆæ— å…³ï¼Œä½†æ˜¯æ²¡åœ°æ–¹å­˜äº†ï¼Œæ‡’å¾—å•ç‹¬å†å­˜
 			squadConfig.blocks = obj["blocks"].toInt();
 			squadConfig.optional = obj["optional"].toObject()[name].toInt();
 			auto maxBlocks = obj["MaxBlocks"].toObject();
@@ -82,7 +82,7 @@ ChipSolver::ChipSolver(QObject* parent):
 				}
 				squadConfig.configs.push_back(config);
 			}
-			// nameÊÇ·½°¸Ãû
+			// nameæ˜¯æ–¹æ¡ˆå
 			configs_[squad][name] = squadConfig;
 			maxValues_[squad] = squadConfig.maxValue;
 		}
@@ -193,7 +193,7 @@ void ChipSolver::run()
 	lastSolveNumber_ = 0;
 	tmpSolutionNumber_ = 0;
 	tmpTarget_ = targetBlock_;
-	tmpTarget_.error += tmpSquadConfig_.optional; // ¸½¼Ó¶îÍâµÄ¿É¿Õ¸ñ
+	tmpTarget_.error += tmpSquadConfig_.optional; // é™„åŠ é¢å¤–çš„å¯ç©ºæ ¼
 	percent = 0;
 	configIndex_ = 0;
 	solutions.clear();
@@ -202,7 +202,7 @@ void ChipSolver::run()
 	emit solvePercentChanged(0);
 	chipUsedFunc = CodeX::instance()->getChipUsedFunc();
 
-	// ¶Ô153ÌØÊâ´¦Àí
+	// å¯¹153ç‰¹æ®Šå¤„ç†
 	if(targetSquadName_ == "Mk-153")
 	{
 		if(targetBlock_.damageBlock == 17 && targetBlock_.defbreakBlock == 9 && targetBlock_.hitBlock == 7 && targetBlock_.reloadBlock == 5)
@@ -240,7 +240,7 @@ void ChipSolver::run()
 	mergeTh->start();
 	for (auto th : threads_)
 		th->wait();
-	// µÈ´ıºÏ²¢½á¹û
+	// ç­‰å¾…åˆå¹¶ç»“æœ
 	while (!thSolutionQueue_.empty())
 	{
 		QThread::msleep(1);
@@ -308,16 +308,16 @@ void ChipSolver::findSolution(SolverParam& param)
 		}
 		if (tmpSquadConfig_.palindrome > 0)
 		{
-			// Ã¶¾ÙÕûÌåĞı×ª·½Ïò
+			// æšä¸¾æ•´ä½“æ—‹è½¬æ–¹å‘
 			for (auto i = tmpSquadConfig_.palindrome; i < 4; i += tmpSquadConfig_.palindrome)
 			{
 				int sum = 0;
-				// ¶ÔÃ¿¸öĞ¾Æ¬¸½¼ÓÒ»´ÎĞı×ª
+				// å¯¹æ¯ä¸ªèŠ¯ç‰‡é™„åŠ ä¸€æ¬¡æ—‹è½¬
 				for (const auto& it : param.solution.chips)
 				{
 					const auto& chip = CodeX::instance()->chips[it.no];
 					auto r = chip.rotate + i;
-					r %= ChipConfig::getConfig(chip.gridID).direction; // ¿¼ÂÇĞ¾Æ¬×ÔÉí¶Ô³ÆÎÊÌâ
+					r %= ChipConfig::getConfig(chip.gridID).direction; // è€ƒè™‘èŠ¯ç‰‡è‡ªèº«å¯¹ç§°é—®é¢˜
 					sum += int(r != it.rotate);
 				}
 				if (sum < param.solution.totalValue.no)
@@ -351,39 +351,39 @@ void ChipSolver::findSolution(SolverParam& param)
 		return;
 	}
 
-	//»ñÈ¡µ±Ç°ËùĞèĞÍºÅµÄĞ¾Æ¬ÁĞ±í
+	//è·å–å½“å‰æ‰€éœ€å‹å·çš„èŠ¯ç‰‡åˆ—è¡¨
 	auto& chips = param.gridChips[tmpSquadConfig_.color][param.config[param.k].no];
-	// ÏÈ±£´æÕâÒ»²½µÄĞ¾Æ¬ÅäÖÃ£¬ºóĞø¸üĞÂid
+	// å…ˆä¿å­˜è¿™ä¸€æ­¥çš„èŠ¯ç‰‡é…ç½®ï¼Œåç»­æ›´æ–°id
 	param.solution.chips[param.k] = param.config[param.k];
 	for (auto& chip : chips)
 	{
 		if (!running_)
 			return;
-		if (chip.squad & 0x8000) //ÒÑÊ¹ÓÃ
+		if (chip.squad & 0x8000) //å·²ä½¿ç”¨
 			continue;
-		if ((chip.locked && !useLocked_)// ÒÑËø¶¨ÇÒ²»Ê¹ÓÃÒÑËø¶¨
-			|| (chip.squad && !useEquipped_))// ÒÑ×°±¸ÇÒ²»Ê¹ÓÃÒÑ×°±¸
+		if ((chip.locked && !useLocked_)// å·²é”å®šä¸”ä¸ä½¿ç”¨å·²é”å®š
+			|| (chip.squad && !useEquipped_))// å·²è£…å¤‡ä¸”ä¸ä½¿ç”¨å·²è£…å¤‡
 		{
 			continue;
 		}
-		// ÒÑÊ¹ÓÃÇÒ²»Ê¹ÓÃÒÑ×°±¸
+		// å·²ä½¿ç”¨ä¸”ä¸ä½¿ç”¨å·²è£…å¤‡
 		if (!useAlt_ && chipUsedFunc(chip.no))
 		{
 			continue;
 		}
-		// Òç³öÁË²»Âú×ãÒªÇó
+		// æº¢å‡ºäº†ä¸æ»¡è¶³è¦æ±‚
 		if (checkOverflow(tmpTarget_, param.solution.totalValue, chip))
 		{
 			continue;
 		}
-		chip.squad |= 0x8000; //·ûºÅÎ»ÖÃ1£¬·´ÕıĞ¡¶ÓºÅ¶¼ÊÇÕıÊı
+		chip.squad |= 0x8000; //ç¬¦å·ä½ç½®1ï¼Œåæ­£å°é˜Ÿå·éƒ½æ˜¯æ­£æ•°
 		param.solution.totalValue += chip;
-		param.solution.chips[param.k].no = chip.no; // ¸üĞÂid
+		param.solution.chips[param.k].no = chip.no; // æ›´æ–°id
 		param.curChips[param.k] = chip.no;
 		++param.k;
 		findSolution(param);
 		--param.k;
-		chip.squad &= ~0x8000; // ·ûºÅÎ»ÖÃ0
+		chip.squad &= ~0x8000; // ç¬¦å·ä½ç½®0
 		param.solution.totalValue -= chip;
 	}
 }
@@ -398,8 +398,8 @@ void ChipSolver::startSolve()
 	{
 		int index =
 			index = ++configIndex_;
-		// È¡³ö±¾Ïß³ÌÂÖµ½µÄÅäÖÃĞòºÅ
-		if (index >= tmpSquadConfig_.configs.size()) // ½áÊøµ±Ç°Ïß³Ì
+		// å–å‡ºæœ¬çº¿ç¨‹è½®åˆ°çš„é…ç½®åºå·
+		if (index >= tmpSquadConfig_.configs.size()) // ç»“æŸå½“å‰çº¿ç¨‹
 			return;
 
 		if (!satisfyConfig(tmpSquadConfig_.configs[index]))
@@ -416,14 +416,14 @@ void ChipSolver::startSolve()
 
 		findSolution(param);
 
-		// ·Åµ½¶ÓÁĞÀï½»¸øºÏ²¢Ïß³Ì´¦Àí
+		// æ”¾åˆ°é˜Ÿåˆ—é‡Œäº¤ç»™åˆå¹¶çº¿ç¨‹å¤„ç†
 		{
 			std::unique_lock<std::mutex> locker(queueMutex_);
 			thSolutionQueue_.push(param.queue);
 		}
 		queueCV_.notify_all();
 
-		// ¼ÆËãµ±Ç°½ø¶È°Ù·Ö±È
+		// è®¡ç®—å½“å‰è¿›åº¦ç™¾åˆ†æ¯”
 		int per = round((index + 1) * 100.0 / tmpSquadConfig_.configs.size());
 		if (per > percent)
 		{

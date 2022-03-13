@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "chipsolver_global.h"
 #include <QThread>
@@ -15,19 +15,19 @@
 
 struct CHIPSOLVER_EXPORT TargetBlock
 {
-	// ÉËº¦¸ñÊı
+	// ä¼¤å®³æ ¼æ•°
 	int damageBlock;
-	// ÆÆ·À¸ñÊı
+	// ç ´é˜²æ ¼æ•°
 	int defbreakBlock;
-	// ¾«¶È¸ñÊı
+	// ç²¾åº¦æ ¼æ•°
 	int hitBlock;
-	// ×°Ìî¸ñÊı
+	// è£…å¡«æ ¼æ•°
 	int reloadBlock;
-	// Æ«²î¸ñÊı
+	// åå·®æ ¼æ•°
 	int error;
-	// ×î´óÏÔÊ¾·½°¸ÊıÁ¿
+	// æœ€å¤§æ˜¾ç¤ºæ–¹æ¡ˆæ•°é‡
 	int showNumber;
-	// ×î´ó¼ÆËã·½°¸ÊıÁ¿
+	// æœ€å¤§è®¡ç®—æ–¹æ¡ˆæ•°é‡
 	int maxNumber;
 
 	explicit TargetBlock(int dmg = 0, int dbk = 0, int hit = 0, int r = 0,  int e = 0, int u = 1e3,int m = 1e9) :
@@ -53,20 +53,20 @@ public:
 
 	SquadSolution solutions;
 	
-	// ÖØ×°ÁĞ±í
+	// é‡è£…åˆ—è¡¨
 	QStringList squadList() const;
-	// ¸ÃÖØ×°µÄ·½°¸ÁĞ±í£¬Í¬Ê±»áÉèÖÃ³Éµ±Ç°ÖØ×°
+	// è¯¥é‡è£…çš„æ–¹æ¡ˆåˆ—è¡¨ï¼ŒåŒæ—¶ä¼šè®¾ç½®æˆå½“å‰é‡è£…
 	QStringList configList(const QString& squad);
-	// ·µ»Ø¸ÃÖØ×°µÄ×î´óÊôĞÔ
+	// è¿”å›è¯¥é‡è£…çš„æœ€å¤§å±æ€§
 	GFChip squadMaxValue(const QString& squad);
 
-	// ½«Ò»¸ö·½°¸×ªÎª¿ÉÏÔÊ¾µÄÍ¼ĞÎĞÅÏ¢
+	// å°†ä¸€ä¸ªæ–¹æ¡ˆè½¬ä¸ºå¯æ˜¾ç¤ºçš„å›¾å½¢ä¿¡æ¯
 	ChipViewInfo solution2ChipView(const Solution& solution, const QString& squad = "");
 
 public slots:
-	// ÉèÖÃÄ¿±ê¸ñÊı
+	// è®¾ç½®ç›®æ ‡æ ¼æ•°
 	void setTargetBlock(const TargetBlock& block);
-	// ÉèÖÃÄ¿±êµÄÅäÖÃ·½°¸
+	// è®¾ç½®ç›®æ ‡çš„é…ç½®æ–¹æ¡ˆ
 	void setTargetConfig(const QString& name);
 	void setUseEquipped(bool b);
 	void setUseLocked(bool b);
@@ -74,99 +74,99 @@ public slots:
 	void stop();
 
 signals:
-	// ½â¾ö·½°¸°Ù·Ö±È
+	// è§£å†³æ–¹æ¡ˆç™¾åˆ†æ¯”
 	void solvePercentChanged(int percent);
-	// ×Ü·½°¸Êı
+	// æ€»æ–¹æ¡ˆæ•°
 	void solveNumberChanged(long long number);
 	
 protected:
 	void run() override;
 
 private:	
-	// Ò»×éÅäÖÃ
+	// ä¸€ç»„é…ç½®
 	typedef std::vector<ChipPuzzleOption> Config;
-	// Ò»¸öÖØ×°µÄËùÓĞÅäÖÃ
+	// ä¸€ä¸ªé‡è£…çš„æ‰€æœ‰é…ç½®
 	struct SquadConfig
 	{
 		std::vector<Config> configs;
-		// ×Ü¸ñÊı
+		// æ€»æ ¼æ•°
 		int blocks = 38;
-		// ¿É¿Õ¸ñÊı
+		// å¯ç©ºæ ¼æ•°
 		int optional = 0;
-		// ÑÕÉ«
+		// é¢œè‰²
 		int color;
-		// Ğı×ª¶Ô³Æ£¬0Îª²»¶Ô³Æ£¬>0ÎªĞèÒªĞı×ª¼¸´Î
+		// æ—‹è½¬å¯¹ç§°ï¼Œ0ä¸ºä¸å¯¹ç§°ï¼Œ>0ä¸ºéœ€è¦æ—‹è½¬å‡ æ¬¡
 		int palindrome;
-		// ×î´óÊôĞÔ
+		// æœ€å¤§å±æ€§
 		GFChip maxValue;
 	};
-	// ËùÓĞÅäÖÃ·½°¸£¬ÒÔÃû³ÆÎªkey
+	// æ‰€æœ‰é…ç½®æ–¹æ¡ˆï¼Œä»¥åç§°ä¸ºkey
 	std::map<QString, std::map<QString, SquadConfig>> configs_;
-	// ËùÓĞÖØ×°µÄ×î´óÖµ
+	// æ‰€æœ‰é‡è£…çš„æœ€å¤§å€¼
 	std::map<QString, GFChip> maxValues_;
-	// ÖØ×°ºÍÅäÖÃ·½°¸¼ÇÂ¼ĞÅÏ¢
+	// é‡è£…å’Œé…ç½®æ–¹æ¡ˆè®°å½•ä¿¡æ¯
 	QJsonObject configInfo_;
-	// ÖØ×°µÄ»ù±¾¸ñ×Ó
+	// é‡è£…çš„åŸºæœ¬æ ¼å­
 	std::map<QString, ChipViewInfo> squadView_;
-	// Ä¿±êÖØ×°
+	// ç›®æ ‡é‡è£…
 	QString targetSquadName_;
-	// Ä¿±ê·½°¸
+	// ç›®æ ‡æ–¹æ¡ˆ
 	QString targetConfigName_;
-	// Ä¿±ê¸ñÊı
+	// ç›®æ ‡æ ¼æ•°
 	TargetBlock targetBlock_;
-	// ÁÙÊ±¼ÇÂ¼Ä¿±ê
+	// ä¸´æ—¶è®°å½•ç›®æ ‡
 	TargetBlock tmpTarget_;
-	// ÁÙÊ±¼ÇÂ¼·½°¸
+	// ä¸´æ—¶è®°å½•æ–¹æ¡ˆ
 	Solution tmpSolution_;
-	// ÁÙÊ±Ñ¡ÔñµÄ·½°¸
+	// ä¸´æ—¶é€‰æ‹©çš„æ–¹æ¡ˆ
 	Config tmpConfig_;
-	// ÁÙÊ±Ñ¡ÔñµÄÖØ×°·½°¸
+	// ä¸´æ—¶é€‰æ‹©çš„é‡è£…æ–¹æ¡ˆ
 	SquadConfig tmpSquadConfig_;
-	// È¥ÖØÓÃset
+	// å»é‡ç”¨set
 	std::set<std::vector<int>> solutionSet_;
-	// ÉÏÒ»´ÎÉÏ±¨µÄÇó½âÊıÁ¿
+	// ä¸Šä¸€æ¬¡ä¸ŠæŠ¥çš„æ±‚è§£æ•°é‡
 	std::atomic_int64_t lastSolveNumber_{};
-	// ·½°¸Êı
+	// æ–¹æ¡ˆæ•°
 	std::atomic_int64_t tmpSolutionNumber_{};
-	// °Ù·Ö±È
+	// ç™¾åˆ†æ¯”
 	std::atomic_int percent;
-	// µ±Ç°ÅäÖÃĞòºÅ
+	// å½“å‰é…ç½®åºå·
 	std::atomic_int configIndex_;
-	// Ëø
+	// é”
 	//std::mutex configIndexLock_;
-	// Ê¹ÓÃÒÑ×°±¸
+	// ä½¿ç”¨å·²è£…å¤‡
 	bool useEquipped_;
-	// Ê¹ÓÃÒÑËø¶¨
+	// ä½¿ç”¨å·²é”å®š
 	bool useLocked_;
-	// Ê¹ÓÃ±¸Ñ¡
+	// ä½¿ç”¨å¤‡é€‰
 	bool useAlt_;
-	// ÔËĞĞ±êÖ¾£¬ÓÃÓÚÍ£Ö¹½âËã
+	// è¿è¡Œæ ‡å¿—ï¼Œç”¨äºåœæ­¢è§£ç®—
 	bool running_;
 	bool solveRunning_;
-	// µ±Ç°Ğ¾Æ¬
+	// å½“å‰èŠ¯ç‰‡
 	std::vector<int> tmpChips_;
 
-	//¼ì²éµ±Ç°Ğ¾Æ¬ÊıÁ¿ÊÇ·ñÂú×ã¸ÃÆ´·¨×îµÍĞèÒª
+	//æ£€æŸ¥å½“å‰èŠ¯ç‰‡æ•°é‡æ˜¯å¦æ»¡è¶³è¯¥æ‹¼æ³•æœ€ä½éœ€è¦
 	bool satisfyConfig(const Config& config);
-	// ¼ì²éĞ¾Æ¬·½°¸ÊÇ·ñÂú×ãÄ¿±êµÄ¸ñÊıÒç³öÒªÇó£¬Ö»¼ÆËãÉÏÒç£¬Òç³ö·µ»Øtrue
+	// æ£€æŸ¥èŠ¯ç‰‡æ–¹æ¡ˆæ˜¯å¦æ»¡è¶³ç›®æ ‡çš„æ ¼æ•°æº¢å‡ºè¦æ±‚ï¼Œåªè®¡ç®—ä¸Šæº¢ï¼Œæº¢å‡ºè¿”å›true
 	bool checkOverflow(const TargetBlock& target, const GFChip& chips, const GFChip& add) const;
 
 	struct SolverParam
 	{
 		int k;
-		// ÁÙÊ±¼ÇÂ¼·½°¸
+		// ä¸´æ—¶è®°å½•æ–¹æ¡ˆ
 		Solution solution;
-		// Ñ¡ÔñµÄ·½°¸
+		// é€‰æ‹©çš„æ–¹æ¡ˆ
 		Config config;
-		// µ±Ç°Ğ¾Æ¬ÁĞ±í£¬ÓÃÓÚÈ¥ÖØ
+		// å½“å‰èŠ¯ç‰‡åˆ—è¡¨ï¼Œç”¨äºå»é‡
 		std::vector<int16_t> curChips;
-		// È¥ÖØÓÃset
+		// å»é‡ç”¨set
 		std::set<std::vector<int16_t>> solutionSet;
-		// Ğ¾Æ¬ÁĞ±í
+		// èŠ¯ç‰‡åˆ—è¡¨
 		Chips chips;
-		// Íâ²ã°´ÑÕÉ«·ÖÀà£¬ÄÚ²ã°´grid±àºÅ·ÖÀàµÄĞ¾Æ¬£¬±£´æÇ¿ÖÆ+20µÄÊôĞÔ
+		// å¤–å±‚æŒ‰é¢œè‰²åˆ†ç±»ï¼Œå†…å±‚æŒ‰gridç¼–å·åˆ†ç±»çš„èŠ¯ç‰‡ï¼Œä¿å­˜å¼ºåˆ¶+20çš„å±æ€§
 		std::map<int, std::map<int, std::vector<GFChip>>> gridChips;
-		// ÓÅÏÈ¼¶¶ÓÁĞ
+		// ä¼˜å…ˆçº§é˜Ÿåˆ—
 		std::shared_ptr<priority_queue<Solution>> queue;
 
 		SolverParam()
@@ -176,9 +176,9 @@ private:
 	};
 	void findSolution(SolverParam& param);
 	void startSolve();
-	// ¸÷¸öÏß³Ì¸ø³öµÄ½á¹ûµÄ¶ÓÁĞ
+	// å„ä¸ªçº¿ç¨‹ç»™å‡ºçš„ç»“æœçš„é˜Ÿåˆ—
 	std::queue<std::shared_ptr<priority_queue<Solution>>> thSolutionQueue_;
-	// Ëø
+	// é”
 	std::mutex queueMutex_;
 	std::condition_variable queueCV_;
 	std::function<int(int)> chipUsedFunc;

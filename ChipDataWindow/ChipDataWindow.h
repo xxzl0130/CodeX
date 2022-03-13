@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "chipdatawindow_global.h"
 #include <QDialog>
@@ -20,7 +20,7 @@ public:
 	void init();
 
 signals:
-	// Ğ¾Æ¬Êı¾İ¸üĞÂÁË
+	// èŠ¯ç‰‡æ•°æ®æ›´æ–°äº†
 	void chipsChanged();
 
 public slots:

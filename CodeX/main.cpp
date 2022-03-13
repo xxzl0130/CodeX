@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "CodeX.h"
 #include <QtWidgets/QApplication>
 

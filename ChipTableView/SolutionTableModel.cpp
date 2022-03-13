@@ -1,4 +1,4 @@
-#include "SolutionTableModel.h"
+ï»¿#include "SolutionTableModel.h"
 #include "ChipSolver/ChipSolver.h"
 #include "Chip/Chip.h"
 #include <QList>
@@ -138,23 +138,23 @@ QVariant SolutionTableModel::headerData(int section, Qt::Orientation orientation
 	switch (section)
 	{
 	case 0:
-		return trUtf8(u8"±àºÅ");
+		return trUtf8(u8"ç¼–å·");
 	case 1:
-		return trUtf8(u8"É±ÉË");
+		return trUtf8(u8"æ€ä¼¤");
 	case 2:
-		return trUtf8(u8"ÆÆ·À");
+		return trUtf8(u8"ç ´é˜²");
 	case 3:
-		return trUtf8(u8"¾«¶È");
+		return trUtf8(u8"ç²¾åº¦");
 	case 4:
-		return trUtf8(u8"×°Ìî");
+		return trUtf8(u8"è£…å¡«");
 	case 5:
-		return trUtf8(u8"×ÜÆ«²î");
+		return trUtf8(u8"æ€»åå·®");
 	case 6:
-		return trUtf8(u8"×ÜÇ¿»¯");
+		return trUtf8(u8"æ€»å¼ºåŒ–");
 	case 7:
-		return trUtf8(u8"Ğ£×¼È¯");
+		return trUtf8(u8"æ ¡å‡†åˆ¸");
 	case 8:
-		return trUtf8(u8"ÖØ×°");
+		return trUtf8(u8"é‡è£…");
 	default:
 		return QAbstractItemModel::headerData(section, orientation, role);
 	}

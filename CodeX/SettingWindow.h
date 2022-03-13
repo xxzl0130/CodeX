@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <QDialog>
 namespace Ui { class SettingWindow; };

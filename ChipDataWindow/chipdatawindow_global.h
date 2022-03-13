@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #pragma warning(disable:26812)
 #include <QtCore/qglobal.h>
 

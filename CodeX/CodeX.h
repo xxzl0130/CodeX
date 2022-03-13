@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #pragma warning(disable:26812)
 #include <QtWidgets/QMainWindow>
 #include <QList>
@@ -26,14 +26,14 @@ class CodeX : public QMainWindow
 public:
 	static CodeX* instance();
 
-	// Ğ¾Æ¬ÁĞ±í
+	// èŠ¯ç‰‡åˆ—è¡¨
 	Chips chips;
-	// Íâ²ã°´ÑÕÉ«·ÖÀà£¬ÄÚ²ã°´grid±àºÅ·ÖÀàµÄĞ¾Æ¬£¬±£´æÇ¿ÖÆ+20µÄÊôĞÔ
+	// å¤–å±‚æŒ‰é¢œè‰²åˆ†ç±»ï¼Œå†…å±‚æŒ‰gridç¼–å·åˆ†ç±»çš„èŠ¯ç‰‡ï¼Œä¿å­˜å¼ºåˆ¶+20çš„å±æ€§
 	std::map<int,std::map<int, std::vector<GFChip>>> gridChips;
-	// °´Ğ¡¶Ó·ÖÀàµÄÒÑ×°±¸µÄĞ¾Æ¬
+	// æŒ‰å°é˜Ÿåˆ†ç±»çš„å·²è£…å¤‡çš„èŠ¯ç‰‡
 	std::map<int, std::vector<GFChip>> squadChips;
 	
-	// Çó½âÆ÷
+	// æ±‚è§£å™¨
 	ChipSolver* solver_;
 
 	bool chipUsed(int no);
@@ -61,7 +61,7 @@ private:
 	QProgressBar* progressBar_;
 	QLabel* solveNumberLabel_;
 	QLabel* timeLabel_;
-	// ±£´æ½â¾ö·½°¸
+	// ä¿å­˜è§£å†³æ–¹æ¡ˆ
 	std::map < QString, std::map<QString, SquadSolution> > solutions_;
 
 	ChipTableModel* chipTableModel_;

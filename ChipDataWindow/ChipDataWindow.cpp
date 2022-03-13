@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "ChipDataWindow.h"
 #include "ui_ChipDataWindow.h"
 #include "GetChipWindow.h"
@@ -73,7 +73,7 @@ void ChipDataWindow::recvChipJsonObject(const QJsonObject& object)
 			chip.squad = squadID[chip.squad];
 			squadChips[chip.squad].push_back(chip);
 		}
-		// ¿½±´Ò»·İ+20
+		// æ‹·è´ä¸€ä»½+20
 		auto t = chip;
 		t.no = i;
 		t.level = 20;
@@ -83,7 +83,7 @@ void ChipDataWindow::recvChipJsonObject(const QJsonObject& object)
 	this->tableModel_->setChips(chips);
 	this->ui->squadComboBox->setCurrentIndex(1);
 	this->ui->squadComboBox->setCurrentIndex(0);
-	if (!first)// µÚÒ»´ÎÊÇ´ÓÅäÖÃ¶ÁÈ¡Êı¾İ£¬²»ËãĞŞ¸ÄĞ¾Æ¬
+	if (!first)// ç¬¬ä¸€æ¬¡æ˜¯ä»é…ç½®è¯»å–æ•°æ®ï¼Œä¸ç®—ä¿®æ”¹èŠ¯ç‰‡
 		emit chipsChanged();
 	first = false;
 }
@@ -101,28 +101,28 @@ void ChipDataWindow::squadChanged(int index)
 		max += chip;
 	}
 	auto M = CodeX::instance()->solver_->squadMaxValue(this->ui->squadComboBox->currentText());
-	this->ui->damageLabel->setText(trUtf8(u8"É±ÉË£º") + QString("%1/%2/%3/%4").arg(sum.damageValue).arg(max.damageValue).arg(std::min(0, max.damageValue - M.damageValue)).arg(sum.damageBlock));
-	this->ui->dbkLabel->setText(trUtf8(u8"ÆÆ·À£º") + QString("%1/%2/%3/%4").arg(sum.defbreakValue).arg(max.defbreakValue).arg(std::min(0, max.defbreakValue - M.defbreakValue)).arg(sum.defbreakBlock));
-	this->ui->hitLabel->setText(trUtf8(u8"¾«¶È£º") + QString("%1/%2/%3/%4").arg(sum.hitValue).arg(max.hitValue).arg(std::min(0, max.hitValue - M.hitValue)).arg(sum.hitBlock));
-	this->ui->reloadLabel->setText(trUtf8(u8"×°Ìî£º") + QString("%1/%2/%3/%4").arg(sum.reloadValue).arg(max.reloadValue).arg(std::min(0, max.reloadValue - M.reloadValue)).arg(sum.reloadBlock));
+	this->ui->damageLabel->setText(trUtf8(u8"æ€ä¼¤ï¼š") + QString("%1/%2/%3/%4").arg(sum.damageValue).arg(max.damageValue).arg(std::min(0, max.damageValue - M.damageValue)).arg(sum.damageBlock));
+	this->ui->dbkLabel->setText(trUtf8(u8"ç ´é˜²ï¼š") + QString("%1/%2/%3/%4").arg(sum.defbreakValue).arg(max.defbreakValue).arg(std::min(0, max.defbreakValue - M.defbreakValue)).arg(sum.defbreakBlock));
+	this->ui->hitLabel->setText(trUtf8(u8"ç²¾åº¦ï¼š") + QString("%1/%2/%3/%4").arg(sum.hitValue).arg(max.hitValue).arg(std::min(0, max.hitValue - M.hitValue)).arg(sum.hitBlock));
+	this->ui->reloadLabel->setText(trUtf8(u8"è£…å¡«ï¼š") + QString("%1/%2/%3/%4").arg(sum.reloadValue).arg(max.reloadValue).arg(std::min(0, max.reloadValue - M.reloadValue)).arg(sum.reloadBlock));
 }
 
 void ChipDataWindow::importChipJson()
 {
-	auto filename = QFileDialog::getOpenFileName(this, u8"´ò¿ªĞ¾Æ¬Êı¾İJSON", "", "JSON (*.json)");
+	auto filename = QFileDialog::getOpenFileName(this, u8"æ‰“å¼€èŠ¯ç‰‡æ•°æ®JSON", "", "JSON (*.json)");
 	if(filename.isEmpty())
 		return;
 	QFile file(filename);
 	if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
 	{
-		QMessageBox::warning(this, u8"´íÎó", u8"´ò¿ªÎÄ¼şÊ§°Ü");
+		QMessageBox::warning(this, u8"é”™è¯¯", u8"æ‰“å¼€æ–‡ä»¶å¤±è´¥");
 		return;
 	}
 	auto data = file.readAll();
 	QJsonParseError jsonError;
-	QJsonDocument doucment = QJsonDocument::fromJson(data, &jsonError);  // ×ª»¯Îª JSON ÎÄµµ
+	QJsonDocument doucment = QJsonDocument::fromJson(data, &jsonError);  // è½¬åŒ–ä¸º JSON æ–‡æ¡£
 	if (!doucment.isNull() && jsonError.error == QJsonParseError::NoError && doucment.isObject())
-	{  // ½âÎöÎ´·¢Éú´íÎó JSON ÎÄµµÎª¶ÔÏó
+	{  // è§£ææœªå‘ç”Ÿé”™è¯¯ JSON æ–‡æ¡£ä¸ºå¯¹è±¡
 		auto obj = doucment.object();
 		if(obj.contains("squad_with_user_info") && obj.contains("chip_with_user_info"))
 		{
@@ -134,15 +134,15 @@ void ChipDataWindow::importChipJson()
 			}
 			catch (const std::exception& e)
 			{
-				QMessageBox::warning(this, u8"´íÎó", QString(u8"½âÎöJSONÊ§°Ü£¡\n") + e.what());
+				QMessageBox::warning(this, u8"é”™è¯¯", QString(u8"è§£æJSONå¤±è´¥ï¼\n") + e.what());
 				return;
 			}
 		}
-		QMessageBox::information(this, u8"³É¹¦", u8"µ¼ÈëĞ¾Æ¬Êı¾İ³É¹¦£¡");
+		QMessageBox::information(this, u8"æˆåŠŸ", u8"å¯¼å…¥èŠ¯ç‰‡æ•°æ®æˆåŠŸï¼");
 	}
 	else
 	{
-		QMessageBox::warning(this, u8"´íÎó", QString(u8"½âÎöJSONÊ§°Ü£¡\n"));
+		QMessageBox::warning(this, u8"é”™è¯¯", QString(u8"è§£æJSONå¤±è´¥ï¼\n"));
 	}
 }
 

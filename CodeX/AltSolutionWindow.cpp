@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "AltSolutionWindow.h"
 #include "ui_AltSolutionWindow.h"
 #include "CodeX.h"

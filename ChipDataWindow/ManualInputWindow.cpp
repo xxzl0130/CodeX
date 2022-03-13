@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "ManualInputWindow.h"
 #include "ui_ManualInputWindow.h"
 
@@ -38,7 +38,7 @@ void ManualInputWindow::onConfirm()
 	}
 	else
 	{
-		QMessageBox::warning(this, u8"´íÎó", u8"´íÎóµÄĞ¾Æ¬´úÂë£¡");
+		QMessageBox::warning(this, u8"é”™è¯¯", u8"é”™è¯¯çš„èŠ¯ç‰‡ä»£ç ï¼");
 	}
 }
 

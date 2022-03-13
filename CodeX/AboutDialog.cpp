@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "AboutDialog.h"
 #include "ui_AboutDialog.h"
 
@@ -9,7 +9,7 @@ AboutDialog::AboutDialog(QWidget *parent)
 	accessManager_(new QNetworkAccessManager(this))
 {
 	ui->setupUi(this);
-	ui->nameLabel->setText(trUtf8(u8"CodeXÖØ×°Ğ¾Æ¬¼ÆËãÆ÷ v") + version.toString());
+	ui->nameLabel->setText(trUtf8(u8"CodeXé‡è£…èŠ¯ç‰‡è®¡ç®—å™¨ v") + version.toString());
 	QSettings settings;
 	auto s = settings.value("/Sys/AboutShowOnStart", true).toBool();
 	this->ui->checkBox->setChecked(s);
@@ -53,7 +53,7 @@ void AboutDialog::checkUpdate()
 					auto newVersion = QVersionNumber::fromString(ver[0]);
 					if (newVersion > version)
 					{
-						auto ret = QMessageBox::information(nullptr, u8"ÌáÊ¾", u8"¼ì²âµ½ĞÂ°æ±¾£¬ÊÇ·ñÏÂÔØ£¿",
+						auto ret = QMessageBox::information(nullptr, u8"æç¤º", u8"æ£€æµ‹åˆ°æ–°ç‰ˆæœ¬ï¼Œæ˜¯å¦ä¸‹è½½ï¼Ÿ",
 							QMessageBox::Yes | QMessageBox::No);
 						if (ret == QMessageBox::Yes)
 						{

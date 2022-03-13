@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "chiptableview_global.h"
 #include <QAbstractItemModel>
@@ -32,11 +32,11 @@ public:
 	
     void setChips(const Chips& chips);
     const Chips& chips() const;
-	// trueÏÔÊ¾¸ñÊı falseÏÔÊ¾ÊıÖµ£¨Ä¬ÈÏ)
+	// trueæ˜¾ç¤ºæ ¼æ•° falseæ˜¾ç¤ºæ•°å€¼ï¼ˆé»˜è®¤)
     void setShowBlocks(bool b = false);
-	// trueÏÔÊ¾Ëø¶¨Óë×°±¸×´Ì¬£¨Ä¬ÈÏ£©£¬false²»ÏÔÊ¾
+	// trueæ˜¾ç¤ºé”å®šä¸è£…å¤‡çŠ¶æ€ï¼ˆé»˜è®¤ï¼‰ï¼Œfalseä¸æ˜¾ç¤º
     void setShowStatus(bool b = true);
-	// trueÔòÔÚ±àºÅ´¦ÏÔÊ¾ÑÕÉ«
+	// trueåˆ™åœ¨ç¼–å·å¤„æ˜¾ç¤ºé¢œè‰²
     void setShowColor(bool b = false);
     void refresh()
     {

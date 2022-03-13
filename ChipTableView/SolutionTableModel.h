@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <QAbstractItemModel>
 #include "chiptableview_global.h"

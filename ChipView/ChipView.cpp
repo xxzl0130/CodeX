@@ -1,4 +1,4 @@
-#include "ChipView.h"
+﻿#include "ChipView.h"
 #include "ui_ChipView.h"
 #include <QDebug>
 
@@ -121,8 +121,8 @@ void ChipView::resizeEvent(QResizeEvent* event)
 	int bSize = std::min(bHeight, bWidth);
 	auto sHeight = bSize * size.height() + spacing * (size.height() - 1);
 	auto sWidth = bSize * size.width() + spacing * (size.width() - 1);
-	auto vLeft = this->height() - sHeight; // ��ֱʣ��
-	auto hLeft = this->width() - sWidth; // ˮƽʣ��
+	auto vLeft = this->height() - sHeight; // 垂直剩余
+	auto hLeft = this->width() - sWidth; // 水平剩余
 	this->ui->gridLayout->setContentsMargins(hLeft / 2, vLeft / 2, hLeft - hLeft / 2, vLeft - vLeft / 2);
 	QWidget::resizeEvent(event);
 }

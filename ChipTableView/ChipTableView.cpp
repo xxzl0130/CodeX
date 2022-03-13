@@ -1,4 +1,4 @@
-#include "ChipTableView.h"
+ï»¿#include "ChipTableView.h"
 #include <QBrush>
 #include <QPainter>
 #include <QFont>
@@ -69,7 +69,7 @@ QVariant ChipTableModel::data(const QModelIndex& index, int role) const
 		case 7:
 			return QString::number(showBlocks_ ? chip.defbreakBlock : chip.defbreakValue);
 		case 8:
-			return QString(chip.locked ? u8"¡Ì" : "");
+			return QString(chip.locked ? u8"âˆš" : "");
 		case 9:
 			return chip.squadName();
 		default:
@@ -172,25 +172,25 @@ QVariant ChipTableModel::headerData(int section, Qt::Orientation orientation, in
 	switch (section)
 	{
 	case 0:
-		return trUtf8(u8"±à\nºÅ");
+		return trUtf8(u8"ç¼–\nå·");
 	case 1:
-		return trUtf8(u8"ĞÎ\n×´");
+		return trUtf8(u8"å½¢\nçŠ¶");
 	case 2:
-		return trUtf8(u8"Ãû\n³Æ");
+		return trUtf8(u8"å\nç§°");
 	case 3:
-		return trUtf8(u8"Ç¿\n»¯");
+		return trUtf8(u8"å¼º\nåŒ–");
 	case 4:
-		return trUtf8(u8"¾«\n¶È");
+		return trUtf8(u8"ç²¾\nåº¦");
 	case 5:
-		return trUtf8(u8"×°\nÌî");
+		return trUtf8(u8"è£…\nå¡«");
 	case 6:
-		return trUtf8(u8"ÉË\nº¦");
+		return trUtf8(u8"ä¼¤\nå®³");
 	case 7:
-		return trUtf8(u8"ÆÆ\n·À");
+		return trUtf8(u8"ç ´\né˜²");
 	case 8:
-		return trUtf8(u8"Ëø\n¶¨");
+		return trUtf8(u8"é”\nå®š");
 	case 9:
-		return trUtf8(u8"×°\n±¸");
+		return trUtf8(u8"è£…\nå¤‡");
 	default:
 		return QAbstractItemModel::headerData(section, orientation, role);
 	}

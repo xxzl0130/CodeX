@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "CodeX.h"
 #include "ui_CodeX.h"
 #include "SettingWindow.h"
@@ -62,7 +62,7 @@ void CodeX::solveFinished()
 	this->timer_->stop();
 	if(this->solver_->solutions.empty())
 	{
-		QMessageBox::information(this, u8"ÌáÊ¾", u8"Ã»ÓÐËã³ö¿ÉÐÐ½âÅ¶£¡\nÔÜ¸ü¶àÐ¾Æ¬ºóÔÙÀ´ÊÔÊÔ°É~\nÒ²¿ÉÒÔÐÞ¸Ä¸ñÊý·½°¸ÒÔ¼°×ÔÓÉ¸ñÊý³¢ÊÔÅ¶~");
+		QMessageBox::information(this, u8"æç¤º", u8"æ²¡æœ‰ç®—å‡ºå¯è¡Œè§£å“¦ï¼\næ”’æ›´å¤šèŠ¯ç‰‡åŽå†æ¥è¯•è¯•å§~\nä¹Ÿå¯ä»¥ä¿®æ”¹æ ¼æ•°æ–¹æ¡ˆä»¥åŠè‡ªç”±æ ¼æ•°å°è¯•å“¦~");
 	}
 }
 
@@ -96,7 +96,7 @@ void CodeX::chipsChanged()
 
 void CodeX::solutionNumberChanged(long long n)
 {
-	this->solveNumberLabel_->setText(trUtf8(u8"·½°¸Êý£º") + QString::number(n));
+	this->solveNumberLabel_->setText(trUtf8(u8"æ–¹æ¡ˆæ•°ï¼š") + QString::number(n));
 }
 
 CodeX::CodeX(QWidget *parent)
@@ -106,8 +106,8 @@ CodeX::CodeX(QWidget *parent)
 	chipDataWindow_(new ChipDataWindow(this)),
 	settingWindow_(new SettingWindow(this)),
 	progressBar_(new QProgressBar(this)),
-	solveNumberLabel_(new QLabel(u8"·½°¸Êý£º0",this)),
-	timeLabel_(new QLabel(u8"ºÄÊ±£º0s", this)),
+	solveNumberLabel_(new QLabel(u8"æ–¹æ¡ˆæ•°ï¼š0",this)),
+	timeLabel_(new QLabel(u8"è€—æ—¶ï¼š0s", this)),
 	chipTableModel_(new ChipTableModel(this)),
 	chipTableDelegate_(new ChipTableDelegate(this)),
 	solutionTableModel_(new SolutionTableModel(this)),
@@ -275,7 +275,7 @@ void CodeX::connect()
 		[&]()
 		{
 			auto t = startTime_.msecsTo(QDateTime::currentDateTime()) / 1000.0;
-			this->timeLabel_->setText(trUtf8(u8"ºÄÊ±£º") + QString::number(t, 'f', 2) + "s");
+			this->timeLabel_->setText(trUtf8(u8"è€—æ—¶ï¼š") + QString::number(t, 'f', 2) + "s");
 		}
 	);
 }
