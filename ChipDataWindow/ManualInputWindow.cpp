@@ -34,6 +34,8 @@ void ManualInputWindow::onConfirm()
 		}
 		obj["chip_with_user_info"] = chipObj;
 		emit sendChipJsonObject(obj);
+		QSettings settings; // 解析成功则保存数据
+		settings.setValue("/User/Chip", QJsonDocument(obj).toJson());
 		this->accept();
 	}
 	else
