@@ -35,6 +35,9 @@
     <ClCompile Include="GetChipWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ManualInputWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -53,12 +56,18 @@
     <QtUic Include="ChipDataWindow.ui">
       <Filter>Form Files</Filter>
     </QtUic>
+    <QtUic Include="ManualInputWindow.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="ChipDataWindow.h">
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="GetChipWindow.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="ManualInputWindow.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

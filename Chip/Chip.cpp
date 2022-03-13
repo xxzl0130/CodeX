@@ -14,6 +14,8 @@ static constexpr double ArgDmg = 4.4, ArgDbk = 12.7, ArgAcu = 7.1, ArgFil = 5.7;
 static constexpr double Den56 = 1.0, Den551 = 0.92, Den552 = 1.0;
 // 等级系数
 static constexpr double ArgLv[21] = { 1.0,1.08,1.16,1.24,1.32,1.4,1.48,1.56,1.64,1.72,1.8,1.87,1.94,2.01,2.08,2.15,2.22,2.29,2.36,2.43,2.5 };
+// 每级累计经验
+static constexpr int ExprLv[21] = { 0,150,375,675,1050,1500,2100,2850,3750,4800,6000,7350,8850,10500,12300,14250,16350,18750,2130,24000,27000 };
 
 static bool ChipResourceInit = false;
 
@@ -53,6 +55,150 @@ GFChip::GFChip(const QJsonObject& object)
 GFChip GFChip::fromJsonObject(const QJsonObject& object)
 {
 	return GFChip(object);
+}
+
+GFChip GFChip::fromHycdesCode(const QString& code)
+{
+	GFChip chip;
+	chip.id = -1;
+	auto valueStr = code.split(",");
+	if (valueStr.length() != 10)
+		return chip;
+	std::array<int, 10> values{};
+	for (auto i = 0; i < 10; ++i)
+	{
+		bool ok;
+		values[i] = valueStr[i].toInt(&ok);
+		if (!ok)
+			return chip;
+	}
+	chip.color = values[1] == 1 ? Blue : Orange;
+	chip.chipClass = values[2] == 56 ? Class56 : Class551;
+	if (chip.chipClass == Class56)
+	{
+		switch (values[3])
+		{
+		case 1:
+			chip.gridID = 30;
+			break;
+		case 2:
+			chip.gridID = 31;
+			break;
+		case 3:
+			chip.gridID = 32;
+			break;
+		case 41:
+			chip.gridID = 33;
+			break;
+		case 42:
+			chip.gridID = 34;
+			break;
+		case 5:
+			chip.gridID = 35;
+			break;
+		case 6:
+			chip.gridID = 36;
+			break;
+		case 7:
+			chip.gridID = 37;
+			break;
+		case 8:
+			chip.gridID = 38;
+			break;
+		case 9:
+			chip.gridID = 39;
+			break;
+		default:
+			return chip;
+		}
+	}
+	else
+	{
+		switch (values[3])
+		{
+		case 11:
+			chip.gridID = 28;
+			break;
+		case 12:
+			chip.gridID = 29;
+			break;
+		case 21:
+			chip.gridID = 23;
+			break;
+		case 22:
+			chip.gridID = 22;
+			break;
+		case 31:
+			chip.gridID = 25;
+			break;
+		case 32:
+			chip.gridID = 24;
+			break;
+		case 4:
+			chip.gridID = 27;
+			break;
+		case 5:
+			chip.gridID = 21;
+			break;
+		case 6:
+			chip.gridID = 26;
+			break;
+		case 81:
+			chip.gridID = 12;
+			chip.chipClass = Class552;
+			break;
+		case 82:
+			chip.gridID = 13;
+			chip.chipClass = Class552;
+			break;
+		case 9:
+			chip.gridID = 14;
+			chip.chipClass = Class552;
+			break;
+		case 10:
+			chip.gridID = 15;
+			chip.chipClass = Class552;
+			break;
+		case 111:
+			chip.gridID = 16;
+			chip.chipClass = Class552;
+			break;
+		case 112:
+			chip.gridID = 17;
+			chip.chipClass = Class552;
+			break;
+		case 120:
+			chip.gridID = 18;
+			chip.chipClass = Class552;
+			break;
+		case 131:
+			chip.gridID = 19;
+			chip.chipClass = Class552;
+			break;
+		case 132:
+			chip.gridID = 20;
+			chip.chipClass = Class552;
+			break;
+		default:
+			return chip;
+		}
+	}
+	chip.level = values[4];
+	if (chip.level > 20 || chip.level < 0)
+		return chip;
+	chip.hitBlock = values[5];
+	chip.reloadBlock = values[6];
+	chip.damageBlock = values[7];
+	chip.defbreakBlock = values[8];
+	if (chip.chipClass == Class56 && std::accumulate(&values[5], &values[9], 0) != 6)
+		return chip;
+	if ((chip.chipClass == Class551 || chip.chipClass == Class552) &&
+		std::accumulate(&values[5], &values[9], 0) != 5)
+		return chip;
+	chip.id = values[0];
+	chip.exp = ExprLv[chip.level];
+	chip.calcValue();
+	return chip;
 }
 
 QJsonObject GFChip::toObject() const

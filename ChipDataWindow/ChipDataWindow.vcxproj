@@ -145,6 +145,7 @@
   <ItemGroup>
     <ClCompile Include="ChipDataWindow.cpp" />
     <ClCompile Include="GetChipWindow.cpp" />
+    <ClCompile Include="ManualInputWindow.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -155,11 +156,13 @@
     <QtMoc Include="ChipDataWindow.h" />
     <ClInclude Include="chipdatawindow_global.h" />
     <QtMoc Include="GetChipWindow.h" />
+    <QtMoc Include="ManualInputWindow.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="ChipDataWindow.ui" />
     <QtUic Include="GetChipWindow.ui" />
+    <QtUic Include="ManualInputWindow.ui" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

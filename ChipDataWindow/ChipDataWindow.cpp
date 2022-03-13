@@ -4,11 +4,13 @@
 #include "GetChipWindow.h"
 #include "CodeX/CodeX.h"
 #include "ChipSolver/ChipSolver.h"
+#include "ManualInputWindow.h"
 
 ChipDataWindow::ChipDataWindow(QWidget* parent, Qt::WindowFlags f):
 	QDialog(parent,f),
 	ui(new Ui::ChipDataWindow),
 	getChipWindow(new GetChipWindow(this)),
+	manualInputWindow_(new ManualInputWindow(this)),
 	tableModel_(new ChipTableModel(this)),
 	squadModel_(new ChipTableModel(this)),
 	tableDelegate_(new ChipTableDelegate(this)),
@@ -44,13 +46,16 @@ void ChipDataWindow::init()
 
 void ChipDataWindow::recvChipJsonObject(const QJsonObject& object)
 {
-	auto squads = object["squad_with_user_info"].toObject();
-	static bool first = true;
 	std::map<int, int> squadID;
-	for(const auto& it : squads)
+	static bool first = true;
+	if (object.contains("squad_with_user_info"))
 	{
-		auto obj = it.toObject();
-		squadID[obj["id"].toString().toInt()] = obj["squad_id"].toString().toInt();
+		auto squads = object["squad_with_user_info"].toObject();
+		for (const auto& it : squads)
+		{
+			auto obj = it.toObject();
+			squadID[obj["id"].toString().toInt()] = obj["squad_id"].toString().toInt();
+		}
 	}
 
 	auto& chips = CodeX::instance()->chips;
@@ -166,5 +171,17 @@ void ChipDataWindow::connect()
 		static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
 		this,
 		&ChipDataWindow::squadChanged
+	);
+	QObject::connect(
+		this->ui->importCodePushButton,
+		&QPushButton::clicked,
+		this->manualInputWindow_,
+		&ManualInputWindow::show
+	);
+	QObject::connect(
+		this->manualInputWindow_,
+		&ManualInputWindow::sendChipJsonObject,
+		this,
+		&ChipDataWindow::recvChipJsonObject
 	);
 }

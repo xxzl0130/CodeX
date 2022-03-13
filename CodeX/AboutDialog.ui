@@ -45,7 +45,7 @@
    <item row="1" column="1">
     <widget class="QLabel" name="copyrightLabel">
      <property name="text">
-      <string>Copyright © 2020 轩轩醉了</string>
+      <string>Copyright © 2022 轩轩醉了</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>

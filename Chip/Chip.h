@@ -17,6 +17,8 @@ public:
 	explicit GFChip(const QJsonObject& object);
 	GFChip();
 	static GFChip fromJsonObject(const QJsonObject& object);
+	// 从乐章代码中解析单个芯片，如果解析失败，返回的chip.id为-1，否则保持为0
+	static GFChip fromHycdesCode(const QString& code);
 	QJsonObject toObject() const;
 	QPixmap icon() const;
 	QString name() const;
