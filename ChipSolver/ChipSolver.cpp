@@ -7,6 +7,7 @@
 #include "CodeX/CodeX.h"
 #include <cstdlib>
 #include <QSettings>
+#include <QFile>
 
 constexpr auto QrcBase = ":/ChipSolver/Resources/";
 
