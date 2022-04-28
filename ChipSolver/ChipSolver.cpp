@@ -136,9 +136,7 @@ void ChipSolver::stop()
 	running_ = false;
 	for (auto th : threads_)
 	{
-		th->terminate();
-		delete th;
-		th = nullptr;
+		th->quit();
 	}
 }
 
@@ -235,6 +233,7 @@ void ChipSolver::run()
 	for (auto& th : threads_)
 	{
 		th = QThread::create(&ChipSolver::startSolve, this);
+		connect(th, &QThread::finished, th, &QThread::deleteLater);
 		th->start();
 	}
 	auto mergeTh = QThread::create(&ChipSolver::merge, this);
