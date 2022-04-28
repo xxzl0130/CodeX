@@ -226,9 +226,9 @@ void CodeX::connect()
 		&ChipSolver::setUseAlt
 	);
 	QObject::connect(
-		this->ui->solutionTable,
-		&QTableView::clicked,
-		[&](QModelIndex index)
+		this->ui->solutionTable->selectionModel(),
+		&QItemSelectionModel::currentRowChanged,
+		[&](const QModelIndex index)
 		{
 			this->selectSolution(index.row());
 		});
