@@ -3,6 +3,7 @@
 #include "ui_GetChipWindow.h"
 #include <QFile>
 #include <QThread>
+#include <SharpBridge/SharpBridge.h>
 
 constexpr auto pacUrl = "http://static.xuanxuan.tech/GF/GF.pac";
 constexpr auto serverHost = "https://codex.xuanxuan.tech:8080/";
@@ -57,6 +58,12 @@ void GetChipWindow::startLocalProxy()
 	killProcess();
 	this->ui->startLocalPushButton->setEnabled(false);
 	process_->start(QIODevice::ReadOnly);
+	SharpBridge::Proxy::Instance();
+	if (SharpBridge::Proxy::Instance().Start())
+	{
+		QMessageBox::information(this, u8"成功", QString(u8"启动Proxy成功！\n") + SharpBridge::Proxy::Instance().GetLocalIPAddress().c_str() + ":" + QString::number(SharpBridge::Proxy::Instance().GetProxyPort()));
+		SharpBridge::Proxy::Instance().indexCallback = [=](const std::string& data) {QMessageBox::information(this, u8"成功", u8"获取数据成功"); };
+	}
 }
 
 void GetChipWindow::closeEvent(QCloseEvent* e)

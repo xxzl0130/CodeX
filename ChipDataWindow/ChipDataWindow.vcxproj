@@ -164,6 +164,14 @@
     <QtUic Include="GetChipWindow.ui" />
     <QtUic Include="ManualInputWindow.ui" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Proxy\Proxy.csproj">
+      <Project>{aad703dc-7091-4f92-9483-62610f0127e5}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\SharpBridge\SharpBridge.vcxproj">
+      <Project>{24ddaf81-6a9d-4864-b9a6-43b173fcc62d}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
     <Import Project="$(QtMsBuild)\qt.targets" />
