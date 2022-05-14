@@ -1,6 +1,0 @@
-[submodule "3rdparty/gzip-hpp"]
-	path = 3rdparty/gzip-hpp
-	url = https://github.com/mapbox/gzip-hpp.git
-[submodule "3rdparty/zlib"]
-	path = 3rdparty/zlib
-	url = https://github.com/madler/zlib
