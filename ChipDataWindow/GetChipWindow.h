@@ -36,6 +36,7 @@ protected slots:
 
 	// 子线程错误
 	void processError(QProcess::ProcessError error);
+	void processExit(int code);
 	// 子线程数据可读
 	void processDataReady();
 	// 启动本地代理

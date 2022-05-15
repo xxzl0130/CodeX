@@ -119,30 +119,37 @@ void ChipDataWindow::importChipJson()
 		return;
 	}
 	auto data = file.readAll();
-	QJsonParseError jsonError;
-	QJsonDocument doucment = QJsonDocument::fromJson(data, &jsonError);  // 转化为 JSON 文档
-	if (!doucment.isNull() && jsonError.error == QJsonParseError::NoError && doucment.isObject())
-	{  // 解析未发生错误 JSON 文档为对象
-		auto obj = doucment.object();
-		if(obj.contains("squad_with_user_info") && obj.contains("chip_with_user_info"))
-		{
-			try
-			{
-				recvChipJsonObject(obj);
-				QSettings settings;
-				settings.setValue("/User/Chip", data);
-			}
-			catch (const std::exception& e)
-			{
-				QMessageBox::warning(this, u8"错误", QString(u8"解析JSON失败！\n") + e.what());
-				return;
-			}
-		}
-		QMessageBox::information(this, u8"成功", u8"导入芯片数据成功！");
-	}
-	else
+	for (auto i = 0; i < 2; ++i)
 	{
-		QMessageBox::warning(this, u8"错误", QString(u8"解析JSON失败！\n"));
+		QJsonParseError jsonError;
+		QJsonDocument doucment = QJsonDocument::fromJson(data, &jsonError);  // 转化为 JSON 文档
+		if (!doucment.isNull() && jsonError.error == QJsonParseError::NoError && doucment.isObject())
+		{  // 解析未发生错误 JSON 文档为对象
+			auto obj = doucment.object();
+			if (obj.contains("squad_with_user_info") && obj.contains("chip_with_user_info"))
+			{
+				try
+				{
+					recvChipJsonObject(obj);
+					QSettings settings;
+					settings.setValue("/User/Chip", data);
+				}
+				catch (const std::exception& e)
+				{
+					QMessageBox::warning(this, u8"错误", QString(u8"解析JSON失败！\n") + e.what());
+					return;
+				}
+			}
+			QMessageBox::information(this, u8"成功", u8"导入芯片数据成功！");
+		}
+		else if(jsonError.error == QJsonParseError::IllegalUTF8String)
+		{
+			data = QString::fromLocal8Bit(data).toUtf8();
+		}
+		else
+		{
+			QMessageBox::warning(this, u8"错误", QString(u8"解析JSON失败！\n"));
+		}
 	}
 }
 

@@ -50,12 +50,19 @@ void GetChipWindow::init()
 	// 启动后尝试加载数据
 	QSettings settings;
 	parseChipData(settings.value("/User/Chip").toByteArray());
+	this->ui->portSpinBox->setValue(settings.value("/User/Port", 18888).toInt());
 }
 
 void GetChipWindow::startLocalProxy()
 {
 	killProcess();
 	this->ui->startLocalPushButton->setEnabled(false);
+	QStringList arguments;
+	arguments.push_back("-port");
+	arguments.push_back(QString::number(this->ui->portSpinBox->value()));
+	process_->setArguments(arguments);
+	QSettings settings;
+	settings.setValue("/User/Port", this->ui->portSpinBox->value());
 	process_->start(QIODevice::ReadOnly);
 }
 
@@ -111,6 +118,8 @@ void GetChipWindow::setLocalProxy()
 		u8"说明：将手机连接与电脑相同的WiFi，长按打开WiFi的高级设置，选择“手动代理”，地址如下："));
 	this->ui->proxyAddressLineEdit->setText(trUtf8(u8"地址:") + localProxyAddr_ + trUtf8(u8" 端口:") + localProxyPort_);
 	this->ui->startLocalPushButton->setEnabled(this->process_->state() != QProcess::Running);
+	this->ui->portSpinBox->setEnabled(true);
+	this->ui->portLabel->setEnabled(true);
 	request_->setUrl(QUrl(localHost + jsonPath));
 }
 
@@ -122,6 +131,8 @@ void GetChipWindow::setNetProxy()
 	request_->setUrl(QUrl(QString(serverHost) + jsonPath));
 	process_->kill();
 	this->ui->startLocalPushButton->setEnabled(false);
+	this->ui->portSpinBox->setEnabled(false);
+	this->ui->portLabel->setEnabled(false);
 }
 
 void GetChipWindow::getData()
@@ -187,6 +198,14 @@ void GetChipWindow::processError(QProcess::ProcessError error)
 		QMessageBox::warning(this, trUtf8(u8"错误"), trUtf8(u8"程序未知错误！"));
 		break;
 	}
+}
+
+void GetChipWindow::processExit(int code)
+{
+	if(code == 0 || this->isHidden() || !this->ui->localProxyRadioButton->isChecked())
+		return;
+	QMessageBox::warning(this, u8"失败", u8"程序异常退出，请修改端口重新启动！\n" + QString::number(code));
+	this->ui->startLocalPushButton->setEnabled(false);
 }
 
 void GetChipWindow::processDataReady()
@@ -260,18 +279,12 @@ void GetChipWindow::connect()
 		this,
 		&GetChipWindow::processError
 	);
-	/*QObject::connect(
-		this->accessManager_,
-		&QNetworkAccessManager::sslErrors,
-		[&](QNetworkReply* reply, const QList<QSslError>& errors)
-	{
-		for(auto& it : errors)
-		{
-			qDebug() << it;
-		}
-		QByteArray bytes = reply->readAll();
-		qDebug() << QString::fromUtf8(bytes);
-	});*/
+	QObject::connect(
+		this->process_,
+		qOverload<int>(&QProcess::finished),
+		this,
+		&GetChipWindow::processExit
+	);
 }
 
 void GetChipWindow::killProcess()
