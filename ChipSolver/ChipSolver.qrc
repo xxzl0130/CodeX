@@ -25,5 +25,7 @@
         <file>Resources/PP-93-2-result.json</file>
         <file>Resources/PP-93-4-result.json</file>
         <file>Resources/PP-93-result.json</file>
+        <file>Resources/Mk-47.json</file>
+        <file>Resources/Mk-47-result.json</file>
     </qresource>
 </RCC>

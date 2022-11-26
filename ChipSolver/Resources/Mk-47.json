@@ -1,0 +1,35 @@
+{
+    "name": "Mk-47",
+    "optional": {
+        "Mk-47" : 0
+    },
+    "width": 8,
+    "height": 8,
+    "blocks": 38,
+    "chips":[5061,5051],
+    "map": [
+        "11100111",
+        "11100111",
+        "11000011",
+        "10000001",
+        "00000000",
+        "00000000",
+        "01100110",
+        "11000011"
+    ],
+    "color": 2,
+    "palindrome": 0,
+    "MaxBlocks": {
+        "damage": 10,
+        "def_break": 5,
+        "hit": 7,
+        "reload": 14,
+        "free": 2
+    },
+    "MaxValues": {
+        "damage": 120,
+        "def_break": 142,
+        "hit": 131,
+        "reload": 209
+    }
+}

@@ -67,6 +67,14 @@ ChipSolver::ChipSolver(QObject* parent):
 			squadConfig.maxValue.defbreakValue = maxValues["def_break"].toInt();
 			squadConfig.maxValue.hitValue = maxValues["hit"].toInt();
 			squadConfig.maxValue.reloadValue = maxValues["reload"].toInt();
+			if (maxBlocks.contains("free"))
+			{
+				squadConfig.maxValue.squad = maxBlocks["free"].toInt();
+			}
+			else
+			{
+				squadConfig.maxValue.squad = 0;
+			}
 			squadConfig.color = obj["color"].toInt();
 			squadConfig.palindrome = obj["palindrome"].toInt();
 			

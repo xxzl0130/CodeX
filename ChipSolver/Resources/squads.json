@@ -29,5 +29,8 @@
         "填满": "PP-93-result.json",
         "最多空2格": "PP-93-2-result.json",
         "最多空4格": "PP-93-4-result.json"
+    },
+    "Mk-47": {
+        "Mk-47": "Mk-47-result.json"
     }
 }

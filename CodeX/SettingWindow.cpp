@@ -50,7 +50,7 @@ void SettingWindow::reset()
 		dynamic_cast<QSpinBox*>(this->ui->gridLayout->itemAtPosition(i + 1, 2)->widget())->setValue(value.defbreakBlock);
 		dynamic_cast<QSpinBox*>(this->ui->gridLayout->itemAtPosition(i + 1, 3)->widget())->setValue(value.hitBlock);
 		dynamic_cast<QSpinBox*>(this->ui->gridLayout->itemAtPosition(i + 1, 4)->widget())->setValue(value.reloadBlock);
-		dynamic_cast<QSpinBox*>(this->ui->gridLayout->itemAtPosition(i + 1, 5)->widget())->setValue(0);
+		dynamic_cast<QSpinBox*>(this->ui->gridLayout->itemAtPosition(i + 1, 5)->widget())->setValue(value.squad);
 	}
 	this->ui->numbersSpinBox->setValue(1000);
 	this->ui->maxSpinBox->setValue(10000);
